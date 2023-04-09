@@ -1,0 +1,24 @@
+overwrite: true
+schema: 'https://analysis-app-2023.onrender.com/graphql'
+documents: 'src/**/*.graphql'
+generates:
+  src/generated/graphql-types.generated.ts:
+    plugins:
+      - typescript
+  src/:
+    preset: near-operation-file
+    presetConfig:
+      extension: .generated.ts
+      baseTypesPath: '~@/graphql-types.generated'
+    plugins:
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      gqlImport: '@apollo/client#gql'
+      pureMagicComment: true
+      dedupeOperationSuffix: true
+      defaultBaseOptions:
+        shouldResubscribe: true
+hooks:
+  afterOneFileWrite:
+    - prettier --write

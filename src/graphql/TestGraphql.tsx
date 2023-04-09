@@ -1,18 +1,5 @@
-import { gql, useMutation } from '@apollo/client';
 import styled from 'styled-components';
-
-const AUTH_USER = gql`
-  mutation AuthenticateUser($email: String!, $password: String!) {
-    authenticateUser(email: $email, password: $password) {
-      id
-      firstName
-      lastName
-      teamId
-      token
-      email
-    }
-  }
-`;
+import { useAuthenticateUserMutation } from './authUser.generated';
 
 const Error = styled.div`
   color: red;
@@ -25,20 +12,9 @@ const Container = styled.div`
   align-items: center;
 `;
 
-type AuthUser = {
-  email: string;
-  firstName: string;
-  lastName: string;
-  teamId: string | null;
-  token: string;
-  id: string;
-};
-
 export const TestGraphql = () => {
   console.log('testing');
-  const [authUser, { data, loading, error }] = useMutation<{
-    authenticateUser: AuthUser;
-  }>(AUTH_USER);
+  const [authUser, { data, loading, error }] = useAuthenticateUserMutation();
 
   if (error)
     return (
