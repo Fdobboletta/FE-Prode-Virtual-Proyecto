@@ -8,7 +8,7 @@ const GlobalStyles = createGlobalStyle`
     margin: 0;
     padding: 0;
     font-size: 16px;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     -webkit-font-smoothing: antialiased;
     height: 100%;
     display: block;

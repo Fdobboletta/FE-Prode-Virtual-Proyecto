@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import styled from 'styled-components';
 import { useAuthenticateUserMutation } from './authUser.generated';
 
@@ -27,7 +28,8 @@ export const TestGraphql = () => {
 
   return (
     <Container>
-      <button
+      <Button
+        variant="contained"
         onClick={() =>
           authUser({
             variables: {
@@ -38,7 +40,7 @@ export const TestGraphql = () => {
         }
       >
         TEST AUTH
-      </button>
+      </Button>
       {data && (
         <div>{`El usuario logueado es ${data.authenticateUser.firstName} ${data.authenticateUser.lastName}`}</div>
       )}
