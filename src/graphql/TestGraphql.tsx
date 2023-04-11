@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, CircularProgress, Typography } from '@mui/material';
 import styled from 'styled-components';
 import { useAuthenticateUserMutation } from './authUser.generated';
 
@@ -14,7 +14,6 @@ const Container = styled.div`
 `;
 
 export const TestGraphql = () => {
-  console.log('testing');
   const [authUser, { data, loading, error }] = useAuthenticateUserMutation();
 
   if (error)
@@ -24,12 +23,17 @@ export const TestGraphql = () => {
       </Container>
     );
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <Container>
+        <CircularProgress color="primary" />
+      </Container>
+    );
 
   return (
     <Container>
       <Button
-        variant="contained"
+        variant="outlined"
         onClick={() =>
           authUser({
             variables: {
@@ -42,7 +46,7 @@ export const TestGraphql = () => {
         TEST AUTH
       </Button>
       {data && (
-        <div>{`El usuario logueado es ${data.authenticateUser.firstName} ${data.authenticateUser.lastName}`}</div>
+        <Typography>{`El usuario logueado es ${data.authenticateUser.firstName} ${data.authenticateUser.lastName}`}</Typography>
       )}
     </Container>
   );
