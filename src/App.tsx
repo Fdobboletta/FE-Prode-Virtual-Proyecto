@@ -5,17 +5,16 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import { ThemeProvider } from '@mui/system';
-import theme from './styles/theme';
 
 import { BrowserRouter } from 'react-router-dom';
 import { AppRoutes } from './routes';
+import { ThemeProvider } from './styles/theme-provider';
 
 const App = () => {
   return (
     <>
       <GlobalStyles />
-      <ThemeProvider theme={theme}>
+      <ThemeProvider>
         <ApolloProvider client={createApolloClient()}>
           <BrowserRouter>
             <AppRoutes />
