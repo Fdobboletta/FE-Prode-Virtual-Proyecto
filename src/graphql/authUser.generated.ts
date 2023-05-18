@@ -15,9 +15,9 @@ export type AuthenticateUserMutation = {
     id: string;
     firstName: string;
     lastName: string;
-    teamId?: string | null;
     token: string;
     email: string;
+    role: string;
   };
 };
 
@@ -27,9 +27,9 @@ export const AuthenticateUserDocument = /*#__PURE__*/ gql`
       id
       firstName
       lastName
-      teamId
       token
       email
+      role
     }
   }
 `;

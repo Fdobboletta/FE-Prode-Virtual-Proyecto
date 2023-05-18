@@ -1,18 +1,21 @@
 import React, { memo, useCallback, useState } from 'react';
-
 import { AccountCircle, Lock } from '@mui/icons-material';
 import styled from 'styled-components';
-import { Button, CircularProgress, Link, TextField } from '@mui/material';
-import { useAuthenticateUserMutation } from '../graphql/authUser.generated';
+import { Button, CircularProgress, TextField } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { useLocalStorageState } from 'ahooks';
 import { UserRole } from '../types';
 import { toRem } from '../utils';
+import { useRegisterUserMutation } from '../graphql/registerUser.generated';
 import { Logo } from '../logo';
 
-interface LoginFormValues {
+interface RegisterFormValues {
   email: string;
   password: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  cellphone: string;
 }
 
 const Container = styled.div`
@@ -43,7 +46,6 @@ const Form = styled.form`
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: ${toRem(600)};
 `;
 
 const StyledAccountCircle = styled(AccountCircle)`
@@ -53,28 +55,36 @@ const StyledLock = styled(Lock)`
   margin-right: ${toRem(6)};
 `;
 
-const ForgotPasswordLink = styled(Link)`
-  margin-top: ${toRem(8)} !important;
-`;
-
 const ExpandContent = styled.div`
   flex-grow: 1;
 `;
 
 const StyledRegisterButton = styled(Button)`
-  margin-top: ${toRem(12)} !important;
-  margin-bottom: ${toRem(6)} !important;
-`;
-
-const StyledLoginButton = styled(Button)`
   margin-top: ${toRem(6)} !important;
 `;
 
-const InternalLogin = (): JSX.Element => {
-  const [formValues, setFormValues] = useState<LoginFormValues>({
+const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const validateCellphone = (cellphone: string): boolean => {
+  const cellphoneRegex = /^(\+?54)?\s*9?\s*([1-9]{2})\s*\d{4}(\s*\d{2}){2}$/;
+  return cellphoneRegex.test(cellphone);
+};
+
+const InternalRegister = (): JSX.Element => {
+  const [formValues, setFormValues] = useState<RegisterFormValues>({
     email: '',
     password: '',
+    firstName: '',
+    lastName: '',
+    address: '',
+    cellphone: '',
   });
+
+  const [emailError, setEmailError] = useState('');
+  const [cellphoneError, setCellphoneError] = useState('');
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setAuthData] = useLocalStorageState<{
@@ -84,15 +94,14 @@ const InternalLogin = (): JSX.Element => {
 
   const navigate = useNavigate();
 
-  const [authUser, { loading }] = useAuthenticateUserMutation({
+  const [registerUser, { loading }] = useRegisterUserMutation({
     onCompleted: (data) => {
-      const userRole = data.authenticateUser.role as UserRole;
       setAuthData({
-        email: data.authenticateUser.email,
-        role: userRole,
+        email: data.registerNewUser.email,
+        role: data.registerNewUser.role as UserRole,
       });
-      localStorage.setItem('authToken', data.authenticateUser.token);
-      userRole === UserRole.PLAYER ? navigate('/user') : navigate('/admin');
+      localStorage.setItem('authToken', data.registerNewUser.token);
+      navigate('/user');
     },
   });
 
@@ -110,14 +119,37 @@ const InternalLogin = (): JSX.Element => {
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      const { email, password } = formValues;
+      const { email, password, firstName, lastName, address, cellphone } =
+        formValues;
 
-      await authUser({
-        variables: {
-          email,
-          password,
-        },
-      });
+      let isValid = true;
+
+      if (!validateEmail(email)) {
+        setEmailError('Invalid email format');
+        isValid = false;
+      } else {
+        setEmailError('');
+      }
+
+      if (!validateCellphone(cellphone)) {
+        setCellphoneError('Invalid cellphone format');
+        isValid = false;
+      } else {
+        setCellphoneError('');
+      }
+
+      if (isValid) {
+        await registerUser({
+          variables: {
+            email,
+            password,
+            firstName,
+            lastName,
+            address,
+            cellphone,
+          },
+        });
+      }
     },
     [formValues]
   );
@@ -134,6 +166,8 @@ const InternalLogin = (): JSX.Element => {
             name="email"
             type="email"
             fullWidth
+            error={!!emailError}
+            helperText={emailError}
             value={formValues.email}
             onChange={handleInputChange}
             InputProps={{
@@ -153,7 +187,46 @@ const InternalLogin = (): JSX.Element => {
               startAdornment: <StyledLock />,
             }}
           />
-          <StyledLoginButton
+          <TextField
+            label="Nombre"
+            margin="normal"
+            variant="outlined"
+            name="firstName"
+            fullWidth
+            value={formValues.firstName}
+            onChange={handleInputChange}
+          />
+          <TextField
+            label="Apellido"
+            margin="normal"
+            variant="outlined"
+            name="lastName"
+            fullWidth
+            value={formValues.lastName}
+            onChange={handleInputChange}
+          />
+          <TextField
+            label="Direccion"
+            margin="normal"
+            variant="outlined"
+            name="address"
+            fullWidth
+            value={formValues.address}
+            onChange={handleInputChange}
+          />
+          <TextField
+            label="Numero Telefonico"
+            margin="normal"
+            variant="outlined"
+            name="cellphone"
+            fullWidth
+            type={'tel'}
+            value={formValues.cellphone}
+            onChange={handleInputChange}
+            error={!!cellphoneError}
+            helperText={cellphoneError}
+          />
+          <StyledRegisterButton
             variant="contained"
             color="primary"
             type="submit"
@@ -163,20 +236,9 @@ const InternalLogin = (): JSX.Element => {
             {loading ? (
               <CircularProgress size={24} color="inherit" />
             ) : (
-              'Iniciar Sesion'
+              'Registrarse'
             )}
-          </StyledLoginButton>
-          <StyledRegisterButton
-            fullWidth
-            onClick={() => navigate('/register')}
-            variant="outlined"
-            color="primary"
-          >
-            Crear Cuenta
           </StyledRegisterButton>
-          <ForgotPasswordLink href="#">
-            Olvidaste tu contraseña?
-          </ForgotPasswordLink>
           <ExpandContent />
         </Form>
       </FormContainer>
@@ -184,4 +246,4 @@ const InternalLogin = (): JSX.Element => {
   );
 };
 
-export const LoginPage = memo(InternalLogin);
+export const RegisterPage = memo(InternalRegister);

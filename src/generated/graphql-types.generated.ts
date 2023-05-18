@@ -18,6 +18,12 @@ export type Scalars = {
   Float: number;
 };
 
+/** Informacion de link de pago de MercadoPago */
+export type MercadoPagoPreference = {
+  __typename?: 'MercadoPagoPreference';
+  preferenceId: Scalars['ID'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   authenticateUser: User;
@@ -30,25 +36,28 @@ export type MutationAuthenticateUserArgs = {
 };
 
 export type MutationRegisterNewUserArgs = {
+  address: Scalars['String'];
+  cellphone: Scalars['String'];
   email: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   password: Scalars['String'];
-  teamId?: InputMaybe<Scalars['String']>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  ok: Scalars['Boolean'];
+  getLastMercadoPagoPreference: MercadoPagoPreference;
 };
 
 /** App user */
 export type User = {
   __typename?: 'User';
+  address: Scalars['String'];
+  cellphone: Scalars['String'];
   email: Scalars['String'];
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName: Scalars['String'];
-  teamId?: Maybe<Scalars['String']>;
+  role: Scalars['String'];
   token: Scalars['String'];
 };

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { AppBar, Drawer, IconButton, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -42,7 +42,11 @@ const StyledIconButton = styled(IconButton)`
   `}
 `;
 
-const PrivateLayout: React.FC = () => {
+type PrivateLayoutProps = {
+  drawerTitle: string;
+};
+
+const InternalPrivateLayout = (props: PrivateLayoutProps): JSX.Element => {
   const [open, setOpen] = useState(false);
 
   const handleDrawerToggle = useCallback(() => {
@@ -66,7 +70,7 @@ const PrivateLayout: React.FC = () => {
             <MenuIcon />
           </StyledIconButton>
           <Typography variant="h6" noWrap component="div">
-            Cuerpo Tecnico
+            {props.drawerTitle}
           </Typography>
         </StyledToolbar>
       </StyledAppBar>
@@ -84,4 +88,4 @@ const PrivateLayout: React.FC = () => {
   );
 };
 
-export default PrivateLayout;
+export const PrivateLayout = memo(InternalPrivateLayout);
