@@ -3,8 +3,8 @@ mutation AuthenticateUser($email: String!, $password: String!) {
     id
     firstName
     lastName
-    teamId
     token
     email
+    role
   }
 }

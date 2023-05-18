@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Button, CircularProgress, Link, TextField } from '@mui/material';
 import { useAuthenticateUserMutation } from '../graphql/authUser.generated';
 import { useNavigate } from 'react-router';
+import { useLocalStorageState } from 'ahooks';
 
 interface LoginFormValues {
   email: string;
@@ -57,11 +58,13 @@ const Login: React.FC = () => {
     password: '',
   });
 
+  const [_, setAuthToken] = useLocalStorageState<{token: string, userName: string, role: }>('auth');
+
   const navigate = useNavigate();
 
   const [authUser, { loading }] = useAuthenticateUserMutation({
     onCompleted: (data) => {
-      localStorage.setItem('authToken', data.authenticateUser.token);
+      setAuthToken(data.authenticateUser.token);
       navigate('/user');
     },
   });

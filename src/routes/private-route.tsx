@@ -1,3 +1,4 @@
+import { useLocalStorageState } from 'ahooks';
 import { Navigate, Route } from 'react-router-dom';
 
 type PrivateRouteProps = {
@@ -6,7 +7,8 @@ type PrivateRouteProps = {
 };
 
 export const PrivateRoute = ({ path, element }: PrivateRouteProps) => {
-  const isAuthenticated = false; // Replace with your authentication logic
+  const [authToken, setAuthToken] = useLocalStorageState<string>('authToken');
+  const isAuthenticated =  // Replace with your authentication logic
 
   return isAuthenticated ? (
     <Route path={path} element={element} />
