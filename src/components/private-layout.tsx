@@ -1,9 +1,12 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, ReactNode, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { AppBar, Drawer, IconButton, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import { toRem } from '../utils';
 
-const drawerWidth = 256;
+const DRAWER_WIDTH = 256;
+
+const NAV_BAR_HEIGHT = 64;
 
 const MainLayoutContainer = styled.div`
   display: flex;
@@ -12,7 +15,7 @@ const MainLayoutContainer = styled.div`
 const StyledDrawer = styled(Drawer)`
   & .MuiDrawer-paper {
     box-sizing: border-box;
-    width: ${drawerWidth}px;
+    width: ${DRAWER_WIDTH}px;
   }
 `;
 
@@ -20,8 +23,8 @@ const StyledAppBar = styled(AppBar)`
   ${(props) => `
     z-index: ${props.theme.zIndex.drawer + 1};
     ${props.theme.breakpoints.up('md')} {
-      width: calc(100% - ${drawerWidth}px);
-      margin-left: ${drawerWidth}px;
+      width: calc(100% - ${DRAWER_WIDTH}px);
+      margin-left: ${DRAWER_WIDTH}px;
     }
   `}
 `;
@@ -42,8 +45,15 @@ const StyledIconButton = styled(IconButton)`
   `}
 `;
 
+const PageContentContainer = styled.div`
+  margin-left: ${toRem(DRAWER_WIDTH)};
+  margin-top: ${toRem(NAV_BAR_HEIGHT)};
+`;
+
 type PrivateLayoutProps = {
   drawerTitle: string;
+  drawerContent: JSX.Element;
+  children: ReactNode;
 };
 
 const InternalPrivateLayout = (props: PrivateLayoutProps): JSX.Element => {
@@ -82,8 +92,9 @@ const InternalPrivateLayout = (props: PrivateLayoutProps): JSX.Element => {
           keepMounted: true,
         }}
       >
-        drawer content
+        {props.drawerContent}
       </StyledDrawer>
+      <PageContentContainer>{props.children}</PageContentContainer>
     </MainLayoutContainer>
   );
 };

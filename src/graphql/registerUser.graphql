@@ -5,6 +5,8 @@ mutation RegisterUser(
   $lastName: String!
   $address: String!
   $cellphone: String!
+  $role: UserRole!
+  $termsAccepted: Boolean!
 ) {
   registerNewUser(
     email: $email
@@ -13,6 +15,8 @@ mutation RegisterUser(
     lastName: $lastName
     address: $address
     cellphone: $cellphone
+    role: $role
+    termsAccepted: $termsAccepted
   ) {
     id
     email

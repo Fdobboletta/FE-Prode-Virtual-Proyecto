@@ -1,4 +1,4 @@
-import * as Types from '@/graphql-types.generated';
+import * as Types from '@/generated/graphql-types.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
@@ -17,7 +17,7 @@ export type AuthenticateUserMutation = {
     lastName: string;
     token: string;
     email: string;
-    role: string;
+    role: Types.UserRole;
   };
 };
 

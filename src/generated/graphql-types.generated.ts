@@ -27,12 +27,19 @@ export type MercadoPagoPreference = {
 export type Mutation = {
   __typename?: 'Mutation';
   authenticateUser: User;
+  changePassword?: Maybe<Scalars['String']>;
   registerNewUser: User;
+  sendResetPasswordEmail?: Maybe<Scalars['String']>;
 };
 
 export type MutationAuthenticateUserArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type MutationChangePasswordArgs = {
+  newPassword: Scalars['String'];
+  token: Scalars['String'];
 };
 
 export type MutationRegisterNewUserArgs = {
@@ -42,11 +49,23 @@ export type MutationRegisterNewUserArgs = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   password: Scalars['String'];
+  role: UserRole;
+  termsAccepted: Scalars['Boolean'];
+};
+
+export type MutationSendResetPasswordEmailArgs = {
+  email: Scalars['String'];
 };
 
 export type Query = {
   __typename?: 'Query';
   getLastMercadoPagoPreference: MercadoPagoPreference;
+  validateToken: Scalars['Boolean'];
+};
+
+export type QueryValidateTokenArgs = {
+  isResetPassword: Scalars['Boolean'];
+  token: Scalars['String'];
 };
 
 /** App user */
@@ -58,6 +77,11 @@ export type User = {
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName: Scalars['String'];
-  role: Scalars['String'];
+  role: UserRole;
   token: Scalars['String'];
 };
+
+export enum UserRole {
+  Admin = 'ADMIN',
+  Player = 'PLAYER',
+}

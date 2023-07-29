@@ -27,7 +27,6 @@ export const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
     );
 
     return forward(operation).map((response: FetchResult) => {
-      // You can modify the response here if needed.
       return response;
     });
   });

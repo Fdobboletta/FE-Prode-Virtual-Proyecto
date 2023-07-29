@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import { Button, CircularProgress, TextField } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { useLocalStorageState } from 'ahooks';
-import { UserRole } from '../types';
 import { toRem } from '../utils';
 import { useRegisterUserMutation } from '../graphql/registerUser.generated';
 import { Logo } from '../logo';
+import { UserRole } from '@/generated/graphql-types.generated';
 
 interface RegisterFormValues {
   email: string;
@@ -98,7 +98,7 @@ const InternalRegister = (): JSX.Element => {
     onCompleted: (data) => {
       setAuthData({
         email: data.registerNewUser.email,
-        role: data.registerNewUser.role as UserRole,
+        role: data.registerNewUser.role,
       });
       localStorage.setItem('authToken', data.registerNewUser.token);
       navigate('/user');
@@ -147,6 +147,8 @@ const InternalRegister = (): JSX.Element => {
             lastName,
             address,
             cellphone,
+            role: UserRole.Player,
+            termsAccepted: true,
           },
         });
       }

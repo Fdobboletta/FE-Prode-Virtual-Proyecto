@@ -1,4 +1,4 @@
-import * as Types from '@/graphql-types.generated';
+import * as Types from '@/generated/graphql-types.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
@@ -10,6 +10,8 @@ export type RegisterUserMutationVariables = Types.Exact<{
   lastName: Types.Scalars['String'];
   address: Types.Scalars['String'];
   cellphone: Types.Scalars['String'];
+  role: Types.UserRole;
+  termsAccepted: Types.Scalars['Boolean'];
 }>;
 
 export type RegisterUserMutation = {
@@ -18,7 +20,7 @@ export type RegisterUserMutation = {
     __typename?: 'User';
     id: string;
     email: string;
-    role: string;
+    role: Types.UserRole;
     token: string;
   };
 };
@@ -31,6 +33,8 @@ export const RegisterUserDocument = /*#__PURE__*/ gql`
     $lastName: String!
     $address: String!
     $cellphone: String!
+    $role: UserRole!
+    $termsAccepted: Boolean!
   ) {
     registerNewUser(
       email: $email
@@ -39,6 +43,8 @@ export const RegisterUserDocument = /*#__PURE__*/ gql`
       lastName: $lastName
       address: $address
       cellphone: $cellphone
+      role: $role
+      termsAccepted: $termsAccepted
     ) {
       id
       email
@@ -71,6 +77,8 @@ export type RegisterUserMutationFn = Apollo.MutationFunction<
  *      lastName: // value for 'lastName'
  *      address: // value for 'address'
  *      cellphone: // value for 'cellphone'
+ *      role: // value for 'role'
+ *      termsAccepted: // value for 'termsAccepted'
  *   },
  * });
  */

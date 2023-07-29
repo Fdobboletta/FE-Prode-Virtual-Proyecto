@@ -24,7 +24,7 @@ const LogoIcon = styled(SportsSoccer)`
 const InternalLogo = () => (
   <LogoContainer>
     <LogoIcon />
-    Prode Virtual
+    ComuniProde
   </LogoContainer>
 );
 

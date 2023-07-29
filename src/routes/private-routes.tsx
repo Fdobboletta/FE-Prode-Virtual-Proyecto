@@ -1,6 +1,7 @@
+import { UserRole } from '@/generated/graphql-types.generated';
 import { useLocalStorageState } from 'ahooks';
 import { Navigate, Outlet } from 'react-router-dom';
-import { UserRole } from '../types';
+
 import { nonNullable } from '../utils';
 
 type PrivateRouteProps = {
@@ -13,7 +14,7 @@ export const PrivateRoutes = ({ requiredRole }: PrivateRouteProps) => {
     role: UserRole;
   }>('authData');
   const token = localStorage.getItem('authToken');
-  const role = authData?.role; // Replace with your authentication logic
+  const role = authData?.role;
 
   return nonNullable(token) && role === requiredRole ? (
     <Outlet />

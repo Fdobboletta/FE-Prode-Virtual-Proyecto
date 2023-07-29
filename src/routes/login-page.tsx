@@ -6,9 +6,9 @@ import { Button, CircularProgress, Link, TextField } from '@mui/material';
 import { useAuthenticateUserMutation } from '../graphql/authUser.generated';
 import { useNavigate } from 'react-router';
 import { useLocalStorageState } from 'ahooks';
-import { UserRole } from '../types';
 import { toRem } from '../utils';
 import { Logo } from '../logo';
+import { UserRole } from '@/generated/graphql-types.generated';
 
 interface LoginFormValues {
   email: string;
@@ -86,13 +86,13 @@ const InternalLogin = (): JSX.Element => {
 
   const [authUser, { loading }] = useAuthenticateUserMutation({
     onCompleted: (data) => {
-      const userRole = data.authenticateUser.role as UserRole;
+      const userRole = data.authenticateUser.role;
       setAuthData({
         email: data.authenticateUser.email,
         role: userRole,
       });
       localStorage.setItem('authToken', data.authenticateUser.token);
-      userRole === UserRole.PLAYER ? navigate('/user') : navigate('/admin');
+      userRole === UserRole.Player ? navigate('/user') : navigate('/admin');
     },
   });
 
@@ -174,7 +174,7 @@ const InternalLogin = (): JSX.Element => {
           >
             Crear Cuenta
           </StyledRegisterButton>
-          <ForgotPasswordLink href="#">
+          <ForgotPasswordLink href="/reset-password">
             Olvidaste tu contraseña?
           </ForgotPasswordLink>
           <ExpandContent />

@@ -2,6 +2,7 @@
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 // yarn add --dev @esbuild-plugins/node-modules-polyfill
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+import { resolve } from 'path';
 // You don't need to add this to deps, it's included by @esbuild-plugins/node-modules-polyfill
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
 
@@ -12,6 +13,7 @@ export default {
       // see https://github.com/remorses/esbuild-plugins/blob/master/node-modules-polyfill/src/polyfills.ts
       // process and buffer are excluded because already managed
       // by node-globals-polyfill
+      '@': resolve(__dirname, 'src'),
       util: 'rollup-plugin-node-polyfills/polyfills/util',
       sys: 'util',
       events: 'rollup-plugin-node-polyfills/polyfills/events',
