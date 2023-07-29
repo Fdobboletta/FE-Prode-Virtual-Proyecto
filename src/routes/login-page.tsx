@@ -174,7 +174,7 @@ const InternalLogin = (): JSX.Element => {
           >
             Crear Cuenta
           </StyledRegisterButton>
-          <ForgotPasswordLink href="/reset-password">
+          <ForgotPasswordLink onClick={() => navigate('/reset-password')}>
             Olvidaste tu contraseña?
           </ForgotPasswordLink>
           <ExpandContent />
