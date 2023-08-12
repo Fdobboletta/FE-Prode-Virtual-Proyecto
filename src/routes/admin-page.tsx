@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, ReactNode } from 'react';
 import { PrivateLayout } from '../components/private-layout';
 
 import { useCallback } from 'react';
@@ -10,10 +10,17 @@ import {
   Divider,
   Box,
 } from '@mui/material';
+
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Dashboard, People, Assessment, Settings } from '@mui/icons-material';
+import {
+  Dashboard,
+  People,
+  Assessment,
+  Settings,
+  Store,
+} from '@mui/icons-material';
 
 const StyledList = styled(List)`
   width: 100%;
@@ -39,11 +46,9 @@ const StyledListItemIcon = styled(ListItemIcon)`
   min-width: 36px;
 `;
 
-const StyledContent = styled.div`
-  width: 500px;
-  height: 500px;
-  background-color: red;
-`;
+type AdminPageProps = {
+  children: ReactNode;
+};
 
 const AdminDrawerContent = (): JSX.Element => {
   const navigate = useNavigate();
@@ -51,12 +56,12 @@ const AdminDrawerContent = (): JSX.Element => {
 
   const handleNavigation = useCallback(
     (path: string) => () => {
-      navigate(path);
+      navigate(`/admin${path}`);
     },
-    []
+    [navigate]
   );
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => location.pathname === `/admin${path}`;
 
   return (
     <DrawerContentContainer>
@@ -88,6 +93,15 @@ const AdminDrawerContent = (): JSX.Element => {
           </StyledListItemIcon>
           <ListItemText primary="Reportes" />
         </ListItemButton>
+        <ListItemButton
+          onClick={handleNavigation('/integrations')}
+          selected={isActive('/integrations')}
+        >
+          <StyledListItemIcon>
+            <Store />
+          </StyledListItemIcon>
+          <ListItemText primary="Mercado Pago" />
+        </ListItemButton>
       </StyledList>
       <StyledBox>
         <Divider />
@@ -106,13 +120,13 @@ const AdminDrawerContent = (): JSX.Element => {
   );
 };
 
-const InternalAdminPage = () => {
+const InternalAdminPage = (props: AdminPageProps) => {
   return (
     <PrivateLayout
       drawerTitle="Admin Panel"
       drawerContent={<AdminDrawerContent />}
     >
-      <StyledContent>HelloWorld</StyledContent>
+      {props.children}
     </PrivateLayout>
   );
 };

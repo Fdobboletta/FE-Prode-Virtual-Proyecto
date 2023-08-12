@@ -48,6 +48,10 @@ const StyledIconButton = styled(IconButton)`
 const PageContentContainer = styled.div`
   margin-left: ${toRem(DRAWER_WIDTH)};
   margin-top: ${toRem(NAV_BAR_HEIGHT)};
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
 `;
 
 type PrivateLayoutProps = {
@@ -85,7 +89,7 @@ const InternalPrivateLayout = (props: PrivateLayoutProps): JSX.Element => {
         </StyledToolbar>
       </StyledAppBar>
       <StyledDrawer
-        variant="temporary"
+        variant="permanent"
         open={open}
         onClose={handleDrawerClose}
         ModalProps={{
@@ -94,7 +98,9 @@ const InternalPrivateLayout = (props: PrivateLayoutProps): JSX.Element => {
       >
         {props.drawerContent}
       </StyledDrawer>
-      <PageContentContainer>{props.children}</PageContentContainer>
+      <PageContentContainer data-testid="Page-content-container">
+        {props.children}
+      </PageContentContainer>
     </MainLayoutContainer>
   );
 };

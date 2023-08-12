@@ -88,6 +88,7 @@ const InternalRegister = (): JSX.Element => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setAuthData] = useLocalStorageState<{
+    id: string;
     email: string;
     role: UserRole;
   }>('authData');
@@ -97,6 +98,7 @@ const InternalRegister = (): JSX.Element => {
   const [registerUser, { loading }] = useRegisterUserMutation({
     onCompleted: (data) => {
       setAuthData({
+        id: data.registerNewUser.id,
         email: data.registerNewUser.email,
         role: data.registerNewUser.role,
       });
