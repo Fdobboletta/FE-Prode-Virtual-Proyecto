@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, ReactNode } from 'react';
 import { PrivateLayout } from '../components/private-layout';
 
 import { useCallback } from 'react';
@@ -13,8 +13,17 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Dashboard, People, Assessment, Settings } from '@mui/icons-material';
+import {
+  Dashboard,
+  People,
+  Assessment,
+  Settings,
+  Store,
+} from '@mui/icons-material';
 
+type AdminPageProps = {
+  children: ReactNode;
+};
 const StyledList = styled(List)`
   width: 100%;
 `;
@@ -37,12 +46,6 @@ const DrawerContentContainer = styled(Box)`
 
 const StyledListItemIcon = styled(ListItemIcon)`
   min-width: 36px;
-`;
-
-const StyledContent = styled.div`
-  width: 500px;
-  height: 500px;
-  background-color: red;
 `;
 
 const AdminDrawerContent = (): JSX.Element => {
@@ -88,6 +91,15 @@ const AdminDrawerContent = (): JSX.Element => {
           </StyledListItemIcon>
           <ListItemText primary="Reportes" />
         </ListItemButton>
+        <ListItemButton
+          onClick={handleNavigation('/integrations')}
+          selected={isActive('/integrations')}
+        >
+          <StyledListItemIcon>
+            <Store />
+          </StyledListItemIcon>
+          <ListItemText primary="Integracion con Mercado Pago" />
+        </ListItemButton>
       </StyledList>
       <StyledBox>
         <Divider />
@@ -106,13 +118,13 @@ const AdminDrawerContent = (): JSX.Element => {
   );
 };
 
-const InternalAdminPage = () => {
+const InternalAdminPage = (props: AdminPageProps) => {
   return (
     <PrivateLayout
       drawerTitle="Admin Panel"
       drawerContent={<AdminDrawerContent />}
     >
-      <StyledContent>HelloWorld</StyledContent>
+      {props.children}
     </PrivateLayout>
   );
 };

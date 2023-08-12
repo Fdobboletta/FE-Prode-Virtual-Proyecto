@@ -85,7 +85,7 @@ const InternalPrivateLayout = (props: PrivateLayoutProps): JSX.Element => {
         </StyledToolbar>
       </StyledAppBar>
       <StyledDrawer
-        variant="temporary"
+        variant="permanent"
         open={open}
         onClose={handleDrawerClose}
         ModalProps={{
