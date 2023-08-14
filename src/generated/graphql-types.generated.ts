@@ -35,6 +35,7 @@ export type Mutation = {
   authenticateUser: User;
   authorizeMercadoPago?: Maybe<MercadoPagoAccessToken>;
   changePassword?: Maybe<Scalars['String']>;
+  disconnectMercadoPagoIntegration?: Maybe<Scalars['String']>;
   registerNewUser: User;
   sendResetPasswordEmail?: Maybe<Scalars['String']>;
 };

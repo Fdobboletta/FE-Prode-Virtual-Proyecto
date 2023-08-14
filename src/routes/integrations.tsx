@@ -2,7 +2,7 @@ import { UserRole } from '@/generated/graphql-types.generated';
 import { toRem } from '@/utils';
 import { Box, Button, CircularProgress, Stack } from '@mui/material';
 import { useLocalStorageState } from 'ahooks';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { AdminPage } from './admin-page';
 import useUrlState from '@ahooksjs/use-url-state';
@@ -13,6 +13,7 @@ import {
   withSnack,
 } from '@/components/snackbar';
 import { useAuthorizeMercadoPagoMutation } from '@/graphql/authorizeMercadoPago.generated';
+import { useDisconnectMercadoPagoIntegrationMutation } from '@/graphql/disconnectMpIntegration.generated';
 
 const PageContainer = styled.div`
   display: flex;
@@ -57,8 +58,15 @@ const useIntegrationsPage = (props: WithSnackbarProps) => {
       }
     },
   });
+
   const [authorizeMercadoPago, { loading: loadingAuthorizeMutation }] =
     useAuthorizeMercadoPagoMutation();
+
+  const [
+    disconnectMercadoPagoIntegration,
+    { loading: loadingDisconnectMutation },
+  ] = useDisconnectMercadoPagoIntegrationMutation();
+
   const mercadoPagoCode = urlState.code as string;
 
   useEffect(() => {
@@ -82,10 +90,25 @@ const useIntegrationsPage = (props: WithSnackbarProps) => {
     }
   }, [mercadoPagoCode]);
 
+  const handleDisconnectIntegration = useCallback(async () => {
+    await disconnectMercadoPagoIntegration({
+      onCompleted: () => {
+        props.snackbarShowMessage(
+          4000,
+          'Integracion desconectada con exito',
+          snackSeverity.success
+        );
+        setIsIntegrated(false);
+      },
+    });
+  }, []);
+
   return {
     loading: loadingGetAccessTokenQuery || loadingAuthorizeMutation,
+    loadingDisconnectMutation,
     isIntegrated,
     authData,
+    handleDisconnectIntegration,
   };
 };
 
@@ -118,7 +141,18 @@ const IntegrationsPageInternal = (props: WithSnackbarProps) => {
                 </StyledLabel>
               )}
 
-              {!controller.isIntegrated && (
+              {controller.isIntegrated ? (
+                <Button
+                  onClick={() => controller.handleDisconnectIntegration()}
+                  variant="contained"
+                >
+                  {controller.loadingDisconnectMutation ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    'Desconectar Mercado Pago'
+                  )}
+                </Button>
+              ) : (
                 <Button
                   onClick={() =>
                     handleRedirectToMercadoPago(controller.authData?.id || '')
