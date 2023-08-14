@@ -3,7 +3,7 @@ import { toRem } from '@/utils';
 import { Box, Button, Stack } from '@mui/material';
 import { useLocalStorageState } from 'ahooks';
 import { useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useLocation } from 'react-router';
 import styled from 'styled-components';
 import { AdminPage } from './admin-page';
 
@@ -33,11 +33,13 @@ export const IntegrationsPage = () => {
     email: string;
     role: UserRole;
   }>('authData');
-  const urlParams = useParams();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const mercadoPagoCode = queryParams.get('code');
 
   useEffect(() => {
-    console.log('parametros de la url', urlParams);
-  }, [urlParams]);
+    console.log('parametros de la url', queryParams);
+  }, [mercadoPagoCode]);
   return (
     <AdminPage>
       <Box
