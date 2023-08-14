@@ -118,14 +118,16 @@ const IntegrationsPageInternal = (props: WithSnackbarProps) => {
                 </StyledLabel>
               )}
 
-              <Button
-                onClick={() =>
-                  handleRedirectToMercadoPago(controller.authData?.id || '')
-                }
-                variant="contained"
-              >
-                Click aqui para comenzar
-              </Button>
+              {!controller.isIntegrated && (
+                <Button
+                  onClick={() =>
+                    handleRedirectToMercadoPago(controller.authData?.id || '')
+                  }
+                  variant="contained"
+                >
+                  Click aqui para comenzar
+                </Button>
+              )}
             </Stack>
           </BoxContainer>
         </Box>
