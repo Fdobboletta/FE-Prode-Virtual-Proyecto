@@ -36,10 +36,12 @@ export const IntegrationsPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const mercadoPagoCode = queryParams.get('code');
+  const status = queryParams.get('status');
 
   useEffect(() => {
-    console.log('parametros de la url', queryParams);
-  }, [mercadoPagoCode]);
+    console.log('MercadoPagoCode', mercadoPagoCode);
+    console.log('Status', status);
+  }, [mercadoPagoCode, status]);
   return (
     <AdminPage>
       <Box
