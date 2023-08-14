@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router';
 import styled from 'styled-components';
 import { AdminPage } from './admin-page';
+import useUrlState from '@ahooksjs/use-url-state';
 
 const BoxContainer = styled.div`
   display: flex;
@@ -33,12 +34,15 @@ export const IntegrationsPage = () => {
     email: string;
     role: UserRole;
   }>('authData');
+
+  const [urlState] = useUrlState();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const mercadoPagoCode = queryParams.get('code');
   const status = queryParams.get('status');
 
   useEffect(() => {
+    console.log('urlState', urlState);
     console.log('MercadoPagoCode', mercadoPagoCode);
     console.log('Status', status);
   }, [mercadoPagoCode, status]);
