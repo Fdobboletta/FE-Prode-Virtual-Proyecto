@@ -1,0 +1,5 @@
+mutation AuthorizeMercadoPago($mercadoPagoCode: String!) {
+  authorizeMercadoPago(mercadoPagoCode: $mercadoPagoCode) {
+    accessToken
+  }
+}

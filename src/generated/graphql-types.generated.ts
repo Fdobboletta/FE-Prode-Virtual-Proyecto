@@ -46,7 +46,6 @@ export type MutationAuthenticateUserArgs = {
 
 export type MutationAuthorizeMercadoPagoArgs = {
   mercadoPagoCode: Scalars['String'];
-  userId: Scalars['String'];
 };
 
 export type MutationChangePasswordArgs = {
