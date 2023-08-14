@@ -46,6 +46,8 @@ const StyledIconButton = styled(IconButton)`
 `;
 
 const PageContentContainer = styled.div`
+  width: calc(100% - ${DRAWER_WIDTH}px);
+  height: calc(100vh - ${NAV_BAR_HEIGHT}px);
   margin-left: ${toRem(DRAWER_WIDTH)};
   margin-top: ${toRem(NAV_BAR_HEIGHT)};
 `;

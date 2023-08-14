@@ -18,6 +18,12 @@ export type Scalars = {
   Float: number;
 };
 
+/** Token de acceso a Mercado Pago */
+export type MercadoPagoAccessToken = {
+  __typename?: 'MercadoPagoAccessToken';
+  accessToken: Scalars['String'];
+};
+
 /** Informacion de link de pago de MercadoPago */
 export type MercadoPagoPreference = {
   __typename?: 'MercadoPagoPreference';
@@ -27,6 +33,7 @@ export type MercadoPagoPreference = {
 export type Mutation = {
   __typename?: 'Mutation';
   authenticateUser: User;
+  authorizeMercadoPago?: Maybe<MercadoPagoAccessToken>;
   changePassword?: Maybe<Scalars['String']>;
   registerNewUser: User;
   sendResetPasswordEmail?: Maybe<Scalars['String']>;
@@ -35,6 +42,11 @@ export type Mutation = {
 export type MutationAuthenticateUserArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type MutationAuthorizeMercadoPagoArgs = {
+  mercadoPagoCode: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 export type MutationChangePasswordArgs = {
@@ -60,6 +72,7 @@ export type MutationSendResetPasswordEmailArgs = {
 export type Query = {
   __typename?: 'Query';
   getLastMercadoPagoPreference: MercadoPagoPreference;
+  getUserMpAccessToken?: Maybe<Scalars['String']>;
   validateToken: Scalars['Boolean'];
 };
 

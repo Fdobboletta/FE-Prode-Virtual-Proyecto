@@ -10,7 +10,7 @@ const GlobalStyles = createGlobalStyle`
     font-size: 16px;
     font-family: 'Roboto', sans-serif;
     -webkit-font-smoothing: antialiased;
-    height: 100%;
+    height: 100vh;
     display: block;
   }
 

@@ -54,19 +54,19 @@ const AdminDrawerContent = (): JSX.Element => {
 
   const handleNavigation = useCallback(
     (path: string) => () => {
-      navigate(path);
+      navigate(`/admin${path}`);
     },
     []
   );
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => location.pathname === `/admin${path}`;
 
   return (
     <DrawerContentContainer>
       <StyledList>
         <ListItemButton
           onClick={handleNavigation('/prodes')}
-          selected={isActive('/prode')}
+          selected={isActive('/prodes')}
         >
           <StyledListItemIcon>
             <Dashboard />

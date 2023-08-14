@@ -1,12 +1,18 @@
 import { UserRole } from '@/generated/graphql-types.generated';
 import { toRem } from '@/utils';
-import { Box, Button, Stack } from '@mui/material';
+import { Box, Button, CircularProgress, Stack } from '@mui/material';
 import { useLocalStorageState } from 'ahooks';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router';
 import styled from 'styled-components';
 import { AdminPage } from './admin-page';
 import useUrlState from '@ahooksjs/use-url-state';
+import { useGetUserMpAccessTokenQuery } from '@/graphql/getUserMpAccessToken.generated';
+
+const PageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: ${toRem(32)};
+`;
 
 const BoxContainer = styled.div`
   display: flex;
@@ -29,46 +35,58 @@ const handleRedirectToMercadoPago = (userId: string) => {
 };
 
 export const IntegrationsPage = () => {
-  const [authData, _] = useLocalStorageState<{
+  const [authData] = useLocalStorageState<{
     id: string;
     email: string;
     role: UserRole;
   }>('authData');
 
   const [urlState] = useUrlState();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const mercadoPagoCode = queryParams.get('code');
-  const status = queryParams.get('status');
+  const { data, loading } = useGetUserMpAccessTokenQuery();
+  const mercadoPagoCode = urlState.code as string;
 
   useEffect(() => {
-    console.log('urlState', urlState);
-    console.log('MercadoPagoCode', mercadoPagoCode);
-    console.log('Status', status);
-  }, [mercadoPagoCode, status]);
+    if (mercadoPagoCode) {
+      console.log('hey');
+    }
+  });
+
   return (
     <AdminPage>
-      <Box
-        sx={{
-          marginTop: 10,
-          width: 300,
-          height: 300,
-          backgroundColor: 'white',
-          border: 'solid black',
-        }}
-      >
-        <BoxContainer>
-          <Stack spacing={5}>
-            <StyledLabel> Integrar con mercado pago</StyledLabel>
-            <Button
-              onClick={() => handleRedirectToMercadoPago(authData?.id || '')}
-              variant="contained"
-            >
-              Click aqui para comenzar
-            </Button>
-          </Stack>
-        </BoxContainer>
-      </Box>
+      <PageContainer>
+        <Box
+          sx={{
+            width: 300,
+            height: 300,
+            backgroundColor: 'white',
+            border: 'solid black',
+          }}
+        >
+          <BoxContainer>
+            <Stack spacing={5}>
+              <StyledLabel> Integrar con mercado pago</StyledLabel>
+              <StyledLabel> ESTADO:</StyledLabel>
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                <StyledLabel>
+                  {data?.getUserMpAccessToken
+                    ? `Su cuenta se encuentra correctamente sincronizada con mercado
+                  pago`
+                    : 'No integrado'}
+                </StyledLabel>
+              )}
+
+              <Button
+                onClick={() => handleRedirectToMercadoPago(authData?.id || '')}
+                variant="contained"
+              >
+                Click aqui para comenzar
+              </Button>
+            </Stack>
+          </BoxContainer>
+        </Box>
+      </PageContainer>
     </AdminPage>
   );
 };
