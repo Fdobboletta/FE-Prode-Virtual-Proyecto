@@ -2,11 +2,17 @@ import { UserRole } from '@/generated/graphql-types.generated';
 import { toRem } from '@/utils';
 import { Box, Button, CircularProgress, Stack } from '@mui/material';
 import { useLocalStorageState } from 'ahooks';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { AdminPage } from './admin-page';
 import useUrlState from '@ahooksjs/use-url-state';
 import { useGetUserMpAccessTokenQuery } from '@/graphql/getUserMpAccessToken.generated';
+import {
+  WithSnackbarProps,
+  snackSeverity,
+  withSnack,
+} from '@/components/snackbar';
+import { useAuthorizeMercadoPagoMutation } from '@/graphql/authorizeMercadoPago.generated';
 
 const PageContainer = styled.div`
   display: flex;
@@ -34,22 +40,57 @@ const handleRedirectToMercadoPago = (userId: string) => {
   window.location.href = authUrl;
 };
 
-export const IntegrationsPage = () => {
+const useIntegrationsPage = (props: WithSnackbarProps) => {
   const [authData] = useLocalStorageState<{
     id: string;
     email: string;
     role: UserRole;
   }>('authData');
 
+  const [isIntegrated, setIsIntegrated] = useState(false);
+
   const [urlState] = useUrlState();
-  const { data, loading } = useGetUserMpAccessTokenQuery();
+  const { loading: loadingGetAccessTokenQuery } = useGetUserMpAccessTokenQuery({
+    onCompleted: (data) => {
+      if (data.getUserMpAccessToken) {
+        setIsIntegrated(true);
+      }
+    },
+  });
+  const [authorizeMercadoPago, { loading: loadingAuthorizeMutation }] =
+    useAuthorizeMercadoPagoMutation();
   const mercadoPagoCode = urlState.code as string;
 
   useEffect(() => {
+    const authorizeMercadoPagoAndGetAccessToken = async (
+      mercadoPagoAuthCode: string
+    ) => {
+      await authorizeMercadoPago({
+        variables: { mercadoPagoCode: mercadoPagoAuthCode },
+        onCompleted: () => {
+          props.snackbarShowMessage(
+            4000,
+            'Integracion con Mercado Pago exitosa!',
+            snackSeverity.success
+          );
+          setIsIntegrated(true);
+        },
+      });
+    };
     if (mercadoPagoCode) {
-      console.log('hey');
+      authorizeMercadoPagoAndGetAccessToken(mercadoPagoCode);
     }
-  });
+  }, [mercadoPagoCode]);
+
+  return {
+    loading: loadingGetAccessTokenQuery || loadingAuthorizeMutation,
+    isIntegrated,
+    authData,
+  };
+};
+
+const IntegrationsPageInternal = (props: WithSnackbarProps) => {
+  const controller = useIntegrationsPage(props);
 
   return (
     <AdminPage>
@@ -66,19 +107,21 @@ export const IntegrationsPage = () => {
             <Stack spacing={5}>
               <StyledLabel> Integrar con mercado pago</StyledLabel>
               <StyledLabel> ESTADO:</StyledLabel>
-              {loading ? (
+              {controller.loading ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (
                 <StyledLabel>
-                  {data?.getUserMpAccessToken
-                    ? `Su cuenta se encuentra correctamente sincronizada con mercado
+                  {controller.isIntegrated
+                    ? `Felicitaciones: Su cuenta se encuentra correctamente sincronizada con mercado
                   pago`
                     : 'No integrado'}
                 </StyledLabel>
               )}
 
               <Button
-                onClick={() => handleRedirectToMercadoPago(authData?.id || '')}
+                onClick={() =>
+                  handleRedirectToMercadoPago(controller.authData?.id || '')
+                }
                 variant="contained"
               >
                 Click aqui para comenzar
@@ -90,3 +133,5 @@ export const IntegrationsPage = () => {
     </AdminPage>
   );
 };
+
+export const IntegrationsPage = withSnack(IntegrationsPageInternal);
