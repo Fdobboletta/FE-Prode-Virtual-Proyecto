@@ -46,6 +46,10 @@ const Form = styled.form`
   max-width: ${toRem(600)};
 `;
 
+const ErrorMessage = styled.div`
+  color: ${(props) => props.theme.palette.error.main};
+`;
+
 const StyledAccountCircle = styled(AccountCircle)`
   margin-right: ${toRem(6)};
 `;
@@ -82,9 +86,16 @@ const InternalLogin = (): JSX.Element => {
     role: UserRole;
   }>('authData');
 
+  const [error, setError] = useState('');
+
   const navigate = useNavigate();
 
   const [authUser, { loading }] = useAuthenticateUserMutation({
+    onError: (error) => {
+      if (error.message) {
+        setError(error.message);
+      }
+    },
     onCompleted: (data) => {
       const userRole = data.authenticateUser.role;
       setAuthData({
@@ -103,6 +114,7 @@ const InternalLogin = (): JSX.Element => {
         ...prevValues,
         [name]: value,
       }));
+      setError('');
     },
     [setFormValues]
   );
@@ -153,6 +165,7 @@ const InternalLogin = (): JSX.Element => {
               startAdornment: <StyledLock />,
             }}
           />
+          {error && <ErrorMessage>{error}</ErrorMessage>}
           <StyledLoginButton
             variant="contained"
             color="primary"
