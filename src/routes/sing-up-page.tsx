@@ -130,14 +130,16 @@ const InternalRegister = (): JSX.Element => {
       let isValid = true;
 
       if (!validateEmail(email)) {
-        setEmailError('Invalid email format');
+        setEmailError('El valor ingresado no corresponde a un email');
         isValid = false;
       } else {
         setEmailError('');
       }
 
       if (!validateCellphone(cellphone)) {
-        setCellphoneError('Invalid cellphone format');
+        setCellphoneError(
+          'El valor ingresado no corresponde a un numero telefonico'
+        );
         isValid = false;
       } else {
         setCellphoneError('');
