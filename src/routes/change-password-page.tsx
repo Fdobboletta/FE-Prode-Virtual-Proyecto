@@ -5,8 +5,14 @@ import { Button, CircularProgress, TextField } from '@mui/material';
 import { toRem } from '../utils';
 import { Logo } from '../logo';
 import { useChangePasswordMutation } from '../graphql/changePassword.generated';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useValidateTokenLazyQuery } from '../graphql/validateToken.generated';
+import useUrlState from '@ahooksjs/use-url-state';
+import {
+  WithSnackbarProps,
+  snackSeverity,
+  withSnack,
+} from '@/components/snackbar';
 
 interface ResetPasswordFormValues {
   newPassword: string;
@@ -55,24 +61,34 @@ const StyledSubmitButton = styled(Button)`
   margin-top: ${toRem(6)} !important;
 `;
 
-const useChangePassword = () => {
-  const { token } = useParams<{ token: string }>();
+const useChangePassword = (props: WithSnackbarProps) => {
+  const [urlState] = useUrlState();
   const navigate = useNavigate();
 
   const [validateTokenQuery] = useValidateTokenLazyQuery();
 
   const [changePassword, { loading: loadingChangePassword }] =
-    useChangePasswordMutation();
+    useChangePasswordMutation({
+      onCompleted: () => {
+        props.snackbarShowMessage(
+          4000,
+          'Email enviado con exito',
+          snackSeverity.success
+        );
+      },
+    });
 
   const [loadingPage, setLoadingPage] = useState(true);
   const [passwordError, setPasswordError] = useState('');
 
+  const resetPasswordToken = urlState.token as string;
+
   useEffect(() => {
     const validateToken = async () => {
       try {
-        if (!token || !validateTokenQuery) return;
+        if (!resetPasswordToken || !validateTokenQuery) return;
         const { data, loading } = await validateTokenQuery({
-          variables: { token, isResetPassword: true },
+          variables: { token: resetPasswordToken, isResetPassword: true },
         });
 
         if (!loading && !data?.validateToken) {
@@ -88,7 +104,7 @@ const useChangePassword = () => {
       }
     };
     validateToken();
-  }, [token, validateTokenQuery]);
+  }, [resetPasswordToken, validateTokenQuery]);
 
   const [formValues, setFormValues] = useState<ResetPasswordFormValues>({
     newPassword: '',
@@ -124,7 +140,7 @@ const useChangePassword = () => {
         await changePassword({
           variables: {
             newPassword,
-            token: token || '',
+            token: resetPasswordToken || '',
           },
         });
       }
@@ -142,8 +158,8 @@ const useChangePassword = () => {
   };
 };
 
-const InternalChangePassword = (): JSX.Element => {
-  const controller = useChangePassword();
+const InternalChangePassword = (props: WithSnackbarProps): JSX.Element => {
+  const controller = useChangePassword(props);
 
   return (
     <Container>
@@ -204,4 +220,4 @@ const InternalChangePassword = (): JSX.Element => {
   );
 };
 
-export const ChangePasswordPage = memo(InternalChangePassword);
+export const ChangePasswordPage = withSnack(memo(InternalChangePassword));

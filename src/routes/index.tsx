@@ -23,7 +23,7 @@ export const AppRoutes = () => {
       <Route element={<Navigate to="/login" />} path="/" />
       <Route element={<RegisterPage />} path="/register" />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
-      <Route path="/change-password/:token" element={<ChangePasswordPage />} />
+      <Route path="/change-password" element={<ChangePasswordPage />} />
     </Routes>
   );
 };
