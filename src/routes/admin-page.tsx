@@ -12,14 +12,9 @@ import {
 } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { MercadoPagoIcon } from '../components/svg-icon/mercado-pago';
 
-import {
-  Dashboard,
-  People,
-  Assessment,
-  Settings,
-  Store,
-} from '@mui/icons-material';
+import { Dashboard, People, Assessment, Settings } from '@mui/icons-material';
 
 type AdminPageProps = {
   children: ReactNode;
@@ -96,9 +91,9 @@ const AdminDrawerContent = (): JSX.Element => {
           selected={isActive('/integrations')}
         >
           <StyledListItemIcon>
-            <Store />
+            <MercadoPagoIcon />
           </StyledListItemIcon>
-          <ListItemText primary="Integracion con Mercado Pago" />
+          <ListItemText primary="Mercado Pago" />
         </ListItemButton>
       </StyledList>
       <StyledBox>
