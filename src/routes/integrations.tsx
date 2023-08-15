@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { AdminPage } from './admin-page';
 import useUrlState from '@ahooksjs/use-url-state';
 import { useGetUserMpAccessTokenQuery } from '@/graphql/getUserMpAccessToken.generated';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 import {
   WithSnackbarProps,
   snackSeverity,
@@ -14,6 +16,7 @@ import {
 } from '@/components/snackbar';
 import { useAuthorizeMercadoPagoMutation } from '@/graphql/authorizeMercadoPago.generated';
 import { useDisconnectMercadoPagoIntegrationMutation } from '@/graphql/disconnectMpIntegration.generated';
+import { ConfirmationModal, useModal } from '@/components/modal-container';
 
 const PageContainer = styled.div`
   display: flex;
@@ -29,6 +32,12 @@ const BoxContainer = styled.div`
 `;
 
 const StyledLabel = styled.div`
+  margin-bottom: ${toRem(6)};
+  text-align: center;
+`;
+const StyledTitle = styled.div`
+  font-weight: bold;
+  text-transform: uppercase;
   margin-bottom: ${toRem(6)};
   text-align: center;
 `;
@@ -103,12 +112,19 @@ const useIntegrationsPage = (props: WithSnackbarProps) => {
     });
   }, []);
 
+  const { onCloseModal, onOpenModal, modalOpen } = useModal();
+
   return {
     loading: loadingGetAccessTokenQuery || loadingAuthorizeMutation,
     loadingDisconnectMutation,
     isIntegrated,
     authData,
     handleDisconnectIntegration,
+    confirmationModal: {
+      onCloseModal,
+      onOpenModal,
+      modalOpen,
+    },
   };
 };
 
@@ -121,29 +137,44 @@ const IntegrationsPageInternal = (props: WithSnackbarProps) => {
         <Box
           sx={{
             width: 300,
-            height: 300,
             backgroundColor: 'white',
             border: 'solid black',
           }}
         >
           <BoxContainer>
-            <Stack spacing={5}>
-              <StyledLabel> Integrar con mercado pago</StyledLabel>
+            <Stack spacing={3}>
+              <StyledTitle> Integrar con mercado pago</StyledTitle>
               <StyledLabel> ESTADO:</StyledLabel>
               {controller.loading ? (
-                <CircularProgress size={24} color="inherit" />
+                <CircularProgress
+                  size={24}
+                  color="inherit"
+                  style={{ alignSelf: 'center' }}
+                />
+              ) : controller.isIntegrated ? (
+                <>
+                  <CheckCircleIcon
+                    fontSize="large"
+                    style={{ color: 'green', alignSelf: 'center' }}
+                  />
+                  <StyledLabel>
+                    Felicitaciones: Su cuenta esta lista para operar con Mercado
+                    Pago
+                  </StyledLabel>
+                </>
               ) : (
-                <StyledLabel>
-                  {controller.isIntegrated
-                    ? `Felicitaciones: Su cuenta se encuentra correctamente sincronizada con mercado
-                  pago`
-                    : 'No integrado'}
-                </StyledLabel>
+                <>
+                  <CancelIcon
+                    fontSize="large"
+                    style={{ color: '#f44336', alignSelf: 'center' }}
+                  />
+                  <StyledLabel>No Integrado</StyledLabel>
+                </>
               )}
 
               {controller.isIntegrated ? (
                 <Button
-                  onClick={() => controller.handleDisconnectIntegration()}
+                  onClick={() => controller.confirmationModal.onOpenModal()}
                   variant="contained"
                 >
                   {controller.loadingDisconnectMutation ? (
@@ -166,6 +197,20 @@ const IntegrationsPageInternal = (props: WithSnackbarProps) => {
           </BoxContainer>
         </Box>
       </PageContainer>
+      <ConfirmationModal
+        ariaLabel={'confirm-disconnect-modal'}
+        destructive
+        isModalOpen={controller.confirmationModal.modalOpen}
+        onConfirm={() => {
+          controller.handleDisconnectIntegration();
+          controller.confirmationModal.onCloseModal();
+        }}
+        onCloseModal={() => controller.confirmationModal.onCloseModal()}
+      >
+        Estas seguro que deseas desconectar tu integracion con Mercado Pago?
+        Esto implicara volver a realizar todo el proceso de sincronizacion la
+        proxima vez
+      </ConfirmationModal>
     </AdminPage>
   );
 };
