@@ -5,6 +5,11 @@ import { Button, CircularProgress, TextField } from '@mui/material';
 import { toRem } from '../utils';
 import { Logo } from '../logo';
 import { useSendResetPasswordEmailMutation } from '../graphql/sendResetPasswordEmail.generated';
+import {
+  WithSnackbarProps,
+  snackSeverity,
+  withSnack,
+} from '@/components/snackbar';
 
 interface ResetPasswordFormValues {
   email: string;
@@ -57,7 +62,7 @@ const validateEmail = (email: string): boolean => {
   return emailRegex.test(email);
 };
 
-const InternalResetPassword = (): JSX.Element => {
+const InternalResetPassword = (props: WithSnackbarProps): JSX.Element => {
   const [formValues, setFormValues] = useState<ResetPasswordFormValues>({
     email: '',
   });
@@ -66,6 +71,14 @@ const InternalResetPassword = (): JSX.Element => {
 
   const [sendResetPasswordEmail, { loading }] =
     useSendResetPasswordEmailMutation({
+      onCompleted: () => {
+        props.snackbarShowMessage(
+          4000,
+          'Email enviado con exito',
+          snackSeverity.success
+        );
+      },
+
       onError: (error) => {
         if (error.message) {
           setEmailError(error.message);
@@ -149,4 +162,4 @@ const InternalResetPassword = (): JSX.Element => {
   );
 };
 
-export const ResetPasswordPage = memo(InternalResetPassword);
+export const ResetPasswordPage = withSnack(memo(InternalResetPassword));
