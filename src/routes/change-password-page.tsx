@@ -72,9 +72,10 @@ const useChangePassword = (props: WithSnackbarProps) => {
       onCompleted: () => {
         props.snackbarShowMessage(
           4000,
-          'Email enviado con exito',
+          'Su contraseña fue modificada con exito',
           snackSeverity.success
         );
+        navigate('/login');
       },
     });
 
