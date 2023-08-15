@@ -65,7 +65,13 @@ const InternalResetPassword = (): JSX.Element => {
   const [emailError, setEmailError] = useState('');
 
   const [sendResetPasswordEmail, { loading }] =
-    useSendResetPasswordEmailMutation();
+    useSendResetPasswordEmailMutation({
+      onError: (error) => {
+        if (error.message) {
+          setEmailError(error.message);
+        }
+      },
+    });
 
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
