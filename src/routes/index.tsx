@@ -1,13 +1,15 @@
 import { UserRole } from '@/generated/graphql-types.generated';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { ChangePasswordPage } from './change-password-page';
 import { IntegrationsPage } from './integrations';
-import { LoginPage } from './login-page';
+
 import { PrivateRoutes } from './private-routes';
-import { ResetPasswordPage } from './reset-password-page';
-import { RegisterPage } from './sing-up-page';
+
 import { UserPage } from './user-page';
+import { ResetPasswordPage } from './auth/reset-password-page';
+import { LoginPage } from './auth/login-page';
+import { RegisterPage } from './auth/sing-up-page';
+import { ChangePasswordPage } from './auth/change-password-page';
 
 export const AppRoutes = () => {
   return (

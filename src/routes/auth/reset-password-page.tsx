@@ -2,9 +2,10 @@ import React, { memo, useCallback, useState } from 'react';
 import { AccountCircle } from '@mui/icons-material';
 import styled from 'styled-components';
 import { Button, CircularProgress, TextField } from '@mui/material';
-import { toRem } from '../utils';
-import { Logo } from '../logo';
-import { useSendResetPasswordEmailMutation } from '../graphql/sendResetPasswordEmail.generated';
+import { toRem } from '@/utils';
+
+import { Logo } from '@/logo';
+import { useSendResetPasswordEmailMutation } from '@/graphql/sendResetPasswordEmail.generated';
 import {
   WithSnackbarProps,
   snackSeverity,

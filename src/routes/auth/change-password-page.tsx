@@ -2,17 +2,19 @@ import React, { memo, useCallback, useEffect, useState } from 'react';
 import { Lock } from '@mui/icons-material';
 import styled from 'styled-components';
 import { Button, CircularProgress, TextField } from '@mui/material';
-import { toRem } from '../utils';
-import { Logo } from '../logo';
-import { useChangePasswordMutation } from '../graphql/changePassword.generated';
+
 import { useNavigate } from 'react-router';
-import { useValidateTokenLazyQuery } from '../graphql/validateToken.generated';
+
 import useUrlState from '@ahooksjs/use-url-state';
 import {
   WithSnackbarProps,
   snackSeverity,
   withSnack,
 } from '@/components/snackbar';
+import { Logo } from '@/logo';
+import { useValidateTokenLazyQuery } from '@/graphql/validateToken.generated';
+import { useChangePasswordMutation } from '@/graphql/changePassword.generated';
+import { toRem } from '@/utils';
 
 interface ResetPasswordFormValues {
   newPassword: string;
