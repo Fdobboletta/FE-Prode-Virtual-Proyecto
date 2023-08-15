@@ -103,6 +103,11 @@ const InternalRegister = (): JSX.Element => {
       localStorage.setItem('authToken', data.registerNewUser.token);
       navigate('/user');
     },
+    onError: (mutationError) => {
+      if (mutationError.message) {
+        setEmailError(mutationError.message);
+      }
+    },
   });
 
   const handleInputChange = useCallback(
