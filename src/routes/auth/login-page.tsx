@@ -3,12 +3,14 @@ import React, { memo, useCallback, useState } from 'react';
 import { AccountCircle, Lock } from '@mui/icons-material';
 import styled from 'styled-components';
 import { Button, CircularProgress, Link, TextField } from '@mui/material';
-import { useAuthenticateUserMutation } from '../graphql/authUser.generated';
+
 import { useNavigate } from 'react-router';
 import { useLocalStorageState } from 'ahooks';
-import { toRem } from '../utils';
-import { Logo } from '../logo';
+
 import { UserRole } from '@/generated/graphql-types.generated';
+import { Logo } from '@/logo';
+import { useAuthenticateUserMutation } from '@/graphql/authUser.generated';
+import { toRem } from '@/utils';
 
 interface LoginFormValues {
   email: string;
