@@ -1,7 +1,6 @@
-import { createTheme } from '@mui/material/styles';
-import { DefaultTheme } from 'styled-components';
+import { Theme, createTheme } from '@mui/material/styles';
 
-const theme: DefaultTheme = createTheme({
+const theme: Theme = createTheme({
   breakpoints: {
     values: {
       xs: 0,
