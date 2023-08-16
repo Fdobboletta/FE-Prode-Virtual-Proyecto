@@ -43,7 +43,7 @@ const StyledTitle = styled.div`
 `;
 
 const handleRedirectToMercadoPago = (userId: string) => {
-  const clientId = import.meta.env.VITE_MERCADO_PAGO_CLIENT_ID as string;
+  const clientId = import.meta.env.VITE_TEST_MERCADO_PAGO_CLIENT_ID as string;
   const redirectUri = 'https://comuniprode.netlify.app/admin/integrations';
   const authUrl = `https://auth.mercadopago.com/authorization?client_id=${clientId}&response_type=code&platform_id=mp&state=${userId}&redirect_uri=${redirectUri} `;
 
