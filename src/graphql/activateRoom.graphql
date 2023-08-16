@@ -1,0 +1,11 @@
+mutation ActivateRoom($roomId: String!) {
+  activateRoom(roomId: $roomId) {
+    id
+    isActive
+    name
+    paymentLink
+    prizeMoney
+    entryPrice
+    dueDate
+  }
+}

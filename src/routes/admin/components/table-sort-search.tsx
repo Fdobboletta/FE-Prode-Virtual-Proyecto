@@ -1,6 +1,6 @@
 import { Room } from '@/generated/graphql-types.generated';
 import { toRem } from '@/utils';
-import { Delete, Launch } from '@mui/icons-material';
+import { Delete, Publish } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { format } from 'date-fns';
 import MUIDataTable, {
@@ -8,6 +8,11 @@ import MUIDataTable, {
   MUIDataTableOptions,
 } from 'mui-datatables';
 import styled from 'styled-components';
+
+type TableWithSortingAndSearchProps = {
+  data: Room[];
+  onActivateRoom?: (roomId: string) => void;
+};
 
 const StyledTable = styled(MUIDataTable)`
   .MuiToolbar-root {
@@ -36,8 +41,30 @@ const StyledTable = styled(MUIDataTable)`
   }
 `;
 
-type TableWithSortingAndSearchProps = {
-  data: Room[];
+const options: MUIDataTableOptions = {
+  search: true,
+  filter: false,
+  download: false,
+  print: false,
+  viewColumns: false,
+  selectableRows: 'none',
+  rowsPerPageOptions: [1, 5, 10],
+  textLabels: {
+    body: {
+      noMatch: 'No se encontraron registros',
+      toolTip: 'Ordenar',
+    },
+    pagination: {
+      next: 'Siguiente',
+      previous: 'Anterior',
+      rowsPerPage: 'Filas por página',
+    },
+    filter: {
+      all: 'Todos',
+      title: 'FILTROS',
+      reset: 'RESET',
+    },
+  },
 };
 
 const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
@@ -93,51 +120,27 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
       },
     },
     {
-      name: 'paymentLink',
-      label: 'Link de Pago',
+      name: 'id',
+      label: 'Publicar Sala',
       options: {
         customBodyRender: (value) => {
           return (
             <IconButton
               onClick={() => {
-                window.open(value, '_blank');
+                if (props.onActivateRoom) {
+                  props.onActivateRoom(value);
+                }
               }}
-              aria-label="Delete"
+              aria-label="Publish"
               size="small"
             >
-              <Launch />
+              <Publish />
             </IconButton>
           );
         },
       },
     },
   ];
-
-  const options: MUIDataTableOptions = {
-    search: true,
-    filter: false,
-    download: false,
-    print: false,
-    viewColumns: false,
-    selectableRows: 'none',
-    rowsPerPageOptions: [1, 5, 10],
-    textLabels: {
-      body: {
-        noMatch: 'No se encontraron registros',
-        toolTip: 'Ordenar',
-      },
-      pagination: {
-        next: 'Siguiente',
-        previous: 'Anterior',
-        rowsPerPage: 'Filas por página',
-      },
-      filter: {
-        all: 'Todos',
-        title: 'FILTROS',
-        reset: 'RESET',
-      },
-    },
-  };
 
   return (
     <StyledTable

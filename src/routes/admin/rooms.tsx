@@ -13,6 +13,12 @@ import { useGetRoomsByUserIdQuery } from '@/graphql/getRoomsByUser.generated';
 import { CircularProgress } from '@mui/material';
 import { Room } from '@/generated/graphql-types.generated';
 import { LoadedRooms } from './loaded-rooms';
+import { useActivateRoomMutation } from '@/graphql/activateRoom.generated';
+import {
+  WithSnackbarProps,
+  snackSeverity,
+  withSnack,
+} from '@/components/snackbar';
 
 const PageContainer = styled.div`
   display: flex;
@@ -20,10 +26,11 @@ const PageContainer = styled.div`
   padding: ${toRem(32)};
 `;
 
-const RoomsPageInternal = () => {
+const RoomsPageInternal = (props: WithSnackbarProps) => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [isIntegrated, setIsIntegrated] = useState(false);
   const [createRoom, { loading: loadingCreateRoom }] = useCreateRoomMutation();
+  const [activateRoom] = useActivateRoomMutation();
   const { loading: loadingGetAccessTokenQuery } = useGetUserMpAccessTokenQuery({
     onCompleted: (data) => {
       if (data.getUserMpAccessToken) {
@@ -61,6 +68,40 @@ const RoomsPageInternal = () => {
     }
   };
 
+  const handleActivateRoom = async (roomId: string) => {
+    try {
+      await activateRoom({
+        variables: {
+          roomId,
+        },
+        onCompleted: () => {
+          props.snackbarShowMessage(
+            4000,
+            'Su sala fue publicada',
+            snackSeverity.success
+          );
+        },
+        onError: () => {
+          props.snackbarShowMessage(
+            4000,
+            'Ocurrio un error al intentar publicada su sala',
+            snackSeverity.error
+          );
+        },
+      });
+      setRooms((prevRoomsArray) => {
+        return prevRoomsArray.map((room) => {
+          if (room.id === roomId) {
+            return { ...room, isActive: true };
+          }
+          return room;
+        });
+      });
+    } catch (error) {
+      console.error('Error al activar sala', error);
+    }
+  };
+
   return (
     <AdminPage>
       <PageContainer>
@@ -68,6 +109,7 @@ const RoomsPageInternal = () => {
           <CircularProgress size={24} color="inherit" />
         ) : (
           <LoadedRooms
+            onActivateRoom={handleActivateRoom}
             onCreateRoom={handleCreateRoom}
             rooms={rooms}
             isIntegrated={isIntegrated}
@@ -80,4 +122,4 @@ const RoomsPageInternal = () => {
   );
 };
 
-export const RoomsPage = memo(RoomsPageInternal);
+export const RoomsPage = withSnack(memo(RoomsPageInternal));

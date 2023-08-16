@@ -14,6 +14,7 @@ import { Room } from '@/generated/graphql-types.generated';
 type AccordionTableProps = {
   title: string;
   data: Room[];
+  onActivateRoom?: (roomId: string) => void;
 };
 
 const StyledAccordion = styled(Accordion)`
@@ -56,7 +57,10 @@ const AccordionWithTableInternal = (props: AccordionTableProps) => {
         <Typography>{`${props.title} (${props.data.length})`}</Typography>
       </StyledAccordionSummary>
       <StyledAccordionDetails>
-        <TableWithSortingAndSearch data={props.data} />
+        <TableWithSortingAndSearch
+          data={props.data}
+          onActivateRoom={props.onActivateRoom}
+        />
       </StyledAccordionDetails>
     </StyledAccordion>
   );

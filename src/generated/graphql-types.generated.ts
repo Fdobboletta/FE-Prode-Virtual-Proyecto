@@ -32,6 +32,7 @@ export type MercadoPagoPreference = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  activateRoom: Room;
   authenticateUser: User;
   authorizeMercadoPago?: Maybe<MercadoPagoAccessToken>;
   changePassword?: Maybe<Scalars['String']>;
@@ -39,6 +40,10 @@ export type Mutation = {
   disconnectMercadoPagoIntegration?: Maybe<Scalars['String']>;
   registerNewUser: User;
   sendResetPasswordEmail?: Maybe<Scalars['String']>;
+};
+
+export type MutationActivateRoomArgs = {
+  roomId: Scalars['String'];
 };
 
 export type MutationAuthenticateUserArgs = {
