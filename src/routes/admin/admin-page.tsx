@@ -1,5 +1,5 @@
 import { memo, ReactNode } from 'react';
-import { PrivateLayout } from '../components/private-layout';
+import { PrivateLayout } from '@/components/private-layout';
 
 import { useCallback } from 'react';
 import {
@@ -12,9 +12,9 @@ import {
 } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { MercadoPagoIcon } from '../components/svg-icon/mercado-pago';
+import { MercadoPagoIcon } from '@/components/svg-icon/mercado-pago';
 
-import { Dashboard, People, Assessment, Settings } from '@mui/icons-material';
+import { People, Assessment, Settings, MeetingRoom } from '@mui/icons-material';
 
 type AdminPageProps = {
   children: ReactNode;
@@ -60,13 +60,13 @@ const AdminDrawerContent = (): JSX.Element => {
     <DrawerContentContainer>
       <StyledList>
         <ListItemButton
-          onClick={handleNavigation('/prodes')}
-          selected={isActive('/prodes')}
+          onClick={handleNavigation('/salas')}
+          selected={isActive('/salas')}
         >
           <StyledListItemIcon>
-            <Dashboard />
+            <MeetingRoom />
           </StyledListItemIcon>
-          <ListItemText primary="Prodes" />
+          <ListItemText primary="Mis salas" />
         </ListItemButton>
         <ListItemButton
           onClick={handleNavigation('/equipos')}

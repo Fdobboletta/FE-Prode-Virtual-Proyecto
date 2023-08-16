@@ -4,7 +4,6 @@ import { Box, Button, CircularProgress, Stack } from '@mui/material';
 import { useLocalStorageState } from 'ahooks';
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { AdminPage } from './admin-page';
 import useUrlState from '@ahooksjs/use-url-state';
 import { useGetUserMpAccessTokenQuery } from '@/graphql/getUserMpAccessToken.generated';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -17,6 +16,7 @@ import {
 import { useAuthorizeMercadoPagoMutation } from '@/graphql/authorizeMercadoPago.generated';
 import { useDisconnectMercadoPagoIntegrationMutation } from '@/graphql/disconnectMpIntegration.generated';
 import { ConfirmationModal, useModal } from '@/components/modal-container';
+import { AdminPage } from './admin-page';
 
 const PageContainer = styled.div`
   display: flex;
@@ -45,7 +45,7 @@ const StyledTitle = styled.div`
 const handleRedirectToMercadoPago = (userId: string) => {
   const clientId = import.meta.env.VITE_MERCADO_PAGO_CLIENT_ID as string;
   const redirectUri = 'https://comuniprode.netlify.app/admin/integrations';
-  const authUrl = `https://auth.mercadopago.com/authorization?client_id=${clientId}&response_type=code&platform_id=mp&state=${userId}&redirect_uri=${redirectUri}&test_token=true `;
+  const authUrl = `https://auth.mercadopago.com/authorization?client_id=${clientId}&response_type=code&platform_id=mp&state=${userId}&redirect_uri=${redirectUri} `;
 
   window.location.href = authUrl;
 };
