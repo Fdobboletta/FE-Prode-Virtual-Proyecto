@@ -15,6 +15,7 @@ type AccordionTableProps = {
   title: string;
   data: Room[];
   onActivateRoom?: (roomId: string) => void;
+  onDeleteRoom: (roomId: string) => void;
 };
 
 const StyledAccordion = styled(Accordion)`
@@ -60,6 +61,7 @@ const AccordionWithTableInternal = (props: AccordionTableProps) => {
         <TableWithSortingAndSearch
           data={props.data}
           onActivateRoom={props.onActivateRoom}
+          onDeleteRoom={props.onDeleteRoom}
         />
       </StyledAccordionDetails>
     </StyledAccordion>

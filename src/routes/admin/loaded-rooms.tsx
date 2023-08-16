@@ -39,14 +39,16 @@ type LoadedRoomsProps = {
   loadingCreateRoom: boolean;
   isIntegrated: boolean;
   onCreateRoom: (newRoom: CreateRoomMutationVariables) => void;
-  onActivateRoom: (roomId: string) => void;
+  onConfirmActivateRoom: (roomId: string) => void;
+  onConfirmDeleteRoom: (roomId: string) => void;
 };
 
 const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
   const createRoomModalController = useModal();
   const activateRoomModalController = useModal();
+  const deleteRoomModalController = useModal();
 
-  const [activateRoomId, setActivateRoomId] = useState('');
+  const [selectedRoomId, setSelectedRoomId] = useState('');
 
   const activeRooms = useMemo(
     () => props.rooms.filter((room) => room.isActive),
@@ -58,8 +60,13 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
   );
 
   const handleActivateRoom = (roomId: string) => {
-    setActivateRoomId(roomId);
+    setSelectedRoomId(roomId);
     activateRoomModalController.onOpenModal();
+  };
+
+  const handleDeleteRoom = (roomId: string) => {
+    setSelectedRoomId(roomId);
+    deleteRoomModalController.onOpenModal();
   };
 
   return (
@@ -76,12 +83,17 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
           '+ Crear nueva Sala'
         )}
       </StyledButton>
-      <AccordionWithTable title="SALAS ACTIVAS" data={activeRooms} />
+      <AccordionWithTable
+        title="SALAS ACTIVAS"
+        data={activeRooms}
+        onDeleteRoom={handleDeleteRoom}
+      />
       <Spacer />
       <AccordionWithTable
         title="SALAS INACTIVAS"
         data={inactiveRooms}
         onActivateRoom={handleActivateRoom}
+        onDeleteRoom={handleDeleteRoom}
       />
       <CreateRoomModal
         loading={props.loadingCreateRoom}
@@ -90,10 +102,10 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
         isOpen={createRoomModalController.modalOpen}
       />
       <ConfirmationModal
-        ariaLabel={'confirmar-activacion-sala'}
+        ariaLabel={'confirmar-publicacion-sala'}
         isModalOpen={activateRoomModalController.modalOpen}
         onConfirm={() => {
-          props.onActivateRoom(activateRoomId);
+          props.onConfirmActivateRoom(selectedRoomId);
           activateRoomModalController.onCloseModal();
         }}
         onCancel={() => activateRoomModalController.onCloseModal()}
@@ -101,6 +113,19 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
         modalTitle="Publicar Sala?"
       >
         Una vez publicados, los datos de la sala no podran ser editados
+      </ConfirmationModal>
+      <ConfirmationModal
+        ariaLabel={'confirmar-borrar-sala'}
+        isModalOpen={deleteRoomModalController.modalOpen}
+        onConfirm={() => {
+          props.onConfirmDeleteRoom(selectedRoomId);
+          deleteRoomModalController.onCloseModal();
+        }}
+        onCancel={() => deleteRoomModalController.onCloseModal()}
+        onCloseModal={() => deleteRoomModalController.onCloseModal()}
+        modalTitle="Desea eliminar la sala?"
+      >
+        Une vez eliminada una sala, sus datos no podran recuperarse
       </ConfirmationModal>
     </AccordionGroupContainer>
   );

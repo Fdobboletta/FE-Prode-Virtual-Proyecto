@@ -14,6 +14,8 @@ import { CircularProgress } from '@mui/material';
 import { Room } from '@/generated/graphql-types.generated';
 import { LoadedRooms } from './loaded-rooms';
 import { useActivateRoomMutation } from '@/graphql/activateRoom.generated';
+import { useDeleteRoomMutation } from '@/graphql/deleteRoom.generated';
+
 import {
   WithSnackbarProps,
   snackSeverity,
@@ -31,6 +33,7 @@ const RoomsPageInternal = (props: WithSnackbarProps) => {
   const [isIntegrated, setIsIntegrated] = useState(false);
   const [createRoom, { loading: loadingCreateRoom }] = useCreateRoomMutation();
   const [activateRoom] = useActivateRoomMutation();
+  const [deleteRoom] = useDeleteRoomMutation();
   const { loading: loadingGetAccessTokenQuery } = useGetUserMpAccessTokenQuery({
     onCompleted: (data) => {
       if (data.getUserMpAccessToken) {
@@ -68,7 +71,7 @@ const RoomsPageInternal = (props: WithSnackbarProps) => {
     }
   };
 
-  const handleActivateRoom = async (roomId: string) => {
+  const handleConfirmActivateRoom = async (roomId: string) => {
     try {
       await activateRoom({
         variables: {
@@ -102,6 +105,35 @@ const RoomsPageInternal = (props: WithSnackbarProps) => {
     }
   };
 
+  const handleConfirmDeleteRoom = async (roomId: string) => {
+    try {
+      await deleteRoom({
+        variables: {
+          roomId,
+        },
+        onCompleted: () => {
+          props.snackbarShowMessage(
+            4000,
+            'Su sala fue eliminada correctamente',
+            snackSeverity.success
+          );
+        },
+        onError: () => {
+          props.snackbarShowMessage(
+            4000,
+            'Ocurrio un error al intentar eliminar su sala',
+            snackSeverity.error
+          );
+        },
+      });
+      setRooms((prevRoomsArray) =>
+        prevRoomsArray.filter((room) => room.id !== roomId)
+      );
+    } catch (error) {
+      console.error('Error al activar sala', error);
+    }
+  };
+
   return (
     <AdminPage>
       <PageContainer>
@@ -109,7 +141,8 @@ const RoomsPageInternal = (props: WithSnackbarProps) => {
           <CircularProgress size={24} color="inherit" />
         ) : (
           <LoadedRooms
-            onActivateRoom={handleActivateRoom}
+            onConfirmActivateRoom={handleConfirmActivateRoom}
+            onConfirmDeleteRoom={handleConfirmDeleteRoom}
             onCreateRoom={handleCreateRoom}
             rooms={rooms}
             isIntegrated={isIntegrated}

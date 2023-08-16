@@ -12,6 +12,7 @@ import styled from 'styled-components';
 type TableWithSortingAndSearchProps = {
   data: Room[];
   onActivateRoom?: (roomId: string) => void;
+  onDeleteRoom: (roomId: string) => void;
 };
 
 const StyledTable = styled(MUIDataTable)`
@@ -74,7 +75,7 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
       name: 'dueDate',
       label: 'Fecha de Cierre',
       options: {
-        customBodyRender: (value) => {
+        customBodyRender: (value: any) => {
           const date = new Date(value);
 
           const formattedDate = format(date, 'dd/MM/yyyy HH:mm');
@@ -86,7 +87,7 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
       name: 'entryPrice',
       label: 'Precio de Entrada',
       options: {
-        customBodyRender: (value) => {
+        customBodyRender: (value: any) => {
           return `$${value}`;
         },
       },
@@ -95,7 +96,7 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
       name: 'prizeMoney',
       label: 'Premio',
       options: {
-        customBodyRender: (value) => {
+        customBodyRender: (value: any) => {
           return `$${value}`;
         },
       },
@@ -104,11 +105,11 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
       name: 'id',
       label: 'Eliminar',
       options: {
-        customBodyRender: (value) => {
+        customBodyRender: (value: any) => {
           return (
             <IconButton
               onClick={() => {
-                console.log('delete', value);
+                props.onDeleteRoom(value);
               }}
               aria-label="Delete"
               size="small"
@@ -123,7 +124,7 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
       name: 'id',
       label: 'Publicar Sala',
       options: {
-        customBodyRender: (value) => {
+        customBodyRender: (value: any) => {
           return (
             <IconButton
               onClick={() => {
@@ -140,7 +141,9 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
         },
       },
     },
-  ];
+  ].filter((column) =>
+    props.onActivateRoom ? column : column.label !== 'Publicar Sala'
+  );
 
   return (
     <StyledTable
