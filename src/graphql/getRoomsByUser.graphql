@@ -1,0 +1,11 @@
+query GetRoomsByUserId {
+  getRoomsByUserId {
+    id
+    name
+    prizeMoney
+    dueDate
+    entryPrice
+    isActive
+    paymentLink
+  }
+}

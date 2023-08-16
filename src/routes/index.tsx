@@ -19,9 +19,9 @@ export const AppRoutes = () => {
         <Route path="/user" element={<UserPage />} />
       </Route>
       <Route element={<PrivateRoutes requiredRole={UserRole.Admin} />}>
-        <Route path="/admin" element={<Navigate to="/admin/integrations" />} />
+        <Route path="/admin" element={<Navigate to="/admin/rooms" />} />
         <Route path="/admin/integrations" element={<IntegrationsPage />} />
-        <Route path="/admin/salas" element={<RoomsPage />} />
+        <Route path="/admin/rooms" element={<RoomsPage />} />
       </Route>
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/register" element={<RegisterPage />} />

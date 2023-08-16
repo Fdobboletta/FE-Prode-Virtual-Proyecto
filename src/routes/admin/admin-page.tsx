@@ -43,7 +43,7 @@ const StyledListItemIcon = styled(ListItemIcon)`
   min-width: 36px;
 `;
 
-const AdminDrawerContent = (): JSX.Element => {
+const AdminDrawerContent = (): JSX.Element | null => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -60,8 +60,8 @@ const AdminDrawerContent = (): JSX.Element => {
     <DrawerContentContainer>
       <StyledList>
         <ListItemButton
-          onClick={handleNavigation('/salas')}
-          selected={isActive('/salas')}
+          onClick={handleNavigation('/rooms')}
+          selected={isActive('/rooms')}
         >
           <StyledListItemIcon>
             <MeetingRoom />

@@ -1,6 +1,46 @@
 import { Theme, createTheme } from '@mui/material/styles';
 
 const theme: Theme = createTheme({
+  components: {
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          backgroundColor: '#3f5372',
+        },
+      },
+    },
+  },
+  typography: {
+    h1: {
+      fontSize: '2.25rem',
+      fontWeight: 'bold',
+    },
+    h2: {
+      fontSize: '1.25rem',
+      fontWeight: 'bold',
+    },
+    h3: {
+      fontSize: '1.125rem',
+      fontWeight: 'bold',
+    },
+    subtitle1: {
+      fontSize: '1.25rem',
+    },
+    body1: {
+      fontSize: '0.875rem',
+      fontWeight: 400,
+    },
+    body2: {
+      fontSize: '0.875rem',
+      fontWeight: 'bold',
+    },
+    caption: {
+      fontSize: '0.75rem',
+    },
+    overline: {
+      fontSize: '0.75rem',
+    },
+  },
   breakpoints: {
     values: {
       xs: 0,

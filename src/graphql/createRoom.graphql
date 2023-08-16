@@ -1,0 +1,23 @@
+mutation CreateRoom(
+  $name: String!
+  $dueDate: String!
+  $prizeMoney: Float!
+  $entryPrice: Float!
+  $isActive: Boolean!
+) {
+  createRoom(
+    name: $name
+    dueDate: $dueDate
+    prizeMoney: $prizeMoney
+    entryPrice: $entryPrice
+    isActive: $isActive
+  ) {
+    id
+    entryPrice
+    dueDate
+    isActive
+    name
+    paymentLink
+    prizeMoney
+  }
+}

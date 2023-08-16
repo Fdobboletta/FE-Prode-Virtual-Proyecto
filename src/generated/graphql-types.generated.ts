@@ -35,6 +35,7 @@ export type Mutation = {
   authenticateUser: User;
   authorizeMercadoPago?: Maybe<MercadoPagoAccessToken>;
   changePassword?: Maybe<Scalars['String']>;
+  createRoom: Room;
   disconnectMercadoPagoIntegration?: Maybe<Scalars['String']>;
   registerNewUser: User;
   sendResetPasswordEmail?: Maybe<Scalars['String']>;
@@ -54,6 +55,14 @@ export type MutationChangePasswordArgs = {
   token: Scalars['String'];
 };
 
+export type MutationCreateRoomArgs = {
+  dueDate: Scalars['String'];
+  entryPrice: Scalars['Float'];
+  isActive: Scalars['Boolean'];
+  name: Scalars['String'];
+  prizeMoney: Scalars['Float'];
+};
+
 export type MutationRegisterNewUserArgs = {
   address: Scalars['String'];
   cellphone: Scalars['String'];
@@ -71,7 +80,7 @@ export type MutationSendResetPasswordEmailArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  getLastMercadoPagoPreference: MercadoPagoPreference;
+  getRoomsByUserId: Array<Room>;
   getUserMpAccessToken?: Maybe<Scalars['String']>;
   validateToken: Scalars['Boolean'];
 };
@@ -79,6 +88,18 @@ export type Query = {
 export type QueryValidateTokenArgs = {
   isResetPassword: Scalars['Boolean'];
   token: Scalars['String'];
+};
+
+/** Sala de prode */
+export type Room = {
+  __typename?: 'Room';
+  dueDate: Scalars['String'];
+  entryPrice: Scalars['Float'];
+  id: Scalars['ID'];
+  isActive: Scalars['Boolean'];
+  name: Scalars['String'];
+  paymentLink: Scalars['String'];
+  prizeMoney: Scalars['Float'];
 };
 
 /** App user */

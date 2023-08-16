@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 
 import { toRem } from '@/utils';
-import { Tooltip } from '../tooltip';
+
 import { IconButton } from '@mui/material';
 
 type ModalHeaderProps = {
@@ -57,24 +57,14 @@ const CloseButton = styled.div`
 const ModalHeader: FC<ModalHeaderProps> = (props): JSX.Element => (
   <StyledModalHeader className={props.className}>
     {props.children && (
-      <Tooltip
-        description={
-          props.tooltipDescription ?? (
-            <Typography component="span">{props.children}</Typography>
-          )
-        }
-      >
-        <ModalTitleContainer>
-          <ModalTitle component="h2" variant="h2">
-            {props.children}
-          </ModalTitle>
-          {props.modalSubtitle && (
-            <ModalSubtitle component="span">
-              {props.modalSubtitle}
-            </ModalSubtitle>
-          )}
-        </ModalTitleContainer>
-      </Tooltip>
+      <ModalTitleContainer>
+        <ModalTitle component="h2" variant="h2">
+          {props.children}
+        </ModalTitle>
+        {props.modalSubtitle && (
+          <ModalSubtitle component="span">{props.modalSubtitle}</ModalSubtitle>
+        )}
+      </ModalTitleContainer>
     )}
     {Boolean(props.onClickCloseIcon) && (
       <CloseButton>
