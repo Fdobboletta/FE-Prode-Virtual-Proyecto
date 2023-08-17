@@ -7,7 +7,10 @@ import {
   NextLink,
   NormalizedCacheObject,
   Operation,
+  from,
 } from '@apollo/client';
+
+import { onError } from '@apollo/client/link/error';
 
 export const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
   const httpLink = new HttpLink({
@@ -31,10 +34,30 @@ export const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
     });
   });
 
+  const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors) {
+      for (const error of graphQLErrors) {
+        if (error.extensions?.code === 'UNAUTHENTICATED') {
+          // Handle token expiration, e.g., redirect to login page
+          window.location.replace('/login');
+        } else if (error.message === 'Authentication required') {
+          // Handle authentication required error
+          // For example, you might want to show a message to the user or perform other actions
+          console.error('Authentication required', error);
+          window.location.replace('/login');
+        }
+      }
+    }
+    if (networkError) {
+      // Handle network errors as needed
+      console.error('Network error', networkError);
+    }
+  });
+
   return new ApolloClient({
     cache: new InMemoryCache(),
     connectToDevTools: true,
-    link: ApolloLink.from([authLink, httpLink]),
+    link: from([errorLink, authLink, httpLink]),
     defaultOptions: {
       watchQuery: {
         fetchPolicy: 'cache-and-network',

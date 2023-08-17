@@ -15,7 +15,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { MercadoPagoIcon } from '@/components/svg-icon/mercado-pago';
 
-import { People, Assessment, Settings, MeetingRoom } from '@mui/icons-material';
+import { Assessment, Settings, MeetingRoom } from '@mui/icons-material';
 import { toRem } from '@/utils';
 
 type AdminPageProps = {
