@@ -21,6 +21,7 @@ import {
   snackSeverity,
   withSnack,
 } from '@/components/snackbar';
+import { useUpdateRoomMutation } from '@/graphql/updateRoom.generated';
 
 const PageContainer = styled.div`
   display: flex;
@@ -34,6 +35,7 @@ const RoomsPageInternal = (props: WithSnackbarProps) => {
   const [createRoom, { loading: loadingCreateRoom }] = useCreateRoomMutation();
   const [activateRoom] = useActivateRoomMutation();
   const [deleteRoom] = useDeleteRoomMutation();
+  const [updateRoom] = useUpdateRoomMutation();
   const { loading: loadingGetAccessTokenQuery } = useGetUserMpAccessTokenQuery({
     onCompleted: (data) => {
       if (data.getUserMpAccessToken) {
@@ -105,6 +107,48 @@ const RoomsPageInternal = (props: WithSnackbarProps) => {
     }
   };
 
+  const handleUpdateRoom = async (roomToUpdate: Room) => {
+    try {
+      const updatedRoom = await updateRoom({
+        variables: {
+          roomId: roomToUpdate.id,
+          name: roomToUpdate.name,
+          prizeMoney: roomToUpdate.prizeMoney,
+          entryPrice: roomToUpdate.entryPrice,
+          isActive: roomToUpdate.isActive,
+          dueDate: roomToUpdate.dueDate,
+        },
+        onCompleted: () => {
+          props.snackbarShowMessage(
+            4000,
+            'Su sala fue editada con exito',
+            snackSeverity.success
+          );
+        },
+        onError: () => {
+          props.snackbarShowMessage(
+            4000,
+            'Ocurrio un error al intentar editar su sala',
+            snackSeverity.error
+          );
+        },
+      });
+      if (updatedRoom.data && updatedRoom.data.updateRoom) {
+        const newlyUpdatedRoom = updatedRoom.data.updateRoom;
+        setRooms((prevRoomsArray) => {
+          return prevRoomsArray.map((room) => {
+            if (room.id === roomToUpdate.id) {
+              return newlyUpdatedRoom;
+            }
+            return room;
+          });
+        });
+      }
+    } catch (error) {
+      console.error('Error al editar la sala', error);
+    }
+  };
+
   const handleConfirmDeleteRoom = async (roomId: string) => {
     try {
       await deleteRoom({
@@ -144,6 +188,7 @@ const RoomsPageInternal = (props: WithSnackbarProps) => {
             onConfirmActivateRoom={handleConfirmActivateRoom}
             onConfirmDeleteRoom={handleConfirmDeleteRoom}
             onCreateRoom={handleCreateRoom}
+            onUpdateRoom={handleUpdateRoom}
             rooms={rooms}
             isIntegrated={isIntegrated}
             loadingCreateRoom={loadingCreateRoom}

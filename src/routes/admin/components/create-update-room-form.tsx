@@ -17,7 +17,7 @@ const Form = styled.div`
   width: 100%;
 `;
 
-export type CreateRoomForm = {
+export type CreateOrUpdateRoomFormData = {
   name: string;
   entryPrice: number;
   prizeMoney: number;
@@ -25,16 +25,16 @@ export type CreateRoomForm = {
   dueTime: Date;
 };
 
-type CreateRoomFormProps = {
+type CreateOrUpdateRoomFormProps = {
   onInputChange: (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => void;
   onDateChange: (newDate: Date | null) => void;
   onTimeChange: (newTime: Date | null) => void;
-  formData: CreateRoomForm;
+  formData: CreateOrUpdateRoomFormData;
 };
 
-const CreateRoomFormInternal = (props: CreateRoomFormProps) => {
+const CreateOrUpdateRoomFormInternal = (props: CreateOrUpdateRoomFormProps) => {
   return (
     <Form>
       <TextField
@@ -102,4 +102,4 @@ const CreateRoomFormInternal = (props: CreateRoomFormProps) => {
   );
 };
 
-export const CreateRoomForm = memo(CreateRoomFormInternal);
+export const CreateOrUpdateRoomForm = memo(CreateOrUpdateRoomFormInternal);

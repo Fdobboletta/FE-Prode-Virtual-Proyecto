@@ -13,8 +13,10 @@ import { Room } from '@/generated/graphql-types.generated';
 
 type AccordionTableProps = {
   title: string;
+  inactiveRooms: boolean;
   data: Room[];
   onActivateRoom?: (roomId: string) => void;
+  onEditRoom?: (roomId: string) => void;
   onDeleteRoom: (roomId: string) => void;
 };
 
@@ -60,7 +62,9 @@ const AccordionWithTableInternal = (props: AccordionTableProps) => {
       <StyledAccordionDetails>
         <TableWithSortingAndSearch
           data={props.data}
+          inactiveRooms={props.inactiveRooms}
           onActivateRoom={props.onActivateRoom}
+          onEditRoom={props.onEditRoom}
           onDeleteRoom={props.onDeleteRoom}
         />
       </StyledAccordionDetails>

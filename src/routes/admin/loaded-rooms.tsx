@@ -5,8 +5,9 @@ import { Button, CircularProgress } from '@mui/material';
 import styled from 'styled-components';
 import { AccordionWithTable } from './components/accordion-table';
 import { memo, useMemo, useState } from 'react';
-import { CreateRoomModal } from './components/create-room-modal';
+
 import { CreateRoomMutationVariables } from '@/graphql/createRoom.generated';
+import { CreateOrUpdateRoomModal } from './components/create-update-room-modal';
 
 const AccordionGroupContainer = styled.div`
   display: flex;
@@ -39,16 +40,18 @@ type LoadedRoomsProps = {
   loadingCreateRoom: boolean;
   isIntegrated: boolean;
   onCreateRoom: (newRoom: CreateRoomMutationVariables) => void;
+  onUpdateRoom: (room: Room) => void;
   onConfirmActivateRoom: (roomId: string) => void;
   onConfirmDeleteRoom: (roomId: string) => void;
 };
 
 const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
-  const createRoomModalController = useModal();
+  const createOrUpdateRoomModalController = useModal();
   const activateRoomModalController = useModal();
   const deleteRoomModalController = useModal();
 
   const [selectedRoomId, setSelectedRoomId] = useState('');
+  const [roomToEdit, setRoomToEdit] = useState<Room | null>(null);
 
   const activeRooms = useMemo(
     () => props.rooms.filter((room) => room.isActive),
@@ -64,9 +67,22 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
     activateRoomModalController.onOpenModal();
   };
 
+  const handleEditRoom = (roomId: string) => {
+    const selectedRoomToEdit = props.rooms.find((room) => room.id === roomId);
+
+    if (selectedRoomToEdit) {
+      setRoomToEdit(selectedRoomToEdit);
+    }
+    createOrUpdateRoomModalController.onOpenModal();
+  };
+
   const handleDeleteRoom = (roomId: string) => {
     setSelectedRoomId(roomId);
     deleteRoomModalController.onOpenModal();
+  };
+  const handleCreateRoomModalCancel = () => {
+    setRoomToEdit(null);
+    createOrUpdateRoomModalController.onCloseModal();
   };
 
   return (
@@ -74,7 +90,7 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
       <StyledButton
         disabled={props.loadingGetAccessToken || !props.isIntegrated}
         onClick={() => {
-          createRoomModalController.onOpenModal();
+          createOrUpdateRoomModalController.onOpenModal();
         }}
       >
         {props.loadingGetAccessToken ? (
@@ -84,6 +100,7 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
         )}
       </StyledButton>
       <AccordionWithTable
+        inactiveRooms={false}
         title="SALAS ACTIVAS"
         data={activeRooms}
         onDeleteRoom={handleDeleteRoom}
@@ -91,16 +108,22 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
       <Spacer />
       <AccordionWithTable
         title="SALAS INACTIVAS"
+        inactiveRooms
         data={inactiveRooms}
+        onEditRoom={handleEditRoom}
         onActivateRoom={handleActivateRoom}
         onDeleteRoom={handleDeleteRoom}
       />
-      <CreateRoomModal
-        loading={props.loadingCreateRoom}
-        onCreateRoom={props.onCreateRoom}
-        onCancel={createRoomModalController.onCloseModal}
-        isOpen={createRoomModalController.modalOpen}
-      />
+      {createOrUpdateRoomModalController.modalOpen && (
+        <CreateOrUpdateRoomModal
+          roomToEdit={roomToEdit}
+          onEditRoom={props.onUpdateRoom}
+          loading={props.loadingCreateRoom}
+          onCreateRoom={props.onCreateRoom}
+          onCancel={handleCreateRoomModalCancel}
+          isOpen={createOrUpdateRoomModalController.modalOpen}
+        />
+      )}
       <ConfirmationModal
         ariaLabel={'confirmar-publicacion-sala'}
         isModalOpen={activateRoomModalController.modalOpen}

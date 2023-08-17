@@ -1,0 +1,25 @@
+mutation UpdateRoom(
+  $roomId: String!
+  $name: String!
+  $dueDate: String!
+  $prizeMoney: Float!
+  $entryPrice: Float!
+  $isActive: Boolean!
+) {
+  updateRoom(
+    roomId: $roomId
+    name: $name
+    dueDate: $dueDate
+    prizeMoney: $prizeMoney
+    entryPrice: $entryPrice
+    isActive: $isActive
+  ) {
+    id
+    isActive
+    name
+    paymentLink
+    prizeMoney
+    entryPrice
+    dueDate
+  }
+}

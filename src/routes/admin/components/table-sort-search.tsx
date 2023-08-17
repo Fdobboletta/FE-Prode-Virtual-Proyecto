@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Room } from '@/generated/graphql-types.generated';
 import { toRem } from '@/utils';
-import { Delete, Publish } from '@mui/icons-material';
+import { Delete, Edit, Publish } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { format } from 'date-fns';
 import MUIDataTable, {
@@ -12,7 +13,9 @@ import styled from 'styled-components';
 type TableWithSortingAndSearchProps = {
   data: Room[];
   onActivateRoom?: (roomId: string) => void;
+  onEditRoom?: (roomId: string) => void;
   onDeleteRoom: (roomId: string) => void;
+  inactiveRooms: boolean;
 };
 
 const StyledTable = styled(MUIDataTable)`
@@ -68,6 +71,8 @@ const options: MUIDataTableOptions = {
   },
 };
 
+const inactiveRoomsColumns = new Set(['Editar', 'Publicar']);
+
 const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
   const columns: MUIDataTableColumnDef[] = [
     { name: 'name', label: 'Nombre' },
@@ -103,18 +108,20 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
     },
     {
       name: 'id',
-      label: 'Eliminar',
+      label: 'Editar',
       options: {
         customBodyRender: (value: any) => {
           return (
             <IconButton
               onClick={() => {
-                props.onDeleteRoom(value);
+                if (props.onEditRoom) {
+                  props.onEditRoom(value);
+                }
               }}
-              aria-label="Delete"
+              aria-label="Publish"
               size="small"
             >
-              <Delete />
+              <Edit />
             </IconButton>
           );
         },
@@ -122,7 +129,7 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
     },
     {
       name: 'id',
-      label: 'Publicar Sala',
+      label: 'Publicar',
       options: {
         customBodyRender: (value: any) => {
           return (
@@ -141,8 +148,28 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
         },
       },
     },
+
+    {
+      name: 'id',
+      label: 'Eliminar',
+      options: {
+        customBodyRender: (value: any) => {
+          return (
+            <IconButton
+              onClick={() => {
+                props.onDeleteRoom(value);
+              }}
+              aria-label="Delete"
+              size="small"
+            >
+              <Delete />
+            </IconButton>
+          );
+        },
+      },
+    },
   ].filter((column) =>
-    props.onActivateRoom ? column : column.label !== 'Publicar Sala'
+    props.inactiveRooms ? column : !inactiveRoomsColumns.has(column.label)
   );
 
   return (

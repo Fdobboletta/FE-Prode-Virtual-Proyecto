@@ -41,6 +41,7 @@ export type Mutation = {
   disconnectMercadoPagoIntegration?: Maybe<Scalars['String']>;
   registerNewUser: User;
   sendResetPasswordEmail?: Maybe<Scalars['String']>;
+  updateRoom?: Maybe<Room>;
 };
 
 export type MutationActivateRoomArgs = {
@@ -86,6 +87,15 @@ export type MutationRegisterNewUserArgs = {
 
 export type MutationSendResetPasswordEmailArgs = {
   email: Scalars['String'];
+};
+
+export type MutationUpdateRoomArgs = {
+  dueDate: Scalars['String'];
+  entryPrice: Scalars['Float'];
+  isActive: Scalars['Boolean'];
+  name: Scalars['String'];
+  prizeMoney: Scalars['Float'];
+  roomId: Scalars['String'];
 };
 
 export type Query = {
