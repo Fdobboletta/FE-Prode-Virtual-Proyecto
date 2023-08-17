@@ -100,9 +100,14 @@ export type MutationUpdateRoomArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  getRoomById: Room;
   getRoomsByUserId: Array<Room>;
   getUserMpAccessToken?: Maybe<Scalars['String']>;
   validateToken: Scalars['Boolean'];
+};
+
+export type QueryGetRoomByIdArgs = {
+  roomId: Scalars['String'];
 };
 
 export type QueryValidateTokenArgs = {

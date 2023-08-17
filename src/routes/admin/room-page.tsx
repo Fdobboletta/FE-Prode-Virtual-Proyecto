@@ -11,16 +11,26 @@ import {
   Box,
   Stack,
 } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {
+  generatePath,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import styled from 'styled-components';
-import { MercadoPagoIcon } from '@/components/svg-icon/mercado-pago';
 
-import { People, Assessment, Settings, MeetingRoom } from '@mui/icons-material';
+import { People, Settings, SportsSoccer } from '@mui/icons-material';
+
+import { useGetRoomByIdQuery } from '@/graphql/getRoomById.generated';
 import { toRem } from '@/utils';
+import { RoomPageContextProvider } from './context/room-page-context';
 
-type AdminPageProps = {
+type RoomPageProps = {
   children: ReactNode;
 };
+const StyledList = styled(List)`
+  width: 100%;
+`;
 
 const StyledContainer = styled(Stack)`
   height: calc(100% - ${toRem(NAV_BAR_HEIGHT)});
@@ -41,57 +51,51 @@ const StyledFooterContainer = styled(Box)`
   max-height: fit-content;
 `;
 
-const StyledList = styled(List)`
-  width: 100%;
-`;
-
 const StyledListItemIcon = styled(ListItemIcon)`
   min-width: 36px;
 `;
 
-const AdminDrawerContent = (): JSX.Element | null => {
+const RoomPageDrawerContent = (props: {
+  roomId: string;
+}): JSX.Element | null => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleNavigation = useCallback(
     (path: string) => () => {
-      navigate(`/admin${path}`);
+      navigate(
+        generatePath(`/admin/room/${props.roomId}${path}`, {
+          roomId: props.roomId,
+        })
+      );
     },
     []
   );
 
-  const isActive = (path: string) => location.pathname === `/admin${path}`;
+  const isActive = (path: string) =>
+    location.pathname === `/admin/room/${props.roomId}${path}`;
 
   return (
     <StyledContainer>
       <StyledBodyContainer>
         <StyledList>
           <ListItemButton
-            onClick={handleNavigation('/rooms')}
-            selected={isActive('/rooms')}
+            onClick={handleNavigation('/participants')}
+            selected={isActive('/participants')}
           >
             <StyledListItemIcon>
-              <MeetingRoom />
+              <People />
             </StyledListItemIcon>
-            <ListItemText primary="Mis salas" />
+            <ListItemText primary="Participantes" />
           </ListItemButton>
           <ListItemButton
-            onClick={handleNavigation('/reports')}
-            selected={isActive('/reports')}
+            onClick={handleNavigation('/matches')}
+            selected={isActive('/matches')}
           >
             <StyledListItemIcon>
-              <Assessment />
+              <SportsSoccer />
             </StyledListItemIcon>
-            <ListItemText primary="Reportes" />
-          </ListItemButton>
-          <ListItemButton
-            onClick={handleNavigation('/integrations')}
-            selected={isActive('/integrations')}
-          >
-            <StyledListItemIcon>
-              <MercadoPagoIcon />
-            </StyledListItemIcon>
-            <ListItemText primary="Mercado Pago" />
+            <ListItemText primary="Partidos" />
           </ListItemButton>
         </StyledList>
       </StyledBodyContainer>
@@ -112,15 +116,29 @@ const AdminDrawerContent = (): JSX.Element | null => {
   );
 };
 
-const InternalAdminPage = (props: AdminPageProps) => {
+const RoomPageInternal = (props: RoomPageProps) => {
+  const params = useParams<{ roomId: string }>();
+
+  const { data, loading } = useGetRoomByIdQuery({
+    variables: {
+      roomId: params.roomId || '',
+    },
+  });
+
+  if (loading || !data) return null;
+
   return (
     <PrivateLayout
-      drawerTitle="Admin Panel"
-      drawerContent={<AdminDrawerContent />}
+      drawerTitle={data.getRoomById.name}
+      drawerContent={<RoomPageDrawerContent roomId={params.roomId || ''} />}
+      renderBackIcon
+      backIconPath={'/admin/rooms'}
     >
-      {props.children}
+      <RoomPageContextProvider value={{ room: data.getRoomById }}>
+        {props.children}
+      </RoomPageContextProvider>
     </PrivateLayout>
   );
 };
 
-export const AdminPage = memo(InternalAdminPage);
+export const RoomPage = memo(RoomPageInternal);

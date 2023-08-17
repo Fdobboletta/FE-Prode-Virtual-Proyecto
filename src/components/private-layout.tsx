@@ -12,10 +12,12 @@ import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import { toRem } from '../utils';
 import { useWindowDimensions } from '@/utils/use-windows-dimensions';
+import { ArrowBack } from '@mui/icons-material';
+import { useNavigate } from 'react-router';
 
 const DRAWER_WIDTH = 240;
 
-const NAV_BAR_HEIGHT = 49;
+export const NAV_BAR_HEIGHT = 49;
 
 const MainLayoutContainer = styled.div`
   display: flex;
@@ -110,10 +112,13 @@ type PrivateLayoutProps = {
   drawerTitle: string;
   drawerContent: JSX.Element;
   children: ReactNode;
+  renderBackIcon?: boolean;
+  backIconPath?: string;
 };
 
 const InternalPrivateLayout = (props: PrivateLayoutProps): JSX.Element => {
   const [open, setOpen] = useState(true);
+  const navigate = useNavigate();
 
   const [windowDimensions] = useWindowDimensions();
 
@@ -123,6 +128,12 @@ const InternalPrivateLayout = (props: PrivateLayoutProps): JSX.Element => {
 
   const handleDrawerClose = useCallback(() => {
     setOpen(false);
+  }, []);
+
+  const handleBackButtonClick = useCallback(() => {
+    if (props.backIconPath) {
+      navigate(props.backIconPath);
+    }
   }, []);
 
   const theme = useTheme();
@@ -143,6 +154,16 @@ const InternalPrivateLayout = (props: PrivateLayoutProps): JSX.Element => {
         <MainSubContainer data-testid="main-sub-container">
           <StyledAppBar position="fixed">
             <StyledToolbar>
+              {props.renderBackIcon && (
+                <StyledIconButton
+                  color="inherit"
+                  aria-label="toggle drawer"
+                  onClick={handleBackButtonClick}
+                  edge="start"
+                >
+                  <ArrowBack />
+                </StyledIconButton>
+              )}
               <StyledIconButton
                 color="inherit"
                 aria-label="toggle drawer"

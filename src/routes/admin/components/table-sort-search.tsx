@@ -8,6 +8,8 @@ import MUIDataTable, {
   MUIDataTableColumnDef,
   MUIDataTableOptions,
 } from 'mui-datatables';
+import { useState } from 'react';
+import { useNavigate, generatePath } from 'react-router';
 import styled from 'styled-components';
 
 type TableWithSortingAndSearchProps = {
@@ -74,7 +76,35 @@ const options: MUIDataTableOptions = {
 const inactiveRoomsColumns = new Set(['Editar', 'Publicar']);
 
 const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
-  const columns: MUIDataTableColumnDef[] = [
+  const [clickCount, setClickCount] = useState(0);
+  const [lastClickTime, setLastClickTime] = useState(0);
+
+  const navigate = useNavigate();
+
+  const handleRowClick = (rowData: string[]) => {
+    const currentTime = new Date().getTime();
+
+    if (currentTime - lastClickTime < 300) {
+      handleRowDoubleClick(rowData);
+    } else {
+      setClickCount(clickCount + 1);
+    }
+
+    setLastClickTime(currentTime);
+  };
+
+  const handleRowDoubleClick = (rowData: string[]) => {
+    setClickCount(0);
+    setLastClickTime(0);
+
+    navigate(
+      generatePath(`/admin/room/:roomId/matches`, {
+        roomId: rowData[0],
+      })
+    );
+  };
+  const columns = [
+    { name: 'id', label: 'id', options: { display: 'excluded' } },
     { name: 'name', label: 'Nombre' },
     {
       name: 'dueDate',
@@ -170,14 +200,19 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
     },
   ].filter((column) =>
     props.inactiveRooms ? column : !inactiveRoomsColumns.has(column.label)
-  );
+  ) as MUIDataTableColumnDef[];
 
   return (
     <StyledTable
       title=""
       data={props.data}
       columns={columns}
-      options={options}
+      options={{
+        ...options,
+        onRowClick: (rowData) => {
+          handleRowClick(rowData);
+        },
+      }}
     />
   );
 };

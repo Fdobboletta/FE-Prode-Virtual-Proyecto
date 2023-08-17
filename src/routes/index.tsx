@@ -11,6 +11,10 @@ import { ChangePasswordPage } from './auth/change-password-page';
 import { IntegrationsPage } from './admin/integrations';
 import { RoomsPage } from './admin/rooms';
 
+import { RoomMatches } from './admin/room-matches';
+import { RoomParticipants } from './admin/room-participants';
+import { AdminPage } from './admin/admin-page';
+
 export const AppRoutes = () => {
   return (
     <Routes>
@@ -21,7 +25,16 @@ export const AppRoutes = () => {
       <Route element={<PrivateRoutes requiredRole={UserRole.Admin} />}>
         <Route path="/admin" element={<Navigate to="/admin/rooms" />} />
         <Route path="/admin/integrations" element={<IntegrationsPage />} />
+        <Route
+          path="/admin/reports"
+          element={<AdminPage>Hello World</AdminPage>}
+        />
         <Route path="/admin/rooms" element={<RoomsPage />} />
+        <Route path="/admin/room/:roomId/matches" element={<RoomMatches />} />
+        <Route
+          path="/admin/room/:roomId/participants"
+          element={<RoomParticipants />}
+        />
       </Route>
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/register" element={<RegisterPage />} />

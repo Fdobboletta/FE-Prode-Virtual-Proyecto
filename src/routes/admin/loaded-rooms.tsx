@@ -101,13 +101,13 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
       </StyledButton>
       <AccordionWithTable
         inactiveRooms={false}
-        title="SALAS ACTIVAS"
+        title="SALAS PUBLICADAS"
         data={activeRooms}
         onDeleteRoom={handleDeleteRoom}
       />
       <Spacer />
       <AccordionWithTable
-        title="SALAS INACTIVAS"
+        title="SALAS NO PUBLICADAS"
         inactiveRooms
         data={inactiveRooms}
         onEditRoom={handleEditRoom}

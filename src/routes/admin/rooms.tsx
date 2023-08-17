@@ -26,7 +26,7 @@ import { useUpdateRoomMutation } from '@/graphql/updateRoom.generated';
 const PageContainer = styled.div`
   display: flex;
   justify-content: center;
-  padding: ${toRem(32)};
+  padding: ${toRem(16)};
 `;
 
 const RoomsPageInternal = (props: WithSnackbarProps) => {

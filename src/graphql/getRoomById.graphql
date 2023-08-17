@@ -1,0 +1,11 @@
+query GetRoomById($roomId: String!) {
+  getRoomById(roomId: $roomId) {
+    id
+    entryPrice
+    dueDate
+    isActive
+    name
+    prizeMoney
+    paymentLink
+  }
+}
