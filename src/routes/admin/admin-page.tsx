@@ -28,15 +28,9 @@ const StyledBox = styled(Box)`
 `;
 
 const DrawerContentContainer = styled(Box)`
-  margin-top: 64px !important;
-  padding: 16px !important;
   display: flex;
   flex-direction: column;
   height: 100vh;
-  ${({ theme }) => theme.breakpoints.up('sm')} {
-    margin-top: 80px;
-    padding: 24px;
-  }
 `;
 
 const StyledListItemIcon = styled(ListItemIcon)`

@@ -38,8 +38,8 @@ const FormContainer = styled.div`
   background-color: white;
   padding: ${toRem(24)};
   border-radius: 8px;
-  width: 30%; /* Adjust the width as needed */
-  max-width: ${toRem(600)};
+  width: 90%;
+  max-width: ${toRem(400)};
   box-shadow: 0 0 ${toRem(10)} rgba(0, 0, 0, 0.1);
 `;
 

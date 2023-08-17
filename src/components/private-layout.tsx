@@ -1,21 +1,36 @@
 import { memo, ReactNode, useCallback, useState } from 'react';
-import styled from 'styled-components';
-import { AppBar, Drawer, IconButton, Toolbar, Typography } from '@mui/material';
+import styled, { css } from 'styled-components';
+import {
+  AppBar,
+  Box,
+  Drawer,
+  IconButton,
+  Toolbar,
+  Typography,
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import { toRem } from '../utils';
+import { useWindowDimensions } from '@/utils/use-windows-dimensions';
 
-const DRAWER_WIDTH = 256;
+const DRAWER_WIDTH = 240;
 
-const NAV_BAR_HEIGHT = 64;
+const NAV_BAR_HEIGHT = 49;
 
 const MainLayoutContainer = styled.div`
   display: flex;
 `;
 
+type MainProps = {
+  $drawerOpen: boolean;
+};
+
 const StyledDrawer = styled(Drawer)`
   & .MuiDrawer-paper {
     box-sizing: border-box;
-    width: ${DRAWER_WIDTH}px;
+    margin-top: ${toRem(NAV_BAR_HEIGHT)};
+    padding: ${toRem(6)} ${toRem(12)};
+    width: ${toRem(DRAWER_WIDTH)};
     box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2),
       0px 16px 24px 2px rgba(0, 0, 0, 0.14),
       0px 6px 30px 5px rgba(0, 0, 0, 0.12);
@@ -23,16 +38,20 @@ const StyledDrawer = styled(Drawer)`
 `;
 
 const StyledAppBar = styled(AppBar)`
+  height: ${toRem(NAV_BAR_HEIGHT)} !important;
+  min-height: ${toRem(NAV_BAR_HEIGHT)} !important;
   ${(props) => `
     z-index: ${props.theme.zIndex.drawer + 1};
     ${props.theme.breakpoints.up('md')} {
-      width: calc(100% - ${DRAWER_WIDTH}px);
-      margin-left: ${DRAWER_WIDTH}px;
+      width: calc(100% - ${toRem(DRAWER_WIDTH)});
+      margin-left: ${toRem(DRAWER_WIDTH)};
     }
   `}
 `;
 
 const StyledToolbar = styled(Toolbar)`
+  height: ${toRem(NAV_BAR_HEIGHT)};
+  min-height: ${toRem(NAV_BAR_HEIGHT)} !important;
   ${(props) => `
     ${props.theme.breakpoints.down('sm')} {
       justify-content: space-between;
@@ -48,11 +67,43 @@ const StyledIconButton = styled(IconButton)`
   `}
 `;
 
-const PageContentContainer = styled.div`
-  width: calc(100% - ${DRAWER_WIDTH}px);
-  height: calc(100vh - ${NAV_BAR_HEIGHT}px);
+const Main = styled.main<MainProps>`
+  flex-grow: 1;
   margin-left: ${toRem(DRAWER_WIDTH)};
+
+  transition: ${({ theme }) =>
+    theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    })};
+  ${({ $drawerOpen }) =>
+    !$drawerOpen &&
+    css`
+      transition: ${(props) =>
+        props.theme.transitions.create('margin', {
+          easing: props.theme.transitions.easing.easeOut,
+          duration: props.theme.transitions.duration.enteringScreen,
+        })};
+
+      margin-left: 0;
+    `};
+`;
+
+const MainSubContainer = styled.div`
+  box-shadow: 0 0 ${toRem(10)} 0 rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 100vh;
+  height: 100%;
+  background-color: ${(props) => props.theme.palette.background.paper};
+`;
+
+const ChildrenContainer = styled(Box)`
   margin-top: ${toRem(NAV_BAR_HEIGHT)};
+  display: flex;
+  flex: 1;
+  flex-direction: column;
 `;
 
 type PrivateLayoutProps = {
@@ -62,7 +113,9 @@ type PrivateLayoutProps = {
 };
 
 const InternalPrivateLayout = (props: PrivateLayoutProps): JSX.Element => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
+
+  const [windowDimensions] = useWindowDimensions();
 
   const handleDrawerToggle = useCallback(() => {
     setOpen((prevState) => !prevState);
@@ -72,34 +125,40 @@ const InternalPrivateLayout = (props: PrivateLayoutProps): JSX.Element => {
     setOpen(false);
   }, []);
 
+  const theme = useTheme();
+
+  const isSmallScreen = windowDimensions.width <= theme.breakpoints.values.sm;
+
   return (
     <MainLayoutContainer>
-      <StyledAppBar position="fixed">
-        <StyledToolbar>
-          <StyledIconButton
-            color="inherit"
-            aria-label="toggle drawer"
-            onClick={handleDrawerToggle}
-            edge="start"
-          >
-            <MenuIcon />
-          </StyledIconButton>
-          <Typography variant="h6" noWrap component="div">
-            {props.drawerTitle}
-          </Typography>
-        </StyledToolbar>
-      </StyledAppBar>
       <StyledDrawer
-        variant="permanent"
-        open={open}
         onClose={handleDrawerClose}
-        ModalProps={{
-          keepMounted: true,
-        }}
+        open={open}
+        role="presentation"
+        variant={isSmallScreen ? 'temporary' : 'persistent'}
       >
         {props.drawerContent}
       </StyledDrawer>
-      <PageContentContainer>{props.children}</PageContentContainer>
+      <Main $drawerOpen={open}>
+        <MainSubContainer data-testid="main-sub-container">
+          <StyledAppBar position="fixed">
+            <StyledToolbar>
+              <StyledIconButton
+                color="inherit"
+                aria-label="toggle drawer"
+                onClick={handleDrawerToggle}
+                edge="start"
+              >
+                <MenuIcon />
+              </StyledIconButton>
+              <Typography variant="h6" noWrap component="div">
+                {props.drawerTitle}
+              </Typography>
+            </StyledToolbar>
+          </StyledAppBar>
+          <ChildrenContainer>{props.children}</ChildrenContainer>
+        </MainSubContainer>
+      </Main>
     </MainLayoutContainer>
   );
 };

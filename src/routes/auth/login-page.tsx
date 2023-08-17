@@ -32,20 +32,19 @@ const FormContainer = styled.div`
   align-items: center;
   justify-content: center;
   background-color: white;
-  padding: ${toRem(24)};
+  padding: ${toRem(16)};
   border-radius: 8px;
-  width: 30%; /* Adjust the width as needed */
-  max-width: ${toRem(600)};
-  box-shadow: 0 0 ${toRem(10)} rgba(0, 0, 0, 0.1);
+  width: 85%;
+  max-width: ${toRem(400)};
+  box-shadow: 0 0 ${toRem(6)} rgba(0, 0, 0, 0.1);
 `;
-
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: ${toRem(600)};
+  max-width: ${toRem(400)};
 `;
 
 const ErrorMessage = styled.div`
@@ -68,14 +67,16 @@ const ExpandContent = styled.div`
 `;
 
 const StyledRegisterButton = styled(Button)`
-  margin-top: ${toRem(12)} !important;
-  margin-bottom: ${toRem(6)} !important;
+  margin-top: ${toRem(6)} !important;
+  margin-bottom: ${toRem(12)} !important;
+  padding: ${toRem(8)} ${toRem(16)} !important;
 `;
 
 const StyledLoginButton = styled(Button)`
-  margin-top: ${toRem(6)} !important;
+  margin-top: ${toRem(12)} !important;
+  margin-bottom: ${toRem(6)} !important;
+  padding: ${toRem(8)} ${toRem(16)} !important;
 `;
-
 const InternalLogin = (): JSX.Element => {
   const [formValues, setFormValues] = useState<LoginFormValues>({
     email: '',
