@@ -1,0 +1,20 @@
+mutation UpdateMatch(
+  $matchId: String!
+  $homeTeam: String!
+  $awayTeam: String!
+  $date: String!
+) {
+  updateMatch(
+    matchId: $matchId
+    homeTeam: $homeTeam
+    awayTeam: $awayTeam
+    date: $date
+  ) {
+    id
+    homeTeam
+    awayTeam
+    roomId
+    officialScore
+    startDate
+  }
+}

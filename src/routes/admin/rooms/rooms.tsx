@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { AdminPage } from './admin-page';
+import { AdminPage } from '../admin-page';
 import styled from 'styled-components';
 import { toRem } from '@/utils';
 

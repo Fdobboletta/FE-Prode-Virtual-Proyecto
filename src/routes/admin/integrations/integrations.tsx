@@ -16,7 +16,7 @@ import {
 import { useAuthorizeMercadoPagoMutation } from '@/graphql/authorizeMercadoPago.generated';
 import { useDisconnectMercadoPagoIntegrationMutation } from '@/graphql/disconnectMpIntegration.generated';
 import { ConfirmationModal, useModal } from '@/components/modal-container';
-import { AdminPage } from './admin-page';
+import { AdminPage } from '../admin-page';
 
 const PageContainer = styled.div`
   display: flex;

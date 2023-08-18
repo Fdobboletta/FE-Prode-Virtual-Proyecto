@@ -3,11 +3,12 @@ import { Room } from '@/generated/graphql-types.generated';
 import { toRem } from '@/utils';
 import { Button, CircularProgress } from '@mui/material';
 import styled from 'styled-components';
-import { AccordionWithTable } from './components/accordion-table';
+import { AccordionWithTable } from '../components/accordion-table';
 import { memo, useMemo, useState } from 'react';
 
 import { CreateRoomMutationVariables } from '@/graphql/createRoom.generated';
-import { CreateOrUpdateRoomModal } from './components/create-update-room-modal';
+import { CreateOrUpdateRoomModal } from '../components/create-update-room-modal';
+import TableWithSortingAndSearch from '../components/table-sort-search';
 
 const AccordionGroupContainer = styled.div`
   display: flex;
@@ -100,20 +101,28 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
         )}
       </StyledButton>
       <AccordionWithTable
-        inactiveRooms={false}
         title="SALAS PUBLICADAS"
-        data={activeRooms}
-        onDeleteRoom={handleDeleteRoom}
-      />
+        dataLength={activeRooms.length}
+      >
+        <TableWithSortingAndSearch
+          data={activeRooms}
+          onDeleteRoom={handleDeleteRoom}
+          inactiveRooms={false}
+        />
+      </AccordionWithTable>
       <Spacer />
       <AccordionWithTable
         title="SALAS NO PUBLICADAS"
-        inactiveRooms
-        data={inactiveRooms}
-        onEditRoom={handleEditRoom}
-        onActivateRoom={handleActivateRoom}
-        onDeleteRoom={handleDeleteRoom}
-      />
+        dataLength={inactiveRooms.length}
+      >
+        <TableWithSortingAndSearch
+          data={inactiveRooms}
+          onEditRoom={handleEditRoom}
+          onActivateRoom={handleActivateRoom}
+          onDeleteRoom={handleDeleteRoom}
+          inactiveRooms
+        />
+      </AccordionWithTable>
       {createOrUpdateRoomModalController.modalOpen && (
         <CreateOrUpdateRoomModal
           roomToEdit={roomToEdit}

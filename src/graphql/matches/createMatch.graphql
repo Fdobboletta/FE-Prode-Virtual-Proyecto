@@ -1,0 +1,20 @@
+mutation CreateMatch(
+  $homeTeam: String!
+  $awayTeam: String!
+  $date: String!
+  $roomId: String!
+) {
+  createMatch(
+    homeTeam: $homeTeam
+    awayTeam: $awayTeam
+    date: $date
+    roomId: $roomId
+  ) {
+    id
+    homeTeam
+    awayTeam
+    officialScore
+    roomId
+    startDate
+  }
+}

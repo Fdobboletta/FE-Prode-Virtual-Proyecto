@@ -8,11 +8,11 @@ import { ResetPasswordPage } from './auth/reset-password-page';
 import { LoginPage } from './auth/login-page';
 import { RegisterPage } from './auth/sing-up-page';
 import { ChangePasswordPage } from './auth/change-password-page';
-import { IntegrationsPage } from './admin/integrations';
-import { RoomsPage } from './admin/rooms';
+import { IntegrationsPage } from './admin/integrations/integrations';
+import { RoomsPage } from './admin/rooms/rooms';
 
-import { RoomMatches } from './admin/room-matches';
-import { RoomParticipants } from './admin/room-participants';
+import { RoomMatches } from './admin/matches/room-matches';
+import { RoomParticipants } from './admin/participants/room-participants';
 import { AdminPage } from './admin/admin-page';
 
 export const AppRoutes = () => {

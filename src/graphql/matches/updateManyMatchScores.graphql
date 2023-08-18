@@ -1,0 +1,10 @@
+mutation UpdateManyMatchScores($scoreUpdates: [ScoreUpdateInput!]!) {
+  updateManyMatchScores(scoreUpdates: $scoreUpdates) {
+    id
+    homeTeam
+    awayTeam
+    officialScore
+    roomId
+    startDate
+  }
+}

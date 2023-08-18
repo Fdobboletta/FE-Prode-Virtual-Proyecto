@@ -8,16 +8,12 @@ import {
 } from '@mui/material';
 import { ArrowForward } from '@mui/icons-material/';
 import { memo, useState } from 'react';
-import TableWithSortingAndSearch from './table-sort-search';
-import { Room } from '@/generated/graphql-types.generated';
 
 type AccordionTableProps = {
   title: string;
-  inactiveRooms: boolean;
-  data: Room[];
-  onActivateRoom?: (roomId: string) => void;
-  onEditRoom?: (roomId: string) => void;
-  onDeleteRoom: (roomId: string) => void;
+  dataLength: number;
+  children: JSX.Element;
+  keepExpanded?: boolean;
 };
 
 const StyledAccordion = styled(Accordion)`
@@ -44,9 +40,10 @@ const StyledAccordionDetails = styled(AccordionDetails)`
 `;
 
 const AccordionWithTableInternal = (props: AccordionTableProps) => {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(props.keepExpanded);
 
   const handleAccordionChange = () => {
+    if (props.keepExpanded) return;
     setExpanded(!expanded);
   };
 
@@ -57,17 +54,9 @@ const AccordionWithTableInternal = (props: AccordionTableProps) => {
         id="panel-header"
         expandIcon={<ArrowForward />}
       >
-        <Typography>{`${props.title} (${props.data.length})`}</Typography>
+        <Typography>{`${props.title} (${props.dataLength})`}</Typography>
       </StyledAccordionSummary>
-      <StyledAccordionDetails>
-        <TableWithSortingAndSearch
-          data={props.data}
-          inactiveRooms={props.inactiveRooms}
-          onActivateRoom={props.onActivateRoom}
-          onEditRoom={props.onEditRoom}
-          onDeleteRoom={props.onDeleteRoom}
-        />
-      </StyledAccordionDetails>
+      <StyledAccordionDetails>{props.children}</StyledAccordionDetails>
     </StyledAccordion>
   );
 };

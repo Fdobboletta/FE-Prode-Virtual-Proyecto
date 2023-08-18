@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { RoomPage } from './room-page';
+import { RoomPage } from '../room-page';
 
 const RoomParticipantsInternal = () => {
   return <RoomPage>Hello World!</RoomPage>;

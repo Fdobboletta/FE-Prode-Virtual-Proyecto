@@ -18,6 +18,17 @@ export type Scalars = {
   Float: number;
 };
 
+/** Partido */
+export type Match = {
+  __typename?: 'Match';
+  awayTeam: Scalars['String'];
+  homeTeam: Scalars['String'];
+  id: Scalars['ID'];
+  officialScore?: Maybe<Score>;
+  roomId: Scalars['ID'];
+  startDate: Scalars['String'];
+};
+
 /** Token de acceso a Mercado Pago */
 export type MercadoPagoAccessToken = {
   __typename?: 'MercadoPagoAccessToken';
@@ -36,11 +47,15 @@ export type Mutation = {
   authenticateUser: User;
   authorizeMercadoPago?: Maybe<MercadoPagoAccessToken>;
   changePassword?: Maybe<Scalars['String']>;
+  createMatch: Match;
   createRoom: Room;
+  deleteMatch?: Maybe<Scalars['String']>;
   deleteRoom?: Maybe<Scalars['String']>;
   disconnectMercadoPagoIntegration?: Maybe<Scalars['String']>;
   registerNewUser: User;
   sendResetPasswordEmail?: Maybe<Scalars['String']>;
+  updateManyMatchScores: Array<Match>;
+  updateMatch: Match;
   updateRoom?: Maybe<Room>;
 };
 
@@ -62,12 +77,23 @@ export type MutationChangePasswordArgs = {
   token: Scalars['String'];
 };
 
+export type MutationCreateMatchArgs = {
+  awayTeam: Scalars['String'];
+  date: Scalars['String'];
+  homeTeam: Scalars['String'];
+  roomId: Scalars['String'];
+};
+
 export type MutationCreateRoomArgs = {
   dueDate: Scalars['String'];
   entryPrice: Scalars['Float'];
   isActive: Scalars['Boolean'];
   name: Scalars['String'];
   prizeMoney: Scalars['Float'];
+};
+
+export type MutationDeleteMatchArgs = {
+  matchId: Scalars['String'];
 };
 
 export type MutationDeleteRoomArgs = {
@@ -89,6 +115,17 @@ export type MutationSendResetPasswordEmailArgs = {
   email: Scalars['String'];
 };
 
+export type MutationUpdateManyMatchScoresArgs = {
+  scoreUpdates: Array<ScoreUpdateInput>;
+};
+
+export type MutationUpdateMatchArgs = {
+  awayTeam: Scalars['String'];
+  date: Scalars['String'];
+  homeTeam: Scalars['String'];
+  matchId: Scalars['String'];
+};
+
 export type MutationUpdateRoomArgs = {
   dueDate: Scalars['String'];
   entryPrice: Scalars['Float'];
@@ -100,10 +137,15 @@ export type MutationUpdateRoomArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  getMatchesByRoomId: Array<Match>;
   getRoomById: Room;
   getRoomsByUserId: Array<Room>;
   getUserMpAccessToken?: Maybe<Scalars['String']>;
   validateToken: Scalars['Boolean'];
+};
+
+export type QueryGetMatchesByRoomIdArgs = {
+  roomId: Scalars['String'];
 };
 
 export type QueryGetRoomByIdArgs = {
@@ -125,6 +167,17 @@ export type Room = {
   name: Scalars['String'];
   paymentLink: Scalars['String'];
   prizeMoney: Scalars['Float'];
+};
+
+export enum Score {
+  Away = 'AWAY',
+  Draw = 'DRAW',
+  Home = 'HOME',
+}
+
+export type ScoreUpdateInput = {
+  matchId: Scalars['ID'];
+  score?: InputMaybe<Score>;
 };
 
 /** App user */

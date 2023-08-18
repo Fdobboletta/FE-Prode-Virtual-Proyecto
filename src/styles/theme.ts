@@ -65,6 +65,9 @@ const theme: Theme = createTheme({
     error: {
       main: '#f44336',
     },
+    background: {
+      paper: '#FAFAFA',
+    },
   },
   zIndex: {
     appBar: 1200,
