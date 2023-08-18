@@ -40,6 +40,13 @@ type MatchesTableProps = {
   onSaveScores: () => void;
 };
 
+const getScoreLabel = (score?: Score | null | undefined) => {
+  if (score === Score.Home) return 'LOCAL';
+  if (score === Score.Away) return 'VISITANTE';
+  if (score === Score.Draw) return 'EMPATE';
+  return 'No disputado';
+};
+
 const MatchesTableInternal = (props: MatchesTableProps) => {
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [urlState, setUrlState] = useUrlState<{ isEditing: '1' }>();
@@ -135,7 +142,7 @@ const MatchesTableInternal = (props: MatchesTableProps) => {
                     </StyledSelect>
                   </TableCell>
                 ) : (
-                  <TableCell>{row.officialScore || 'No disputado'}</TableCell>
+                  <TableCell>{getScoreLabel(row.officialScore)}</TableCell>
                 )}
                 <TableCell>
                   <StyledIconButton
