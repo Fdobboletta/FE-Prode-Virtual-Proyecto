@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Room } from '@/generated/graphql-types.generated';
 import { toRem } from '@/utils';
-import { Delete, Edit, Publish } from '@mui/icons-material';
+import { MoreHoriz } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { format } from 'date-fns';
 import MUIDataTable, {
@@ -11,13 +11,17 @@ import MUIDataTable, {
 import { useState } from 'react';
 import { useNavigate, generatePath } from 'react-router';
 import styled from 'styled-components';
+import {
+  RoomTableRowMenuActions,
+  RoomsTableActionRowMenu,
+} from './rooms-table-action-row-menu';
 
 type TableWithSortingAndSearchProps = {
   data: Room[];
-  onActivateRoom?: (roomId: string) => void;
+  onPublishRoom?: (roomId: string) => void;
   onEditRoom?: (roomId: string) => void;
   onDeleteRoom: (roomId: string) => void;
-  inactiveRooms: boolean;
+  allowedActionsSet: Set<RoomTableRowMenuActions>;
 };
 
 const StyledTable = styled(MUIDataTable)`
@@ -73,11 +77,13 @@ const options: MUIDataTableOptions = {
   },
 };
 
-const inactiveRoomsColumns = new Set(['Editar', 'Publicar']);
-
 const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
   const [clickCount, setClickCount] = useState(0);
   const [lastClickTime, setLastClickTime] = useState(0);
+  const [menuAnchorElement, setMenuAnchorElement] =
+    useState<null | HTMLElement>(null);
+
+  const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
@@ -103,7 +109,7 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
       })
     );
   };
-  const columns = [
+  const columns: MUIDataTableColumnDef[] = [
     { name: 'id', label: 'id', options: { display: 'excluded' } },
     { name: 'name', label: 'Nombre' },
     {
@@ -138,82 +144,73 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
     },
     {
       name: 'id',
-      label: 'Editar',
+      label: 'Acciones',
       options: {
-        customBodyRender: (value: any) => {
+        customBodyRender: (value: string) => {
           return (
             <IconButton
-              onClick={() => {
-                if (props.onEditRoom) {
-                  props.onEditRoom(value);
-                }
+              onClick={(event) => {
+                setMenuAnchorElement(event.currentTarget);
+                setSelectedRowId(value);
               }}
-              aria-label="Publish"
+              aria-label="More actions"
               size="small"
             >
-              <Edit />
+              <MoreHoriz />
             </IconButton>
           );
         },
       },
     },
-    {
-      name: 'id',
-      label: 'Publicar',
-      options: {
-        customBodyRender: (value: any) => {
-          return (
-            <IconButton
-              onClick={() => {
-                if (props.onActivateRoom) {
-                  props.onActivateRoom(value);
-                }
-              }}
-              aria-label="Publish"
-              size="small"
-            >
-              <Publish />
-            </IconButton>
-          );
-        },
-      },
-    },
-
-    {
-      name: 'id',
-      label: 'Eliminar',
-      options: {
-        customBodyRender: (value: any) => {
-          return (
-            <IconButton
-              onClick={() => {
-                props.onDeleteRoom(value);
-              }}
-              aria-label="Delete"
-              size="small"
-            >
-              <Delete />
-            </IconButton>
-          );
-        },
-      },
-    },
-  ].filter((column) =>
-    props.inactiveRooms ? column : !inactiveRoomsColumns.has(column.label)
-  ) as MUIDataTableColumnDef[];
+  ];
 
   return (
-    <StyledTable
-      title=""
-      data={props.data}
-      columns={columns}
-      options={{
-        ...options,
-        onRowClick: (rowData) => {
-          handleRowClick(rowData);
-        },
-      }}
-    />
+    <>
+      <StyledTable
+        title=""
+        data={props.data}
+        columns={columns}
+        options={{
+          ...options,
+          onRowClick: (rowData) => {
+            handleRowClick(rowData);
+          },
+        }}
+      />
+      {menuAnchorElement && selectedRowId && (
+        <RoomsTableActionRowMenu
+          menuAnchorElement={menuAnchorElement}
+          open={Boolean(menuAnchorElement) && Boolean(selectedRowId)}
+          onClose={() => {
+            setMenuAnchorElement(null);
+            setSelectedRowId(null);
+          }}
+          onEdit={(roomId) => {
+            if (props.onEditRoom) {
+              props.onEditRoom(roomId);
+              setMenuAnchorElement(null);
+              setSelectedRowId(null);
+            }
+          }}
+          onDelete={(roomId) => {
+            if (props.onDeleteRoom) {
+              props.onDeleteRoom(roomId);
+              setMenuAnchorElement(null);
+              setSelectedRowId(null);
+            }
+          }}
+          onPublish={(roomId) => {
+            if (props.onPublishRoom) {
+              props.onDeleteRoom(roomId);
+              setMenuAnchorElement(null);
+              setSelectedRowId(null);
+            }
+          }}
+          roomId={selectedRowId}
+          allowedActionsSet={props.allowedActionsSet}
+        />
+      )}
+    </>
   );
 };
 

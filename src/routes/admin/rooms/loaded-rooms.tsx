@@ -9,6 +9,7 @@ import { memo, useMemo, useState } from 'react';
 import { CreateRoomMutationVariables } from '@/graphql/createRoom.generated';
 import { CreateOrUpdateRoomModal } from '../components/create-update-room-modal';
 import TableWithSortingAndSearch from '../components/table-sort-search';
+import { RoomTableRowMenuActions } from '../components/rooms-table-action-row-menu';
 
 const AccordionGroupContainer = styled.div`
   display: flex;
@@ -107,7 +108,7 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
         <TableWithSortingAndSearch
           data={activeRooms}
           onDeleteRoom={handleDeleteRoom}
-          inactiveRooms={false}
+          allowedActionsSet={new Set([RoomTableRowMenuActions.DELETE])}
         />
       </AccordionWithTable>
       <Spacer />
@@ -118,9 +119,15 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
         <TableWithSortingAndSearch
           data={inactiveRooms}
           onEditRoom={handleEditRoom}
-          onActivateRoom={handleActivateRoom}
+          onPublishRoom={handleActivateRoom}
           onDeleteRoom={handleDeleteRoom}
-          inactiveRooms
+          allowedActionsSet={
+            new Set([
+              RoomTableRowMenuActions.EDIT,
+              RoomTableRowMenuActions.DELETE,
+              RoomTableRowMenuActions.PUBLISH,
+            ])
+          }
         />
       </AccordionWithTable>
       {createOrUpdateRoomModalController.modalOpen && (
