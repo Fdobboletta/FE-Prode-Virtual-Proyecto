@@ -157,7 +157,9 @@ const RoomMatchesInternal = (props: WithSnackbarProps) => {
 
       if (newlyCreatedMatch.data && newlyCreatedMatch.data.createMatch) {
         const addNewMatch = newlyCreatedMatch.data.createMatch;
-        setMatches((prevState) => [...prevState, addNewMatch]);
+        setMatches((prevState) =>
+          _.orderBy([...prevState, addNewMatch], ['startDate'], ['asc'])
+        );
       }
     } catch (error) {
       console.error('Error al crear la sala:', error);
@@ -166,7 +168,7 @@ const RoomMatchesInternal = (props: WithSnackbarProps) => {
 
   const handleScoreSelect = (matchId: string, score: Score | undefined) => {
     setMatches((prevMatchesArray) => {
-      return prevMatchesArray.map((match) => {
+      const updatedArray = prevMatchesArray.map((match) => {
         if (match.id === matchId) {
           return {
             ...match,
@@ -175,6 +177,7 @@ const RoomMatchesInternal = (props: WithSnackbarProps) => {
         }
         return match;
       });
+      return _.orderBy(updatedArray, ['startDate'], ['asc']);
     });
   };
 
