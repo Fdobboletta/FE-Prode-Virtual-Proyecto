@@ -52,6 +52,7 @@ const CreateOrUpdateMatchFormInternal = (
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           label="Dia del Partido"
+          format="dd/MM/yyyy"
           value={props.formData.startDate}
           disablePast
           slotProps={{

@@ -75,6 +75,7 @@ const CreateOrUpdateRoomFormInternal = (props: CreateOrUpdateRoomFormProps) => {
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           label="Fecha límite"
+          format="dd/MM/yyyy"
           value={props.formData.dueDate}
           disablePast
           slotProps={{
