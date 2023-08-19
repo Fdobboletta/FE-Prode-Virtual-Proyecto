@@ -17,7 +17,7 @@ import styled from 'styled-components';
 import { Settings, Dashboard } from '@mui/icons-material';
 import { toRem } from '@/utils';
 
-type AdminPageProps = {
+type UserPageProps = {
   children: ReactNode;
 };
 
@@ -93,7 +93,7 @@ const UserDrawerContent = (): JSX.Element | null => {
   );
 };
 
-const InternalUserPage = (props: AdminPageProps) => {
+const InternalUserPage = (props: UserPageProps) => {
   return (
     <PrivateLayout
       drawerTitle="User Panel"
