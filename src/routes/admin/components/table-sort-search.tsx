@@ -201,7 +201,7 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
           }}
           onPublish={(roomId) => {
             if (props.onPublishRoom) {
-              props.onDeleteRoom(roomId);
+              props.onPublishRoom(roomId);
               setMenuAnchorElement(null);
               setSelectedRowId(null);
             }
