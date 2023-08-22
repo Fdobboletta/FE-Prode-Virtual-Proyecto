@@ -14,7 +14,7 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Settings, Dashboard } from '@mui/icons-material';
+import { Settings, List as ListIcon, MeetingRoom } from '@mui/icons-material';
 import { toRem } from '@/utils';
 
 type UserPageProps = {
@@ -70,9 +70,18 @@ const UserDrawerContent = (): JSX.Element | null => {
             selected={isActive('/rooms')}
           >
             <StyledListItemIcon>
-              <Dashboard />
+              <MeetingRoom />
             </StyledListItemIcon>
-            <ListItemText primary="Prodes" />
+            <ListItemText primary="Salas" />
+          </ListItemButton>
+          <ListItemButton
+            onClick={handleNavigation('/myRooms')}
+            selected={isActive('/myRooms')}
+          >
+            <StyledListItemIcon>
+              <ListIcon />
+            </StyledListItemIcon>
+            <ListItemText primary="Mis prodes" />
           </ListItemButton>
         </StyledList>
       </StyledBodyContainer>

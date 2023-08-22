@@ -13,6 +13,8 @@ import { RoomsPage } from './admin/rooms/rooms';
 import { RoomMatches } from './admin/matches/room-matches';
 import { RoomParticipants } from './admin/participants/room-participants';
 import { AdminPage } from './admin/admin-page';
+
+import { UserRooms } from './user/rooms/user-rooms';
 import { UserPage } from './user/user-page';
 
 export const AppRoutes = () => {
@@ -21,7 +23,11 @@ export const AppRoutes = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route element={<PrivateRoutes requiredRole={UserRole.Player} />}>
         <Route path="/user" element={<Navigate to="/user/rooms" />} />
-        <Route path="/user/rooms" element={<UserPage>Hello World</UserPage>} />
+        <Route path="/user/rooms" element={<UserRooms />} />
+        <Route
+          path="/user/myRooms"
+          element={<UserPage>Estamos trabajando en esta pagina...</UserPage>}
+        />
       </Route>
       <Route element={<PrivateRoutes requiredRole={UserRole.Admin} />}>
         <Route path="/admin" element={<Navigate to="/admin/rooms" />} />

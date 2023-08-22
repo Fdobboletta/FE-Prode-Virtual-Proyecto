@@ -1,0 +1,6 @@
+mutation GenerateMercadoPagoPreference($roomId: String!) {
+  generateMercadoPagoPreferenceId(roomId: $roomId) {
+    preferenceId
+    redirectLink
+  }
+}
