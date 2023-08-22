@@ -1,7 +1,5 @@
 import React, { FC, memo, useEffect, useState } from 'react';
-
 import styled from 'styled-components';
-
 import {
   Button,
   ButtonProps,
@@ -31,13 +29,35 @@ const StyledModalContainer = styled(ModalContainer)`
 
 const StyledModalBody = styled(ModalBody)`
   display: flex;
+  flex-direction: column;
   align-items: center;
+`;
+
+const ModalText = styled(Typography)`
+  font-size: ${toRem(16)};
+  text-align: center;
+  margin-bottom: ${toRem(24)};
 `;
 
 const StyledModalFooter = styled(ModalFooter)`
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+`;
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  gap: ${toRem(16)};
+`;
+
+const ConfirmButton = styled(Button)`
+  background-color: ${(props) => props.theme.palette.secondary.main};
+  color: ${(props) => props.theme.palette.primary.contrastText};
+
+  &:hover {
+    background-color: ${(props) => props.theme.palette.primary.dark};
+  }
 `;
 
 const RoomPaymentModalInternal: FC<RoomPaymentModalProps> = (
@@ -49,8 +69,6 @@ const RoomPaymentModalInternal: FC<RoomPaymentModalProps> = (
     id: string;
     paymentLink: string;
   } | null>(null);
-
-  const [loadingMpButton, setLoadingMpButton] = useState(true);
 
   useEffect(() => {
     const getMpPreferenceId = async () => {
@@ -76,35 +94,34 @@ const RoomPaymentModalInternal: FC<RoomPaymentModalProps> = (
       data-testid={props['data-testid']}
       isModalOpen={props.isModalOpen}
       modalSubtitle={props.modalSubtitle}
-      modalTitle={props.modalTitle}
+      modalTitle={'Confirmar compra'}
       onCloseModal={props.onCloseModal}
     >
       <>
         <StyledModalBody>
-          <Typography component="span">
-            Estas seguro que desea comprar el accesso a esta sala?
-          </Typography>
+          <ModalText>
+            ¿Estás seguro de que deseas comprar el acceso a esta sala?
+          </ModalText>
         </StyledModalBody>
         <StyledModalFooter>
-          <ModalSecondaryButton
-            onClick={props.onCancel || props.onCloseModal}
-            variant="text"
-          >
-            Cancelar
-          </ModalSecondaryButton>
-          {loading ? (
-            <CircularProgress size={24} />
-          ) : (
-            <Button onClick={() => {}}>
+          <ButtonsContainer>
+            <ModalSecondaryButton
+              onClick={props.onCancel || props.onCloseModal}
+              variant="text"
+            >
+              Cancelar
+            </ModalSecondaryButton>
+            <ConfirmButton variant="contained" disabled={loading}>
               <a
                 href={mpPreference?.paymentLink || ''}
                 target="_blank"
                 rel="noreferrer"
+                style={{ textDecoration: 'none', color: 'inherit' }}
               >
-                Confirmar Pago
+                {loading ? <CircularProgress size={24} /> : 'Confirmar Pago'}
               </a>
-            </Button>
-          )}
+            </ConfirmButton>
+          </ButtonsContainer>
         </StyledModalFooter>
       </>
     </StyledModalContainer>
