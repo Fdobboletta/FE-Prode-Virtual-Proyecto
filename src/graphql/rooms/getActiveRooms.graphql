@@ -1,0 +1,11 @@
+query GetActiveRooms {
+  getActiveRooms {
+    id
+    name
+    isActive
+    entryPrice
+    dueDate
+    paymentLink
+    prizeMoney
+  }
+}

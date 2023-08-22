@@ -39,6 +39,7 @@ export type MercadoPagoAccessToken = {
 export type MercadoPagoPreference = {
   __typename?: 'MercadoPagoPreference';
   preferenceId: Scalars['ID'];
+  redirectLink: Scalars['String'];
 };
 
 export type Mutation = {
@@ -52,6 +53,7 @@ export type Mutation = {
   deleteMatch?: Maybe<Scalars['String']>;
   deleteRoom?: Maybe<Scalars['String']>;
   disconnectMercadoPagoIntegration?: Maybe<Scalars['String']>;
+  generateMercadoPagoPreferenceId: MercadoPagoPreference;
   registerNewUser: User;
   sendResetPasswordEmail?: Maybe<Scalars['String']>;
   updateManyMatchScores: Array<Match>;
@@ -100,6 +102,10 @@ export type MutationDeleteRoomArgs = {
   roomId: Scalars['String'];
 };
 
+export type MutationGenerateMercadoPagoPreferenceIdArgs = {
+  roomId: Scalars['String'];
+};
+
 export type MutationRegisterNewUserArgs = {
   address: Scalars['String'];
   cellphone: Scalars['String'];
@@ -137,6 +143,7 @@ export type MutationUpdateRoomArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  getActiveRooms: Array<Room>;
   getMatchesByRoomId: Array<Match>;
   getRoomById: Room;
   getRoomsByUserId: Array<Room>;
