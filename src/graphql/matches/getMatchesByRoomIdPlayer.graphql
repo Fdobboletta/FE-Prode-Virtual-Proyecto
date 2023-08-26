@@ -1,0 +1,10 @@
+query GetMatchesByRoomIdForPlayers($roomId: String!) {
+  getMatchesByRoomIdForPlayers(roomId: $roomId) {
+    id
+    homeTeam
+    awayTeam
+    officialScore
+    roomId
+    startDate
+  }
+}

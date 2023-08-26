@@ -1,0 +1,11 @@
+query GetActiveUnpaidRooms {
+  getActiveUnpaidRooms {
+    id
+    name
+    dueDate
+    prizeMoney
+    entryPrice
+    paymentLink
+    isActive
+  }
+}

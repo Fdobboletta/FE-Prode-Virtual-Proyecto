@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
 
-import { Match, Score } from '@/generated/graphql-types.generated';
+import { Match, Score, UserRole } from '@/generated/graphql-types.generated';
 import { toRem } from '@/utils';
 import styled from 'styled-components';
 import { Button, CircularProgress } from '@mui/material';
@@ -209,7 +209,7 @@ const RoomMatchesInternal = (props: WithSnackbarProps) => {
   };
 
   return (
-    <RoomPage>
+    <RoomPage role={UserRole.Admin}>
       <Container>
         <StyledButton
           onClick={() => {

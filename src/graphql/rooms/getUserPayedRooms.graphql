@@ -1,0 +1,11 @@
+query GetUserPayedRooms {
+  getUserPayedRooms {
+    id
+    name
+    dueDate
+    prizeMoney
+    entryPrice
+    paymentLink
+    isActive
+  }
+}

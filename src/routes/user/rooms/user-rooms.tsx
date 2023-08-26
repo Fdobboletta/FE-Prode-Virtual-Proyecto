@@ -1,11 +1,11 @@
 import { Room } from '@/generated/graphql-types.generated';
-import { useGetActiveRoomsQuery } from '@/graphql/rooms/getActiveRooms.generated';
 import { memo, useCallback, useState } from 'react';
 import { UserPage } from '../user-page';
 import { Stack } from '@mui/material';
 import { useModal } from '@/components/modal-container';
 import { RoomPaymentModal } from './room-payment-modal';
 import { UserRoomCard } from './user-room-card';
+import { useGetActiveUnpaidRoomsQuery } from '@/graphql/rooms/getActiveUnpaidRooms.generated';
 
 const UserRoomsInternal = () => {
   const [activeRooms, setActiveRooms] = useState<Room[]>([]);
@@ -14,10 +14,10 @@ const UserRoomsInternal = () => {
 
   const paymentModalController = useModal();
 
-  const { loading } = useGetActiveRoomsQuery({
+  const { loading } = useGetActiveUnpaidRoomsQuery({
     onCompleted: (data) => {
-      if (data.getActiveRooms) {
-        setActiveRooms(data.getActiveRooms);
+      if (data.getActiveUnpaidRooms) {
+        setActiveRooms(data.getActiveUnpaidRooms);
       }
     },
   });

@@ -24,9 +24,11 @@ import { People, Settings, SportsSoccer } from '@mui/icons-material';
 import { useGetRoomByIdQuery } from '@/graphql/getRoomById.generated';
 import { toRem } from '@/utils';
 import { RoomPageContextProvider } from './context/room-page-context';
+import { UserRole } from '@/generated/graphql-types.generated';
 
 type RoomPageProps = {
   children: ReactNode;
+  role: UserRole;
 };
 const StyledList = styled(List)`
   width: 100%;
@@ -57,14 +59,17 @@ const StyledListItemIcon = styled(ListItemIcon)`
 
 const RoomPageDrawerContent = (props: {
   roomId: string;
+  role: UserRole;
 }): JSX.Element | null => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const prefix = props.role === UserRole.Admin ? '/admin' : '/user';
+
   const handleNavigation = useCallback(
     (path: string) => () => {
       navigate(
-        generatePath(`/admin/room/${props.roomId}${path}`, {
+        generatePath(`${prefix}/room/${props.roomId}${path}`, {
           roomId: props.roomId,
         })
       );
@@ -73,7 +78,7 @@ const RoomPageDrawerContent = (props: {
   );
 
   const isActive = (path: string) =>
-    location.pathname === `/admin/room/${props.roomId}${path}`;
+    location.pathname === `${prefix}/room/${props.roomId}${path}`;
 
   return (
     <StyledContainer>
@@ -130,9 +135,13 @@ const RoomPageInternal = (props: RoomPageProps) => {
   return (
     <PrivateLayout
       drawerTitle={data.getRoomById.name}
-      drawerContent={<RoomPageDrawerContent roomId={params.roomId || ''} />}
+      drawerContent={
+        <RoomPageDrawerContent roomId={params.roomId || ''} role={props.role} />
+      }
       renderBackIcon
-      backIconPath={'/admin/rooms'}
+      backIconPath={
+        props.role === UserRole.Admin ? '/admin/rooms' : '/user/rooms'
+      }
     >
       <RoomPageContextProvider value={{ room: data.getRoomById }}>
         {props.children}

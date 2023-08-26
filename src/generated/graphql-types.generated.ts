@@ -143,15 +143,21 @@ export type MutationUpdateRoomArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  getActiveRooms: Array<Room>;
+  getActiveUnpaidRooms: Array<Room>;
   getMatchesByRoomId: Array<Match>;
+  getMatchesByRoomIdForPlayers: Array<Match>;
   getRoomById: Room;
   getRoomsByUserId: Array<Room>;
   getUserMpAccessToken?: Maybe<Scalars['String']>;
+  getUserPayedRooms: Array<Room>;
   validateToken: Scalars['Boolean'];
 };
 
 export type QueryGetMatchesByRoomIdArgs = {
+  roomId: Scalars['String'];
+};
+
+export type QueryGetMatchesByRoomIdForPlayersArgs = {
   roomId: Scalars['String'];
 };
 
