@@ -47,7 +47,7 @@ const getScoreLabel = (score?: Score | null | undefined) => {
   return 'No disputado';
 };
 
-const MatchesTableInternal = (props: MatchesTableProps) => {
+const AdminMatchesTableInternal = (props: MatchesTableProps) => {
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [urlState, setUrlState] = useUrlState<{ isEditing: '1' }>();
   const [clickCount, setClickCount] = useState(0);
@@ -185,4 +185,4 @@ const MatchesTableInternal = (props: MatchesTableProps) => {
   );
 };
 
-export const MatchesTable = memo(MatchesTableInternal);
+export const AdminMatchesTable = memo(AdminMatchesTableInternal);

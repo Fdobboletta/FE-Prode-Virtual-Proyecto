@@ -7,5 +7,12 @@ query GetActiveUnpaidRooms {
     entryPrice
     paymentLink
     isActive
+    creator {
+      id
+      firstName
+      lastName
+      email
+    }
+    participantsCount
   }
 }

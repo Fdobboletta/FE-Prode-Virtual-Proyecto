@@ -6,20 +6,21 @@ import styled from 'styled-components';
 import { CircularProgress } from '@mui/material';
 
 import { useParams } from 'react-router';
-import { useModal } from '@/components/modal-container';
 
 import {
   WithSnackbarProps,
   snackSeverity,
   withSnack,
 } from '@/components/snackbar';
-import { useUpdateManyMatchScoresMutation } from '@/graphql/matches/updateManyMatchScores.generated';
+
 import _ from 'lodash';
 import { useGetMatchesByRoomIdForPlayersQuery } from '@/graphql/matches/getMatchesByRoomIdPlayer.generated';
 import { onError } from '@apollo/client/link/error';
 import { RoomPage } from '@/routes/admin/room-page';
 import { AccordionWithTable } from '@/routes/admin/components/accordion-table';
-import { MatchesTable } from '@/routes/admin/components/matches-table';
+
+import { UserMatchesTable } from '../components/user-matches-table';
+import { useUpdateManyMatchForecastsMutation } from '@/graphql/matches/updateManyMatchForecasts.generated';
 
 const Container = styled.div`
   display: flex;
@@ -32,11 +33,6 @@ const UserRoomMatchesInternal = (props: WithSnackbarProps) => {
   const params = useParams<{ roomId: string }>();
 
   const [matches, setMatches] = useState<Match[]>([]);
-
-  const [, setSelectedMatchId] = useState<string | null>(null);
-
-  const createOrUpdateMatchModalController = useModal();
-  const deleteMatchModalController = useModal();
 
   const { loading: LoadingMatches } = useGetMatchesByRoomIdForPlayersQuery({
     variables: {
@@ -57,15 +53,18 @@ const UserRoomMatchesInternal = (props: WithSnackbarProps) => {
     },
   });
 
-  const [updateManyMatchScores] = useUpdateManyMatchScoresMutation();
+  const [updateManyMatchForecasts] = useUpdateManyMatchForecastsMutation();
 
-  const handleScoreSelect = (matchId: string, score: Score | undefined) => {
+  const handleForecastScoreSelect = (
+    matchId: string,
+    score: Score | undefined
+  ) => {
     setMatches((prevMatchesArray) => {
       const updatedArray = prevMatchesArray.map((match) => {
         if (match.id === matchId) {
           return {
             ...match,
-            officialScore: score,
+            userForecast: score,
           };
         }
         return match;
@@ -74,15 +73,15 @@ const UserRoomMatchesInternal = (props: WithSnackbarProps) => {
     });
   };
 
-  const handleScoreSubmit = async () => {
-    const scoreUpdates = matches.map((match) => ({
+  const handleForecastScoreSubmit = async () => {
+    const matchForecasts = matches.map((match) => ({
       matchId: match.id,
-      score: match.officialScore || null,
+      score: match.userForecast || null,
     }));
 
-    await updateManyMatchScores({
+    await updateManyMatchForecasts({
       variables: {
-        scoreUpdates,
+        forecasts: matchForecasts,
       },
       onCompleted: () => {
         props.snackbarShowMessage(
@@ -112,18 +111,10 @@ const UserRoomMatchesInternal = (props: WithSnackbarProps) => {
             dataLength={matches.length}
             keepExpanded
           >
-            <MatchesTable
+            <UserMatchesTable
               matches={matches}
-              onEditMatch={(matchId) => {
-                setSelectedMatchId(matchId);
-                createOrUpdateMatchModalController.onOpenModal();
-              }}
-              onSaveScores={handleScoreSubmit}
-              onScoreSelect={handleScoreSelect}
-              onDeleteMatch={(matchId) => {
-                setSelectedMatchId(matchId);
-                deleteMatchModalController.onOpenModal();
-              }}
+              onSaveScores={handleForecastScoreSubmit}
+              onScoreSelect={handleForecastScoreSelect}
             />
           </AccordionWithTable>
         )}

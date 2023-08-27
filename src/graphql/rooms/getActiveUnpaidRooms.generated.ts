@@ -18,6 +18,14 @@ export type GetActiveUnpaidRoomsQuery = {
     entryPrice: number;
     paymentLink: string;
     isActive: boolean;
+    participantsCount: number;
+    creator: {
+      __typename?: 'User';
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+    };
   }>;
 };
 
@@ -31,6 +39,13 @@ export const GetActiveUnpaidRoomsDocument = /*#__PURE__*/ gql`
       entryPrice
       paymentLink
       isActive
+      creator {
+        id
+        firstName
+        lastName
+        email
+      }
+      participantsCount
     }
   }
 `;

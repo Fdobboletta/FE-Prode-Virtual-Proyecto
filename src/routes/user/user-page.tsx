@@ -75,8 +75,8 @@ const UserDrawerContent = (): JSX.Element | null => {
             <ListItemText primary="Salas" />
           </ListItemButton>
           <ListItemButton
-            onClick={handleNavigation('/myRooms')}
-            selected={isActive('/myRooms')}
+            onClick={handleNavigation('/myrooms')}
+            selected={isActive('/myrooms')}
           >
             <StyledListItemIcon>
               <ListIcon />

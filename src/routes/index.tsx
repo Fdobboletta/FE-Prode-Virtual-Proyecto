@@ -15,7 +15,7 @@ import { RoomParticipants } from './admin/participants/room-participants';
 import { AdminPage } from './admin/admin-page';
 
 import { UserRooms } from './user/rooms/user-rooms';
-import { UserPage } from './user/user-page';
+
 import { UserRoomMatches } from './user/matches/user-room-matches';
 import { MyRooms } from './user/rooms/my-rooms';
 
@@ -27,10 +27,6 @@ export const AppRoutes = () => {
         <Route path="/user" element={<Navigate to="/user/rooms" />} />
         <Route path="/user/rooms" element={<UserRooms />} />
         <Route path="/user/myrooms" element={<MyRooms />} />
-        <Route
-          path="/user/myRooms"
-          element={<UserPage>Estamos trabajando en esta pagina...</UserPage>}
-        />
         <Route
           path="/user/room/:roomId/matches"
           element={<UserRoomMatches />}

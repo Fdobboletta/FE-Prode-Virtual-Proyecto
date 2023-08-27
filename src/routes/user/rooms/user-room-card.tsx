@@ -1,15 +1,22 @@
-import { Room } from '@/generated/graphql-types.generated';
 import { memo } from 'react';
 
-import { AttachMoney, EmojiEvents, Event, People } from '@mui/icons-material';
+import {
+  AttachMoney,
+  Email,
+  EmojiEvents,
+  Event,
+  People,
+  Person,
+} from '@mui/icons-material';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import styled from 'styled-components';
 import { Button, Card, Stack, Typography } from '@mui/material';
 import { toRem } from '@/utils';
+import { UnpaidRoom } from './user-rooms';
 
 type UserRoomCardProps = {
-  room: Room;
+  room: UnpaidRoom;
   onPayButtonClick: (roomId: string) => void;
 };
 
@@ -104,7 +111,7 @@ const UserRoomCardInternal = (props: UserRoomCardProps) => (
           </IconContainer>
           <div>
             <InfoLabel>Número de participantes</InfoLabel>
-            <InfoValue>10</InfoValue>
+            <InfoValue>{props.room.participantsCount}</InfoValue>
           </div>
         </InfoRow>
         <InfoRow>
@@ -124,6 +131,15 @@ const UserRoomCardInternal = (props: UserRoomCardProps) => (
         </InfoRow>
         <InfoRow>
           <IconContainer>
+            <Person />
+          </IconContainer>
+          <div>
+            <InfoLabel>Creador</InfoLabel>
+            <InfoValue>{`${props.room.creator.firstName} ${props.room.creator.lastName}`}</InfoValue>
+          </div>
+        </InfoRow>
+        <InfoRow>
+          <IconContainer>
             <EmojiEvents />
           </IconContainer>
           <div>
@@ -135,6 +151,15 @@ const UserRoomCardInternal = (props: UserRoomCardProps) => (
                 maximumFractionDigits: 2,
               })}
             </InfoValue>
+          </div>
+        </InfoRow>
+        <InfoRow>
+          <IconContainer>
+            <Email />
+          </IconContainer>
+          <div>
+            <InfoLabel>Email del Creador</InfoLabel>
+            <InfoValue>{props.room.creator.email}</InfoValue>
           </div>
         </InfoRow>
       </InfoGrid>

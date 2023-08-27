@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Room } from '@/generated/graphql-types.generated';
 import { toRem } from '@/utils';
 import { MoreHoriz } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
@@ -15,9 +14,10 @@ import {
   RoomTableRowMenuActions,
   RoomsTableActionRowMenu,
 } from './rooms-table-action-row-menu';
+import { RoomPageInternalRoom } from '../rooms/rooms';
 
 type TableWithSortingAndSearchProps = {
-  data: Room[];
+  data: RoomPageInternalRoom[];
   onPublishRoom?: (roomId: string) => void;
   onEditRoom?: (roomId: string) => void;
   onDeleteRoom: (roomId: string) => void;

@@ -1,14 +1,18 @@
-import { Room } from '@/generated/graphql-types.generated';
 import { memo, useCallback, useState } from 'react';
 import { UserPage } from '../user-page';
 import { Stack } from '@mui/material';
 import { useModal } from '@/components/modal-container';
 import { RoomPaymentModal } from './room-payment-modal';
 import { UserRoomCard } from './user-room-card';
-import { useGetActiveUnpaidRoomsQuery } from '@/graphql/rooms/getActiveUnpaidRooms.generated';
+import {
+  GetActiveUnpaidRoomsQuery,
+  useGetActiveUnpaidRoomsQuery,
+} from '@/graphql/rooms/getActiveUnpaidRooms.generated';
+
+export type UnpaidRoom = GetActiveUnpaidRoomsQuery['getActiveUnpaidRooms'][0];
 
 const UserRoomsInternal = () => {
-  const [activeRooms, setActiveRooms] = useState<Room[]>([]);
+  const [activeRooms, setActiveRooms] = useState<UnpaidRoom[]>([]);
 
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
 

@@ -140,7 +140,7 @@ const RoomPageInternal = (props: RoomPageProps) => {
       }
       renderBackIcon
       backIconPath={
-        props.role === UserRole.Admin ? '/admin/rooms' : '/user/rooms'
+        props.role === UserRole.Admin ? '/admin/rooms' : '/user/myrooms'
       }
     >
       <RoomPageContextProvider value={{ room: data.getRoomById }}>

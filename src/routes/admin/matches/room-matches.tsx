@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Button, CircularProgress } from '@mui/material';
 import { RoomPage } from '../room-page';
 import { AccordionWithTable } from '../components/accordion-table';
-import { MatchesTable } from '../components/matches-table';
+
 import { useGetMatchesByRoomIdQuery } from '@/graphql/matches/getMatchesByRoomId.generated';
 import { useCreateMatchMutation } from '@/graphql/matches/createMatch.generated';
 import { useParams } from 'react-router';
@@ -22,6 +22,7 @@ import {
 } from '@/components/snackbar';
 import { useUpdateManyMatchScoresMutation } from '@/graphql/matches/updateManyMatchScores.generated';
 import _ from 'lodash';
+import { AdminMatchesTable } from '../components/admin-matches-table';
 
 const Container = styled.div`
   display: flex;
@@ -226,7 +227,7 @@ const RoomMatchesInternal = (props: WithSnackbarProps) => {
             dataLength={matches.length}
             keepExpanded
           >
-            <MatchesTable
+            <AdminMatchesTable
               matches={matches}
               onEditMatch={(matchId) => {
                 setSelectedMatchId(matchId);

@@ -1,12 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Room } from '@/generated/graphql-types.generated';
-import {
-  RoomTableRowMenuActions,
-  RoomsTableActionRowMenu,
-} from '@/routes/admin/components/rooms-table-action-row-menu';
+
+import { RoomTableRowMenuActions } from '@/routes/admin/components/rooms-table-action-row-menu';
 import { toRem } from '@/utils';
-import { MoreHoriz } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
+
 import { format } from 'date-fns';
 import MUIDataTable, {
   MUIDataTableColumnDef,
@@ -15,12 +11,10 @@ import MUIDataTable, {
 import { memo, useState } from 'react';
 import { useNavigate, generatePath } from 'react-router';
 import styled from 'styled-components';
+import { UserMyRoomInternalRoom } from '../rooms/my-rooms';
 
 type TableWithSortingAndSearchProps = {
-  data: Room[];
-  onPublishRoom?: (roomId: string) => void;
-  onEditRoom?: (roomId: string) => void;
-  onDeleteRoom: (roomId: string) => void;
+  data: UserMyRoomInternalRoom[];
   allowedActionsSet: Set<RoomTableRowMenuActions>;
 };
 
@@ -80,10 +74,6 @@ const options: MUIDataTableOptions = {
 const MyRoomsTableInternal = (props: TableWithSortingAndSearchProps) => {
   const [clickCount, setClickCount] = useState(0);
   const [lastClickTime, setLastClickTime] = useState(0);
-  const [menuAnchorElement, setMenuAnchorElement] =
-    useState<null | HTMLElement>(null);
-
-  const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
@@ -142,26 +132,6 @@ const MyRoomsTableInternal = (props: TableWithSortingAndSearchProps) => {
         },
       },
     },
-    {
-      name: 'id',
-      label: 'Acciones',
-      options: {
-        customBodyRender: (value: string) => {
-          return (
-            <IconButton
-              onClick={(event) => {
-                setMenuAnchorElement(event.currentTarget);
-                setSelectedRowId(value);
-              }}
-              aria-label="More actions"
-              size="small"
-            >
-              <MoreHoriz />
-            </IconButton>
-          );
-        },
-      },
-    },
   ];
 
   return (
@@ -177,39 +147,6 @@ const MyRoomsTableInternal = (props: TableWithSortingAndSearchProps) => {
           },
         }}
       />
-      {menuAnchorElement && selectedRowId && (
-        <RoomsTableActionRowMenu
-          menuAnchorElement={menuAnchorElement}
-          open={Boolean(menuAnchorElement) && Boolean(selectedRowId)}
-          onClose={() => {
-            setMenuAnchorElement(null);
-            setSelectedRowId(null);
-          }}
-          onEdit={(roomId) => {
-            if (props.onEditRoom) {
-              props.onEditRoom(roomId);
-              setMenuAnchorElement(null);
-              setSelectedRowId(null);
-            }
-          }}
-          onDelete={(roomId) => {
-            if (props.onDeleteRoom) {
-              props.onDeleteRoom(roomId);
-              setMenuAnchorElement(null);
-              setSelectedRowId(null);
-            }
-          }}
-          onPublish={(roomId) => {
-            if (props.onPublishRoom) {
-              props.onPublishRoom(roomId);
-              setMenuAnchorElement(null);
-              setSelectedRowId(null);
-            }
-          }}
-          roomId={selectedRowId}
-          allowedActionsSet={props.allowedActionsSet}
-        />
-      )}
     </>
   );
 };

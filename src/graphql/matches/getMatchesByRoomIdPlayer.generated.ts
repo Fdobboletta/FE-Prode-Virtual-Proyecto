@@ -17,6 +17,7 @@ export type GetMatchesByRoomIdForPlayersQuery = {
     officialScore?: Types.Score | null;
     roomId: string;
     startDate: string;
+    userForecast?: Types.Score | null;
   }>;
 };
 
@@ -29,6 +30,7 @@ export const GetMatchesByRoomIdForPlayersDocument = /*#__PURE__*/ gql`
       officialScore
       roomId
       startDate
+      userForecast
     }
   }
 `;

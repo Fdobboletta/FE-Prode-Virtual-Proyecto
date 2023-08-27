@@ -1,5 +1,5 @@
 import { ConfirmationModal, useModal } from '@/components/modal-container';
-import { Room } from '@/generated/graphql-types.generated';
+
 import { toRem } from '@/utils';
 import { Button, CircularProgress } from '@mui/material';
 import styled from 'styled-components';
@@ -10,6 +10,7 @@ import { CreateRoomMutationVariables } from '@/graphql/createRoom.generated';
 import { CreateOrUpdateRoomModal } from '../components/create-update-room-modal';
 import TableWithSortingAndSearch from '../components/table-sort-search';
 import { RoomTableRowMenuActions } from '../components/rooms-table-action-row-menu';
+import { RoomPageInternalRoom } from './rooms';
 
 const AccordionGroupContainer = styled.div`
   display: flex;
@@ -37,12 +38,12 @@ const Spacer = styled.div`
 `;
 
 type LoadedRoomsProps = {
-  rooms: Room[];
+  rooms: RoomPageInternalRoom[];
   loadingGetAccessToken: boolean;
   loadingCreateRoom: boolean;
   isIntegrated: boolean;
   onCreateRoom: (newRoom: CreateRoomMutationVariables) => void;
-  onUpdateRoom: (room: Room) => void;
+  onUpdateRoom: (room: RoomPageInternalRoom) => void;
   onConfirmActivateRoom: (roomId: string) => void;
   onConfirmDeleteRoom: (roomId: string) => void;
 };
@@ -53,7 +54,9 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
   const deleteRoomModalController = useModal();
 
   const [selectedRoomId, setSelectedRoomId] = useState('');
-  const [roomToEdit, setRoomToEdit] = useState<Room | null>(null);
+  const [roomToEdit, setRoomToEdit] = useState<RoomPageInternalRoom | null>(
+    null
+  );
 
   const activeRooms = useMemo(
     () => props.rooms.filter((room) => room.isActive),

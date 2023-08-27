@@ -9,9 +9,12 @@ import {
 } from '@/graphql/createRoom.generated';
 
 import { useGetUserMpAccessTokenQuery } from '@/graphql/getUserMpAccessToken.generated';
-import { useGetRoomsByUserIdQuery } from '@/graphql/getRoomsByUser.generated';
+import {
+  GetRoomsByUserIdQuery,
+  useGetRoomsByUserIdQuery,
+} from '@/graphql/getRoomsByUser.generated';
 import { CircularProgress } from '@mui/material';
-import { Room } from '@/generated/graphql-types.generated';
+
 import { LoadedRooms } from './loaded-rooms';
 import { useActivateRoomMutation } from '@/graphql/activateRoom.generated';
 import { useDeleteRoomMutation } from '@/graphql/deleteRoom.generated';
@@ -29,8 +32,10 @@ const PageContainer = styled.div`
   padding: ${toRem(16)};
 `;
 
+export type RoomPageInternalRoom = GetRoomsByUserIdQuery['getRoomsByUserId'][0];
+
 const RoomsPageInternal = (props: WithSnackbarProps) => {
-  const [rooms, setRooms] = useState<Room[]>([]);
+  const [rooms, setRooms] = useState<RoomPageInternalRoom[]>([]);
   const [isIntegrated, setIsIntegrated] = useState(false);
   const [createRoom, { loading: loadingCreateRoom }] = useCreateRoomMutation();
   const [activateRoom] = useActivateRoomMutation();
@@ -107,7 +112,7 @@ const RoomsPageInternal = (props: WithSnackbarProps) => {
     }
   };
 
-  const handleUpdateRoom = async (roomToUpdate: Room) => {
+  const handleUpdateRoom = async (roomToUpdate: RoomPageInternalRoom) => {
     try {
       const updatedRoom = await updateRoom({
         variables: {

@@ -18,6 +18,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type ForecastInput = {
+  matchId: Scalars['ID'];
+  score?: InputMaybe<Score>;
+};
+
 /** Partido */
 export type Match = {
   __typename?: 'Match';
@@ -27,6 +32,7 @@ export type Match = {
   officialScore?: Maybe<Score>;
   roomId: Scalars['ID'];
   startDate: Scalars['String'];
+  userForecast?: Maybe<Score>;
 };
 
 /** Token de acceso a Mercado Pago */
@@ -49,6 +55,7 @@ export type Mutation = {
   authorizeMercadoPago?: Maybe<MercadoPagoAccessToken>;
   changePassword?: Maybe<Scalars['String']>;
   createMatch: Match;
+  createOrUpdateMultipleForecasts: Scalars['Boolean'];
   createRoom: Room;
   deleteMatch?: Maybe<Scalars['String']>;
   deleteRoom?: Maybe<Scalars['String']>;
@@ -84,6 +91,10 @@ export type MutationCreateMatchArgs = {
   date: Scalars['String'];
   homeTeam: Scalars['String'];
   roomId: Scalars['String'];
+};
+
+export type MutationCreateOrUpdateMultipleForecastsArgs = {
+  forecasts: Array<ForecastInput>;
 };
 
 export type MutationCreateRoomArgs = {
@@ -173,11 +184,14 @@ export type QueryValidateTokenArgs = {
 /** Sala de prode */
 export type Room = {
   __typename?: 'Room';
+  creator: User;
+  creatorId: Scalars['ID'];
   dueDate: Scalars['String'];
   entryPrice: Scalars['Float'];
   id: Scalars['ID'];
   isActive: Scalars['Boolean'];
   name: Scalars['String'];
+  participantsCount: Scalars['Int'];
   paymentLink: Scalars['String'];
   prizeMoney: Scalars['Float'];
 };

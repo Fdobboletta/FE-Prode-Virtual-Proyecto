@@ -2,7 +2,7 @@ import { Room } from '@/generated/graphql-types.generated';
 import { createTypedContext } from '@/utils';
 
 export type RoomPageContext = {
-  room: Room;
+  room: Omit<Room, 'creatorId' | 'creator' | 'participantsCount'>;
 };
 
 export const [useRoomPageContext, RoomPageContextProvider] =

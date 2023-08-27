@@ -6,5 +6,6 @@ query GetMatchesByRoomIdForPlayers($roomId: String!) {
     officialScore
     roomId
     startDate
+    userForecast
   }
 }

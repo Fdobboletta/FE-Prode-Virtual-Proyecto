@@ -13,15 +13,15 @@ import { addMinutes, formatISO, parseISO } from 'date-fns';
 import { ModalSecondaryButton } from '@/components/modal-container/components/modal-secondary-button';
 import { Button } from '@mui/material';
 import { CreateRoomMutationVariables } from '@/graphql/createRoom.generated';
-import { Room } from '@/generated/graphql-types.generated';
+import { RoomPageInternalRoom } from '../rooms/rooms';
 
 type CreateOrUpdateRoomModalProps = {
   isOpen: boolean;
   onCancel: () => void;
   onCreateRoom: (newRoom: CreateRoomMutationVariables) => void;
-  onEditRoom: (editedRoom: Room) => void;
+  onEditRoom: (editedRoom: RoomPageInternalRoom) => void;
   loading: boolean;
-  roomToEdit: Room | null;
+  roomToEdit: RoomPageInternalRoom | null;
 };
 
 const initialDate = new Date();
