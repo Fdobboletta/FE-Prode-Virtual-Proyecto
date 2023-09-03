@@ -18,6 +18,7 @@ export type GetUserPayedRoomsQuery = {
     entryPrice: number;
     paymentLink: string;
     isActive: boolean;
+    isClosed: boolean;
   }>;
 };
 
@@ -31,6 +32,7 @@ export const GetUserPayedRoomsDocument = /*#__PURE__*/ gql`
       entryPrice
       paymentLink
       isActive
+      isClosed
     }
   }
 `;

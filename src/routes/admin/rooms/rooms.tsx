@@ -65,6 +65,7 @@ const RoomsPageInternal = (props: WithSnackbarProps) => {
           createRoom: {
             id: 'new-room',
             paymentLink: 'noLink',
+            isClosed: false,
             ...newRoom,
           },
         },

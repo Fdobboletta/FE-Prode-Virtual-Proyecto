@@ -18,6 +18,7 @@ export type UpdateRoomMutation = {
     __typename?: 'Room';
     id: string;
     isActive: boolean;
+    isClosed: boolean;
     name: string;
     paymentLink: string;
     prizeMoney: number;
@@ -45,6 +46,7 @@ export const UpdateRoomDocument = /*#__PURE__*/ gql`
     ) {
       id
       isActive
+      isClosed
       name
       paymentLink
       prizeMoney

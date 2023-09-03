@@ -76,6 +76,7 @@ const AdminDrawerContent = (): JSX.Element | null => {
             <ListItemText primary="Mis salas" />
           </ListItemButton>
           <ListItemButton
+            disabled
             onClick={handleNavigation('/reports')}
             selected={isActive('/reports')}
           >

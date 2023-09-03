@@ -53,6 +53,7 @@ export type Mutation = {
   activateRoom: Room;
   authenticateUser: User;
   authorizeMercadoPago?: Maybe<MercadoPagoAccessToken>;
+  calculateRoomResults: Array<RoomParticipantWithScore>;
   changePassword?: Maybe<Scalars['String']>;
   createMatch: Match;
   createOrUpdateMultipleForecasts: Scalars['Boolean'];
@@ -66,6 +67,7 @@ export type Mutation = {
   updateManyMatchScores: Array<Match>;
   updateMatch: Match;
   updateRoom?: Maybe<Room>;
+  updateUserData?: Maybe<User>;
 };
 
 export type MutationActivateRoomArgs = {
@@ -79,6 +81,10 @@ export type MutationAuthenticateUserArgs = {
 
 export type MutationAuthorizeMercadoPagoArgs = {
   mercadoPagoCode: Scalars['String'];
+};
+
+export type MutationCalculateRoomResultsArgs = {
+  roomId: Scalars['String'];
 };
 
 export type MutationChangePasswordArgs = {
@@ -152,11 +158,30 @@ export type MutationUpdateRoomArgs = {
   roomId: Scalars['String'];
 };
 
+export type MutationUpdateUserDataArgs = {
+  address?: InputMaybe<Scalars['String']>;
+  cellphone?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']>;
+  lastName?: InputMaybe<Scalars['String']>;
+  newPassword?: InputMaybe<Scalars['String']>;
+};
+
+/** Usuario participando de un prode */
+export type Participant = {
+  __typename?: 'Participant';
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  id: Scalars['ID'];
+  lastName: Scalars['String'];
+  score?: Maybe<Scalars['Int']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   getActiveUnpaidRooms: Array<Room>;
   getMatchesByRoomId: Array<Match>;
   getMatchesByRoomIdForPlayers: Array<Match>;
+  getParticipantsByRoomId: Array<Participant>;
   getRoomById: Room;
   getRoomsByUserId: Array<Room>;
   getUserMpAccessToken?: Maybe<Scalars['String']>;
@@ -169,6 +194,10 @@ export type QueryGetMatchesByRoomIdArgs = {
 };
 
 export type QueryGetMatchesByRoomIdForPlayersArgs = {
+  roomId: Scalars['String'];
+};
+
+export type QueryGetParticipantsByRoomIdArgs = {
   roomId: Scalars['String'];
 };
 
@@ -190,10 +219,21 @@ export type Room = {
   entryPrice: Scalars['Float'];
   id: Scalars['ID'];
   isActive: Scalars['Boolean'];
+  isClosed: Scalars['Boolean'];
   name: Scalars['String'];
   participantsCount: Scalars['Int'];
   paymentLink: Scalars['String'];
   prizeMoney: Scalars['Float'];
+};
+
+/** Lista de participantes de la sala ordenada por puntaje de forma descendente */
+export type RoomParticipantWithScore = {
+  __typename?: 'RoomParticipantWithScore';
+  email: Scalars['String'];
+  lastName: Scalars['String'];
+  name: Scalars['String'];
+  participantId: Scalars['ID'];
+  score?: Maybe<Scalars['Int']>;
 };
 
 export enum Score {
@@ -217,7 +257,7 @@ export type User = {
   id: Scalars['ID'];
   lastName: Scalars['String'];
   role: UserRole;
-  token: Scalars['String'];
+  token?: Maybe<Scalars['String']>;
 };
 
 export enum UserRole {

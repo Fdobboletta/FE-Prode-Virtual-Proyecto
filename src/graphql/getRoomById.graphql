@@ -4,6 +4,7 @@ query GetRoomById($roomId: String!) {
     entryPrice
     dueDate
     isActive
+    isClosed
     name
     prizeMoney
     paymentLink

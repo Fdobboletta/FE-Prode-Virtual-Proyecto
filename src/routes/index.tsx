@@ -10,7 +10,6 @@ import { ChangePasswordPage } from './auth/change-password-page';
 import { IntegrationsPage } from './admin/integrations/integrations';
 import { RoomsPage } from './admin/rooms/rooms';
 
-import { RoomMatches } from './admin/matches/room-matches';
 import { RoomParticipants } from './admin/participants/room-participants';
 import { AdminPage } from './admin/admin-page';
 
@@ -18,6 +17,7 @@ import { UserRooms } from './user/rooms/user-rooms';
 
 import { UserRoomMatches } from './user/matches/user-room-matches';
 import { MyRooms } from './user/rooms/my-rooms';
+import { AdminRoomMatches } from './admin/matches/admin-room-matches';
 
 export const AppRoutes = () => {
   return (
@@ -40,7 +40,10 @@ export const AppRoutes = () => {
           element={<AdminPage>Hello World</AdminPage>}
         />
         <Route path="/admin/rooms" element={<RoomsPage />} />
-        <Route path="/admin/room/:roomId/matches" element={<RoomMatches />} />
+        <Route
+          path="/admin/room/:roomId/matches"
+          element={<AdminRoomMatches />}
+        />
         <Route
           path="/admin/room/:roomId/participants"
           element={<RoomParticipants />}

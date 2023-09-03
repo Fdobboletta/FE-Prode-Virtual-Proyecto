@@ -15,6 +15,7 @@ export type GetRoomByIdQuery = {
     entryPrice: number;
     dueDate: string;
     isActive: boolean;
+    isClosed: boolean;
     name: string;
     prizeMoney: number;
     paymentLink: string;
@@ -28,6 +29,7 @@ export const GetRoomByIdDocument = /*#__PURE__*/ gql`
       entryPrice
       dueDate
       isActive
+      isClosed
       name
       prizeMoney
       paymentLink

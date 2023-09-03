@@ -59,11 +59,17 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
   );
 
   const activeRooms = useMemo(
-    () => props.rooms.filter((room) => room.isActive),
+    () => props.rooms.filter((room) => room.isActive && !room.isClosed),
     [props.rooms]
   );
+
   const inactiveRooms = useMemo(
-    () => props.rooms.filter((room) => !room.isActive),
+    () => props.rooms.filter((room) => !room.isActive && !room.isClosed),
+    [props.rooms]
+  );
+
+  const closedRooms = useMemo(
+    () => props.rooms.filter((room) => room.isClosed),
     [props.rooms]
   );
 
@@ -131,6 +137,19 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
               RoomTableRowMenuActions.PUBLISH,
             ])
           }
+        />
+      </AccordionWithTable>
+      <Spacer />
+      <AccordionWithTable
+        title="SALAS CERRADAS"
+        dataLength={closedRooms.length}
+      >
+        <TableWithSortingAndSearch
+          data={closedRooms}
+          onEditRoom={handleEditRoom}
+          onPublishRoom={handleActivateRoom}
+          onDeleteRoom={handleDeleteRoom}
+          allowedActionsSet={new Set()}
         />
       </AccordionWithTable>
       {createOrUpdateRoomModalController.modalOpen && (

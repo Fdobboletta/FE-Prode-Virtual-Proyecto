@@ -7,5 +7,6 @@ query GetUserPayedRooms {
     entryPrice
     paymentLink
     isActive
+    isClosed
   }
 }

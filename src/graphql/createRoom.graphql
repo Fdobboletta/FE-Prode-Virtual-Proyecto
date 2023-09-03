@@ -16,6 +16,7 @@ mutation CreateRoom(
     entryPrice
     dueDate
     isActive
+    isClosed
     name
     paymentLink
     prizeMoney

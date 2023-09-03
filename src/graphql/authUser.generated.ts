@@ -15,7 +15,7 @@ export type AuthenticateUserMutation = {
     id: string;
     firstName: string;
     lastName: string;
-    token: string;
+    token?: string | null;
     email: string;
     role: Types.UserRole;
   };

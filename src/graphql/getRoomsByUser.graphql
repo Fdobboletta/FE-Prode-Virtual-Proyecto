@@ -6,6 +6,7 @@ query GetRoomsByUserId {
     dueDate
     entryPrice
     isActive
+    isClosed
     paymentLink
   }
 }

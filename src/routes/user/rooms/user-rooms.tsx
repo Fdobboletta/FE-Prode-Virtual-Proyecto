@@ -1,6 +1,6 @@
 import { memo, useCallback, useState } from 'react';
 import { UserPage } from '../user-page';
-import { Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { useModal } from '@/components/modal-container';
 import { RoomPaymentModal } from './room-payment-modal';
 import { UserRoomCard } from './user-room-card';
@@ -36,6 +36,11 @@ const UserRoomsInternal = () => {
   return (
     <UserPage>
       <Stack alignItems={'center'}>
+        {activeRooms.length === 0 && (
+          <Typography>
+            No hay salas disponibles para participar en este momento
+          </Typography>
+        )}
         {activeRooms.map((room) => (
           <UserRoomCard
             key={room.id}

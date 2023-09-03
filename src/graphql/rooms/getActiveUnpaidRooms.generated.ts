@@ -18,6 +18,7 @@ export type GetActiveUnpaidRoomsQuery = {
     entryPrice: number;
     paymentLink: string;
     isActive: boolean;
+    isClosed: boolean;
     participantsCount: number;
     creator: {
       __typename?: 'User';
@@ -39,6 +40,7 @@ export const GetActiveUnpaidRoomsDocument = /*#__PURE__*/ gql`
       entryPrice
       paymentLink
       isActive
+      isClosed
       creator {
         id
         firstName

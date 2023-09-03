@@ -3,9 +3,8 @@ import { memo, useState } from 'react';
 import { Match, Score, UserRole } from '@/generated/graphql-types.generated';
 import { toRem } from '@/utils';
 import styled from 'styled-components';
-import { Button, CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import { RoomPage } from '../room-page';
-import { AccordionWithTable } from '../components/accordion-table';
 
 import { useGetMatchesByRoomIdQuery } from '@/graphql/matches/getMatchesByRoomId.generated';
 import { useCreateMatchMutation } from '@/graphql/matches/createMatch.generated';
@@ -22,7 +21,10 @@ import {
 } from '@/components/snackbar';
 import { useUpdateManyMatchScoresMutation } from '@/graphql/matches/updateManyMatchScores.generated';
 import _ from 'lodash';
-import { AdminMatchesTable } from '../components/admin-matches-table';
+
+import { LoadedAdminRoomMatches } from './loaded-admin-room-matches';
+
+import { CalculateRoomResultsModal } from '../components/calculate-room-results-modal';
 
 const Container = styled.div`
   display: flex;
@@ -30,32 +32,27 @@ const Container = styled.div`
   flex-direction: column;
   padding: ${toRem(16)};
 `;
-const StyledButton = styled(Button)`
-  width: ${toRem(200)};
-  justify-content: flex-end !important;
-  align-self: flex-end;
-  &&& {
-    &:hover {
-      text-decoration: underline;
-      background-color: transparent;
-    }
-    &:focus {
-      background-color: transparent;
-    }
-  }
-`;
 
-const RoomMatchesInternal = (props: WithSnackbarProps) => {
+const AdminRoomMatchesInternal = (props: WithSnackbarProps) => {
   const params = useParams<{ roomId: string }>();
 
   const [matches, setMatches] = useState<Match[]>([]);
 
   const [selectedMatchId, setSelectedMatchId] = useState<string | null>(null);
 
+  const [createMatch, { loading: loadingCreateMatch }] =
+    useCreateMatchMutation();
+
+  const [updateMatch] = useUpdateMatchMutation();
+
+  const [deleteMatch] = useDeleteMatchMutation();
+  const [updateManyMatchScores] = useUpdateManyMatchScoresMutation();
+
   const createOrUpdateMatchModalController = useModal();
   const deleteMatchModalController = useModal();
+  const calculateResultsModalController = useModal();
 
-  const { loading: LoadingMatches } = useGetMatchesByRoomIdQuery({
+  const { loading: loadingMatches } = useGetMatchesByRoomIdQuery({
     variables: {
       roomId: params.roomId || '',
     },
@@ -70,14 +67,6 @@ const RoomMatchesInternal = (props: WithSnackbarProps) => {
       }
     },
   });
-
-  const [createMatch, { loading: loadingCreateMatch }] =
-    useCreateMatchMutation();
-
-  const [updateMatch] = useUpdateMatchMutation();
-
-  const [deleteMatch] = useDeleteMatchMutation();
-  const [updateManyMatchScores] = useUpdateManyMatchScoresMutation();
 
   const handleDeleteMatch = async (matchId: string) => {
     try {
@@ -212,35 +201,28 @@ const RoomMatchesInternal = (props: WithSnackbarProps) => {
   return (
     <RoomPage role={UserRole.Admin}>
       <Container>
-        <StyledButton
-          onClick={() => {
-            createOrUpdateMatchModalController.onOpenModal();
-          }}
-        >
-          + Agregar Partido
-        </StyledButton>
-        {LoadingMatches ? (
+        {loadingMatches ? (
           <CircularProgress size={24} />
         ) : (
-          <AccordionWithTable
-            title="Listado de partidos"
-            dataLength={matches.length}
-            keepExpanded
-          >
-            <AdminMatchesTable
-              matches={matches}
-              onEditMatch={(matchId) => {
-                setSelectedMatchId(matchId);
-                createOrUpdateMatchModalController.onOpenModal();
-              }}
-              onSaveScores={handleScoreSubmit}
-              onScoreSelect={handleScoreSelect}
-              onDeleteMatch={(matchId) => {
-                setSelectedMatchId(matchId);
-                deleteMatchModalController.onOpenModal();
-              }}
-            />
-          </AccordionWithTable>
+          <LoadedAdminRoomMatches
+            matches={matches}
+            onCalculateResults={() =>
+              calculateResultsModalController.onOpenModal()
+            }
+            onCreateMatch={() =>
+              createOrUpdateMatchModalController.onOpenModal()
+            }
+            onEditMatch={(matchId) => {
+              setSelectedMatchId(matchId);
+              createOrUpdateMatchModalController.onOpenModal();
+            }}
+            onSaveScores={handleScoreSubmit}
+            onScoreSelect={handleScoreSelect}
+            onDeleteMatch={(matchId) => {
+              setSelectedMatchId(matchId);
+              deleteMatchModalController.onOpenModal();
+            }}
+          />
         )}
         {createOrUpdateMatchModalController.modalOpen && (
           <CreateOrUpdateMatchModal
@@ -256,6 +238,13 @@ const RoomMatchesInternal = (props: WithSnackbarProps) => {
             matchToEdit={
               matches.find((match) => match.id === selectedMatchId) || null
             }
+          />
+        )}
+        {calculateResultsModalController.modalOpen && (
+          <CalculateRoomResultsModal
+            roomId={params.roomId || ''}
+            isOpen={calculateResultsModalController.modalOpen}
+            onCancel={() => calculateResultsModalController.onCloseModal()}
           />
         )}
         <ConfirmationModal
@@ -277,4 +266,4 @@ const RoomMatchesInternal = (props: WithSnackbarProps) => {
   );
 };
 
-export const RoomMatches = withSnack(memo(RoomMatchesInternal));
+export const AdminRoomMatches = withSnack(memo(AdminRoomMatchesInternal));

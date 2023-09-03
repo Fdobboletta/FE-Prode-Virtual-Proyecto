@@ -16,6 +16,7 @@ mutation UpdateRoom(
   ) {
     id
     isActive
+    isClosed
     name
     paymentLink
     prizeMoney

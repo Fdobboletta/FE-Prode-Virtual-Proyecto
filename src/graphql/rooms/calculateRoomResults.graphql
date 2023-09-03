@@ -1,0 +1,9 @@
+mutation CalculateRoomResults($roomId: String!) {
+  calculateRoomResults(roomId: $roomId) {
+    participantId
+    name
+    lastName
+    email
+    score
+  }
+}

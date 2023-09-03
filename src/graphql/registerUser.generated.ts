@@ -21,7 +21,7 @@ export type RegisterUserMutation = {
     id: string;
     email: string;
     role: Types.UserRole;
-    token: string;
+    token?: string | null;
   };
 };
 

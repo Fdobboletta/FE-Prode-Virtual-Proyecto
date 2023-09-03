@@ -19,6 +19,7 @@ export type CreateRoomMutation = {
     entryPrice: number;
     dueDate: string;
     isActive: boolean;
+    isClosed: boolean;
     name: string;
     paymentLink: string;
     prizeMoney: number;
@@ -44,6 +45,7 @@ export const CreateRoomDocument = /*#__PURE__*/ gql`
       entryPrice
       dueDate
       isActive
+      isClosed
       name
       paymentLink
       prizeMoney

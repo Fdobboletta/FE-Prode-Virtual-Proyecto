@@ -84,15 +84,17 @@ const RoomPageDrawerContent = (props: {
     <StyledContainer>
       <StyledBodyContainer>
         <StyledList>
-          <ListItemButton
-            onClick={handleNavigation('/participants')}
-            selected={isActive('/participants')}
-          >
-            <StyledListItemIcon>
-              <People />
-            </StyledListItemIcon>
-            <ListItemText primary="Participantes" />
-          </ListItemButton>
+          {props.role === UserRole.Admin && (
+            <ListItemButton
+              onClick={handleNavigation('/participants')}
+              selected={isActive('/participants')}
+            >
+              <StyledListItemIcon>
+                <People />
+              </StyledListItemIcon>
+              <ListItemText primary="Participantes" />
+            </ListItemButton>
+          )}
           <ListItemButton
             onClick={handleNavigation('/matches')}
             selected={isActive('/matches')}

@@ -17,6 +17,7 @@ export type GetRoomsByUserIdQuery = {
     dueDate: string;
     entryPrice: number;
     isActive: boolean;
+    isClosed: boolean;
     paymentLink: string;
   }>;
 };
@@ -30,6 +31,7 @@ export const GetRoomsByUserIdDocument = /*#__PURE__*/ gql`
       dueDate
       entryPrice
       isActive
+      isClosed
       paymentLink
     }
   }
