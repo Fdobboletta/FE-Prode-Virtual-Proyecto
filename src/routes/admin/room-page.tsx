@@ -19,7 +19,12 @@ import {
 } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { People, Settings, SportsSoccer } from '@mui/icons-material';
+import {
+  EmojiEvents,
+  People,
+  Settings,
+  SportsSoccer,
+} from '@mui/icons-material';
 
 import { useGetRoomByIdQuery } from '@/graphql/getRoomById.generated';
 import { toRem } from '@/utils';
@@ -61,6 +66,7 @@ const StyledListItemIcon = styled(ListItemIcon)`
 const RoomPageDrawerContent = (props: {
   roomId: string;
   role: UserRole;
+  isClosed: boolean;
 }): JSX.Element | null => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -94,6 +100,17 @@ const RoomPageDrawerContent = (props: {
                 <People />
               </StyledListItemIcon>
               <ListItemText primary="Participantes" />
+            </ListItemButton>
+          )}
+          {props.isClosed && (
+            <ListItemButton
+              onClick={handleNavigation('/rank')}
+              selected={isActive('/rank')}
+            >
+              <StyledListItemIcon>
+                <EmojiEvents />
+              </StyledListItemIcon>
+              <ListItemText primary="Ranking" />
             </ListItemButton>
           )}
           <ListItemButton
@@ -139,7 +156,11 @@ const RoomPageInternal = (props: RoomPageProps) => {
     <PrivateLayout
       drawerTitle={props.title || data.getRoomById.name}
       drawerContent={
-        <RoomPageDrawerContent roomId={params.roomId || ''} role={props.role} />
+        <RoomPageDrawerContent
+          roomId={params.roomId || ''}
+          role={props.role}
+          isClosed={data.getRoomById.isClosed}
+        />
       }
       renderBackIcon
       backIconPath={

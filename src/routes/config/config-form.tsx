@@ -65,7 +65,7 @@ const validateCellphone = (cellphone: string): boolean => {
   return cellphoneRegex.test(cellphone);
 };
 
-const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = (props) => {
+const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = () => {
   const [formData, setFormData] = useState({
     password: '',
     confirmPassword: '',

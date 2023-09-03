@@ -1,0 +1,9 @@
+query GetParticipantsByRoomId($roomId: String!) {
+  getParticipantsByRoomId(roomId: $roomId) {
+    id
+    firstName
+    email
+    lastName
+    score
+  }
+}

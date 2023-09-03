@@ -21,6 +21,7 @@ import { AdminRoomMatches } from './admin/matches/admin-room-matches';
 import UserProfileUpdateForm from './config/config-form';
 import { UserPage } from './user/user-page';
 import { RoomPage } from './admin/room-page';
+import { ParticipantsRankingPage } from './user/participants-ranking/participants-ranking-page';
 
 export const AppRoutes = () => {
   return (
@@ -44,6 +45,10 @@ export const AppRoutes = () => {
               <UserProfileUpdateForm />
             </RoomPage>
           }
+        />
+        <Route
+          path="user/room/:roomId/rank"
+          element={<ParticipantsRankingPage />}
         />
         <Route
           path="user/config"
