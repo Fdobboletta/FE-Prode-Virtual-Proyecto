@@ -18,6 +18,9 @@ import { UserRooms } from './user/rooms/user-rooms';
 import { UserRoomMatches } from './user/matches/user-room-matches';
 import { MyRooms } from './user/rooms/my-rooms';
 import { AdminRoomMatches } from './admin/matches/admin-room-matches';
+import UserProfileUpdateForm from './config/config-form';
+import { UserPage } from './user/user-page';
+import { RoomPage } from './admin/room-page';
 
 export const AppRoutes = () => {
   return (
@@ -30,6 +33,25 @@ export const AppRoutes = () => {
         <Route
           path="/user/room/:roomId/matches"
           element={<UserRoomMatches />}
+        />
+        <Route
+          path="/user/room/:roomId/config"
+          element={
+            <RoomPage
+              role={UserRole.Player}
+              title="Actualizar datos del usuario"
+            >
+              <UserProfileUpdateForm />
+            </RoomPage>
+          }
+        />
+        <Route
+          path="user/config"
+          element={
+            <UserPage>
+              <UserProfileUpdateForm />
+            </UserPage>
+          }
         />
       </Route>
       <Route element={<PrivateRoutes requiredRole={UserRole.Admin} />}>
@@ -47,6 +69,25 @@ export const AppRoutes = () => {
         <Route
           path="/admin/room/:roomId/participants"
           element={<RoomParticipants />}
+        />
+        <Route
+          path="/admin/room/:roomId/config"
+          element={
+            <RoomPage
+              role={UserRole.Admin}
+              title="Actualizar datos del usuario"
+            >
+              <UserProfileUpdateForm />
+            </RoomPage>
+          }
+        />
+        <Route
+          path="admin/config"
+          element={
+            <AdminPage title="Actualizar datos del usuario">
+              <UserProfileUpdateForm />
+            </AdminPage>
+          }
         />
       </Route>
       <Route path="/" element={<Navigate to="/login" />} />

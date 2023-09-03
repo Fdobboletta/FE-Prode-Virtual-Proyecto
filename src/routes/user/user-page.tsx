@@ -88,8 +88,8 @@ const UserDrawerContent = (): JSX.Element | null => {
       <StyledFooterContainer>
         <Divider />
         <ListItemButton
-          onClick={handleNavigation('/configuracion')}
-          selected={isActive('/configuracion')}
+          onClick={handleNavigation('/config')}
+          selected={isActive('/config')}
           style={{ marginTop: 'auto' }}
         >
           <StyledListItemIcon>

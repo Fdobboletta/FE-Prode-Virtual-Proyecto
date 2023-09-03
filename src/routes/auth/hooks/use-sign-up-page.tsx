@@ -45,7 +45,9 @@ export const useSignUpPage = () => {
         email: data.registerNewUser.email,
         role: data.registerNewUser.role,
       });
-      localStorage.setItem('authToken', data.registerNewUser.token);
+      if (data.registerNewUser.token) {
+        localStorage.setItem('authToken', data.registerNewUser.token);
+      }
       navigate('/user');
     },
     onError: (mutationError) => {

@@ -29,6 +29,7 @@ import { UserRole } from '@/generated/graphql-types.generated';
 type RoomPageProps = {
   children: ReactNode;
   role: UserRole;
+  title?: string;
 };
 const StyledList = styled(List)`
   width: 100%;
@@ -109,8 +110,8 @@ const RoomPageDrawerContent = (props: {
       <StyledFooterContainer>
         <Divider />
         <ListItemButton
-          onClick={handleNavigation('/configuracion')}
-          selected={isActive('/configuracion')}
+          onClick={handleNavigation('/config')}
+          selected={isActive('/config')}
           style={{ marginTop: 'auto' }}
         >
           <StyledListItemIcon>
@@ -136,7 +137,7 @@ const RoomPageInternal = (props: RoomPageProps) => {
 
   return (
     <PrivateLayout
-      drawerTitle={data.getRoomById.name}
+      drawerTitle={props.title || data.getRoomById.name}
       drawerContent={
         <RoomPageDrawerContent roomId={params.roomId || ''} role={props.role} />
       }

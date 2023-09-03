@@ -185,7 +185,7 @@ const RoomsPageInternal = (props: WithSnackbarProps) => {
   };
 
   return (
-    <AdminPage>
+    <AdminPage title="Salas">
       <PageContainer>
         {loadingRooms ? (
           <CircularProgress size={24} color="inherit" />

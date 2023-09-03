@@ -20,6 +20,7 @@ import { toRem } from '@/utils';
 
 type AdminPageProps = {
   children: ReactNode;
+  title?: string;
 };
 
 const StyledContainer = styled(Stack)`
@@ -99,8 +100,8 @@ const AdminDrawerContent = (): JSX.Element | null => {
       <StyledFooterContainer>
         <Divider />
         <ListItemButton
-          onClick={handleNavigation('/configuracion')}
-          selected={isActive('/configuracion')}
+          onClick={handleNavigation('/config')}
+          selected={isActive('/config')}
           style={{ marginTop: 'auto' }}
         >
           <StyledListItemIcon>
@@ -116,7 +117,7 @@ const AdminDrawerContent = (): JSX.Element | null => {
 const InternalAdminPage = (props: AdminPageProps) => {
   return (
     <PrivateLayout
-      drawerTitle="Admin Panel"
+      drawerTitle={props.title || 'Admin Panel'}
       drawerContent={<AdminDrawerContent />}
     >
       {props.children}

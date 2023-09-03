@@ -105,7 +105,9 @@ const InternalLogin = (): JSX.Element => {
         email: data.authenticateUser.email,
         role: userRole,
       });
-      localStorage.setItem('authToken', data.authenticateUser.token);
+      if (data.authenticateUser.token) {
+        localStorage.setItem('authToken', data.authenticateUser.token);
+      }
       userRole === UserRole.Player ? navigate('/user') : navigate('/admin');
     },
   });

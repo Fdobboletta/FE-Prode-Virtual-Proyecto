@@ -132,7 +132,7 @@ const IntegrationsPageInternal = (props: WithSnackbarProps) => {
   const controller = useIntegrationsPage(props);
 
   return (
-    <AdminPage>
+    <AdminPage title="Integracion con Mercado Pago">
       <PageContainer>
         <Box
           sx={{
@@ -172,7 +172,8 @@ const IntegrationsPageInternal = (props: WithSnackbarProps) => {
                 </>
               )}
 
-              {controller.isIntegrated ? (
+              {controller.isIntegrated &&
+              import.meta.env.VITE_ENV === 'local' ? (
                 <Button
                   onClick={() => controller.confirmationModal.onOpenModal()}
                   variant="contained"
@@ -190,7 +191,9 @@ const IntegrationsPageInternal = (props: WithSnackbarProps) => {
                   }
                   variant="contained"
                 >
-                  Click aqui para comenzar
+                  {controller.isIntegrated
+                    ? 'Cambiar cuenta receptora'
+                    : 'Click aqui para comenzar'}
                 </Button>
               )}
             </Stack>
