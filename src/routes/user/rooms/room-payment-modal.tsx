@@ -114,8 +114,6 @@ const RoomPaymentModalInternal: FC<RoomPaymentModalProps> = (
             <ConfirmButton variant="contained" disabled={loading}>
               <a
                 href={mpPreference?.paymentLink || ''}
-                target="_blank"
-                rel="noreferrer"
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 {loading ? <CircularProgress size={24} /> : 'Confirmar Pago'}
