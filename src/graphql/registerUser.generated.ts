@@ -23,6 +23,8 @@ export type RegisterUserMutation = {
     firstName: string;
     lastName: string;
     role: Types.UserRole;
+    cellphone: string;
+    address: string;
     token?: string | null;
   };
 };
@@ -53,6 +55,8 @@ export const RegisterUserDocument = /*#__PURE__*/ gql`
       firstName
       lastName
       role
+      cellphone
+      address
       token
     }
   }

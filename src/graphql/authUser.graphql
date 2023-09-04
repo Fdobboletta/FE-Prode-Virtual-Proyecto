@@ -6,5 +6,7 @@ mutation AuthenticateUser($email: String!, $password: String!) {
     token
     email
     role
+    address
+    cellphone
   }
 }

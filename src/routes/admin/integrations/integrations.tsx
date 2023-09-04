@@ -54,6 +54,8 @@ const useIntegrationsPage = (props: WithSnackbarProps) => {
   const [authData] = useLocalStorageState<{
     id: string;
     email: string;
+    address: string;
+    phone: string;
     role: UserRole;
   }>('authData');
 

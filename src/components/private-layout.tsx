@@ -147,6 +147,8 @@ const InternalPrivateLayout = (props: PrivateLayoutProps): JSX.Element => {
     email: string;
     firstName: string;
     lastName: string;
+    address: string;
+    phone: string;
   }>('authData');
 
   const [windowDimensions] = useWindowDimensions();

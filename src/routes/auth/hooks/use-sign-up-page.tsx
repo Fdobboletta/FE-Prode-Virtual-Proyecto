@@ -40,6 +40,8 @@ export const useSignUpPage = () => {
     id: string;
     firstName: string;
     lastName: string;
+    address: string;
+    phone: string;
     email: string;
     role: UserRole;
   }>('authData');
@@ -52,6 +54,8 @@ export const useSignUpPage = () => {
         lastName: data.registerNewUser.lastName,
         email: data.registerNewUser.email,
         role: data.registerNewUser.role,
+        phone: data.registerNewUser.cellphone,
+        address: data.registerNewUser.address,
       });
       if (data.registerNewUser.token) {
         localStorage.setItem('authToken', data.registerNewUser.token);

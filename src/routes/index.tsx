@@ -18,7 +18,7 @@ import { UserRooms } from './user/rooms/user-rooms';
 import { UserRoomMatches } from './user/matches/user-room-matches';
 import { MyRooms } from './user/rooms/my-rooms';
 import { AdminRoomMatches } from './admin/matches/admin-room-matches';
-import UserProfileUpdateForm from './config/config-form';
+import { UserProfileUpdateForm } from './config/config-form';
 import { UserPage } from './user/user-page';
 import { RoomPage } from './admin/room-page';
 import { ParticipantsRankingPage } from './user/participants-ranking/participants-ranking-page';

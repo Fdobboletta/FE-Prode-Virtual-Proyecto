@@ -18,6 +18,8 @@ export type AuthenticateUserMutation = {
     token?: string | null;
     email: string;
     role: Types.UserRole;
+    address: string;
+    cellphone: string;
   };
 };
 
@@ -30,6 +32,8 @@ export const AuthenticateUserDocument = /*#__PURE__*/ gql`
       token
       email
       role
+      address
+      cellphone
     }
   }
 `;

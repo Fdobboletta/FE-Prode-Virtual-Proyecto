@@ -88,6 +88,8 @@ const InternalLogin = (): JSX.Element => {
     id: string;
     firstName: string;
     lastName: string;
+    address: string;
+    phone: string;
     email: string;
     role: UserRole;
   }>('authData');
@@ -109,6 +111,8 @@ const InternalLogin = (): JSX.Element => {
         firstName: data.authenticateUser.firstName,
         lastName: data.authenticateUser.lastName,
         email: data.authenticateUser.email,
+        address: data.authenticateUser.address,
+        phone: data.authenticateUser.cellphone,
         role: userRole,
       });
       if (data.authenticateUser.token) {

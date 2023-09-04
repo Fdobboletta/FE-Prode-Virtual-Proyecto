@@ -23,6 +23,8 @@ mutation RegisterUser(
     firstName
     lastName
     role
+    cellphone
+    address
     token
   }
 }

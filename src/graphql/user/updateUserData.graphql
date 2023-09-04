@@ -1,0 +1,21 @@
+mutation UpdateUserData(
+  $firstName: String
+  $lastName: String
+  $cellphone: String
+  $address: String
+) {
+  updateUserData(
+    firstName: $firstName
+    lastName: $lastName
+    cellphone: $cellphone
+    address: $address
+  ) {
+    id
+    firstName
+    lastName
+    email
+    role
+    cellphone
+    address
+  }
+}
