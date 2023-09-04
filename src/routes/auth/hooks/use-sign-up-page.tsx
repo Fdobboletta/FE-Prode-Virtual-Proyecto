@@ -56,7 +56,11 @@ export const useSignUpPage = () => {
       if (data.registerNewUser.token) {
         localStorage.setItem('authToken', data.registerNewUser.token);
       }
-      navigate('/user');
+      if (data.registerNewUser.role === UserRole.Admin) {
+        navigate('/admin');
+      } else {
+        navigate('/user');
+      }
     },
     onError: (mutationError) => {
       if (mutationError.message) {
