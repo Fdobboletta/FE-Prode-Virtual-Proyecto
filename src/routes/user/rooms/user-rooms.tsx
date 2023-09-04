@@ -9,8 +9,17 @@ import {
   useGetActiveUnpaidRoomsQuery,
 } from '@/graphql/rooms/getActiveUnpaidRooms.generated';
 import { UserRoomEmptyState } from './user-room-empty-state';
+import { toRem } from '@/utils';
+import styled from 'styled-components';
 
 export type UnpaidRoom = GetActiveUnpaidRoomsQuery['getActiveUnpaidRooms'][0];
+
+const CenterLoadingContainer = styled.div`
+  width: 100%;
+  margin-top: ${toRem(32)};
+  display: flex;
+  justify-content: center;
+`;
 
 const UserRoomsInternal = () => {
   const [activeRooms, setActiveRooms] = useState<UnpaidRoom[]>([]);
@@ -35,7 +44,9 @@ const UserRoomsInternal = () => {
   return (
     <UserPage>
       {loading ? (
-        <CircularProgress />
+        <CenterLoadingContainer>
+          <CircularProgress />
+        </CenterLoadingContainer>
       ) : (
         <>
           <Stack alignItems={'center'}>
