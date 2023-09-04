@@ -11,7 +11,7 @@ import { Button, CircularProgress } from '@mui/material';
 import { useCalculateRoomResultsMutation } from '@/graphql/rooms/calculateRoomResults.generated';
 import { RoomParticipantWithScore } from '@/generated/graphql-types.generated';
 import { EmojiEvents } from '@mui/icons-material';
-import { generatePath, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import {
   WithSnackbarProps,
   snackSeverity,
@@ -55,11 +55,8 @@ const CalculateRoomResultsModalInternal = (
   };
 
   const handleNavigateToRank = () => {
-    navigate(
-      generatePath(`admin/room/:roomId/rank`, {
-        roomId: props.roomId,
-      })
-    );
+    const url = `/admin/room/${props.roomId}/rank`;
+    navigate(url);
   };
 
   return (
