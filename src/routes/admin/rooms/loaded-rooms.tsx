@@ -1,7 +1,7 @@
 import { ConfirmationModal, useModal } from '@/components/modal-container';
 
 import { toRem } from '@/utils';
-import { Button, CircularProgress } from '@mui/material';
+import { Button, CircularProgress, Tooltip } from '@mui/material';
 import styled from 'styled-components';
 import { AccordionWithTable } from '../components/accordion-table';
 import { memo, useMemo, useState } from 'react';
@@ -18,10 +18,12 @@ const AccordionGroupContainer = styled.div`
   width: 100%;
 `;
 
-const StyledButton = styled(Button)`
-  width: ${toRem(200)};
+const StyledSpan = styled.span`
   justify-content: flex-end !important;
   align-self: flex-end;
+`;
+
+const StyledButton = styled(Button)`
   &&& {
     &:hover {
       text-decoration: underline;
@@ -99,18 +101,29 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
 
   return (
     <AccordionGroupContainer>
-      <StyledButton
-        disabled={props.loadingGetAccessToken || !props.isIntegrated}
-        onClick={() => {
-          createOrUpdateRoomModalController.onOpenModal();
-        }}
+      <Tooltip
+        title={
+          props.loadingGetAccessToken || !props.isIntegrated
+            ? 'Primero debes integrar tu usuario con Mercado Pago'
+            : null
+        }
+        followCursor
       >
-        {props.loadingGetAccessToken ? (
-          <CircularProgress size={24} color="inherit" />
-        ) : (
-          '+ Crear nueva Sala'
-        )}
-      </StyledButton>
+        <StyledSpan>
+          <StyledButton
+            disabled={props.loadingGetAccessToken || !props.isIntegrated}
+            onClick={() => {
+              createOrUpdateRoomModalController.onOpenModal();
+            }}
+          >
+            {props.loadingGetAccessToken ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              '+ Crear nueva Sala'
+            )}
+          </StyledButton>
+        </StyledSpan>
+      </Tooltip>
       <AccordionWithTable
         title="SALAS PUBLICADAS"
         dataLength={activeRooms.length}

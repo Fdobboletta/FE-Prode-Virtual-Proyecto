@@ -1,3 +1,4 @@
+import { toRem } from '@/utils';
 import { Theme, createTheme } from '@mui/material/styles';
 
 const theme: Theme = createTheme({
@@ -6,6 +7,8 @@ const theme: Theme = createTheme({
       styleOverrides: {
         tooltip: {
           backgroundColor: '#3f5372',
+          fontSize: `${toRem(14)}`,
+          padding: `${toRem(8)} ${toRem(16)}`,
         },
       },
     },
