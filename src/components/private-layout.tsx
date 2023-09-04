@@ -5,6 +5,8 @@ import {
   Box,
   Drawer,
   IconButton,
+  Menu,
+  MenuItem,
   Toolbar,
   Typography,
 } from '@mui/material';
@@ -12,8 +14,11 @@ import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import { toRem } from '../utils';
 import { useWindowDimensions } from '@/utils/use-windows-dimensions';
-import { ArrowBack } from '@mui/icons-material';
+import { AccountCircle, ArrowBack, Logout } from '@mui/icons-material';
 import { useNavigate } from 'react-router';
+import { useLocalStorageState } from 'ahooks';
+import { useDynamicMenu } from './modal-container/hooks';
+import { MenuItemText } from './menu';
 
 const DRAWER_WIDTH = 240;
 
@@ -69,6 +74,17 @@ const StyledIconButton = styled(IconButton)`
   `}
 `;
 
+const StyledToolbarBodyContainer = styled(Box)`
+  display: flex;
+  flex: 1;
+  height: 100%;
+`;
+
+const StyledToolbarLeftContainer = styled(Box)`
+  display: flex;
+  max-height: fit-content;
+`;
+
 const Main = styled.main<MainProps>`
   flex-grow: 1;
   margin-left: ${toRem(DRAWER_WIDTH)};
@@ -89,6 +105,10 @@ const Main = styled.main<MainProps>`
 
       margin-left: 0;
     `};
+`;
+
+const StyledTypography = styled(Typography)`
+  align-self: center;
 `;
 
 const MainSubContainer = styled.div`
@@ -120,6 +140,15 @@ const InternalPrivateLayout = (props: PrivateLayoutProps): JSX.Element => {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
 
+  const menuController = useDynamicMenu();
+
+  const [authData] = useLocalStorageState<{
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+  }>('authData');
+
   const [windowDimensions] = useWindowDimensions();
 
   const handleDrawerToggle = useCallback(() => {
@@ -134,6 +163,11 @@ const InternalPrivateLayout = (props: PrivateLayoutProps): JSX.Element => {
     if (props.backIconPath) {
       navigate(props.backIconPath);
     }
+  }, []);
+
+  const handleLogout = useCallback(() => {
+    localStorage.clear();
+    navigate('/login');
   }, []);
 
   const theme = useTheme();
@@ -154,32 +188,69 @@ const InternalPrivateLayout = (props: PrivateLayoutProps): JSX.Element => {
         <MainSubContainer data-testid="main-sub-container">
           <StyledAppBar position="fixed">
             <StyledToolbar>
-              {props.renderBackIcon && (
+              <StyledToolbarBodyContainer>
+                {props.renderBackIcon && (
+                  <StyledIconButton
+                    color="inherit"
+                    aria-label="back button"
+                    onClick={handleBackButtonClick}
+                    edge="start"
+                  >
+                    <ArrowBack />
+                  </StyledIconButton>
+                )}
                 <StyledIconButton
                   color="inherit"
                   aria-label="toggle drawer"
-                  onClick={handleBackButtonClick}
+                  onClick={handleDrawerToggle}
                   edge="start"
                 >
-                  <ArrowBack />
+                  <MenuIcon />
                 </StyledIconButton>
-              )}
-              <StyledIconButton
-                color="inherit"
-                aria-label="toggle drawer"
-                onClick={handleDrawerToggle}
-                edge="start"
-              >
-                <MenuIcon />
-              </StyledIconButton>
-              <Typography variant="h6" noWrap component="div">
-                {props.drawerTitle}
-              </Typography>
+                <StyledTypography variant="h6" noWrap>
+                  {props.drawerTitle}
+                </StyledTypography>
+              </StyledToolbarBodyContainer>
+              <StyledToolbarLeftContainer>
+                <StyledTypography variant="h6">{`${authData?.firstName} ${authData?.lastName}`}</StyledTypography>
+                <StyledIconButton
+                  color="inherit"
+                  aria-label="user-icon"
+                  sx={{
+                    ':hover': {
+                      backgroundColor: 'inherit',
+                    },
+                    ':focus': {
+                      backgroundColor: 'inherit',
+                    },
+                  }}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    menuController.onOpenMenu(event);
+                  }}
+                >
+                  <AccountCircle />
+                </StyledIconButton>
+              </StyledToolbarLeftContainer>
             </StyledToolbar>
           </StyledAppBar>
           <ChildrenContainer>{props.children}</ChildrenContainer>
         </MainSubContainer>
       </Main>
+      <Menu
+        anchorEl={menuController.menuAnchorRef.current}
+        disableAutoFocus
+        onClose={menuController.onCloseMenu}
+        open={menuController.menuOpen}
+      >
+        <MenuItem
+          data-testid="WorkbooksList-workbook-edit-button"
+          onClick={handleLogout}
+        >
+          <Logout />
+          <MenuItemText>Cerrar Sesion</MenuItemText>
+        </MenuItem>
+      </Menu>
     </MainLayoutContainer>
   );
 };

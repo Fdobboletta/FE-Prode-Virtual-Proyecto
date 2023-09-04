@@ -20,6 +20,8 @@ mutation RegisterUser(
   ) {
     id
     email
+    firstName
+    lastName
     role
     token
   }

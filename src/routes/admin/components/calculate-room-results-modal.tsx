@@ -7,11 +7,18 @@ import {
 import { memo, useState } from 'react';
 
 import { ModalSecondaryButton } from '@/components/modal-container/components/modal-secondary-button';
-import { Button, CircularProgress, List, ListItem } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { useCalculateRoomResultsMutation } from '@/graphql/rooms/calculateRoomResults.generated';
 import { RoomParticipantWithScore } from '@/generated/graphql-types.generated';
+import { EmojiEvents } from '@mui/icons-material';
+import { generatePath, useNavigate } from 'react-router';
+import {
+  WithSnackbarProps,
+  snackSeverity,
+  withSnack,
+} from '@/components/snackbar';
 
-type CalculateRoomResultsModalProps = {
+type CalculateRoomResultsModalProps = WithSnackbarProps & {
   isOpen: boolean;
   roomId: string;
   onCancel: () => void;
@@ -22,6 +29,7 @@ const CalculateRoomResultsModalInternal = (
 ) => {
   const [rank, setRank] = useState<RoomParticipantWithScore[] | null>(null);
   const [calculateResults, { loading }] = useCalculateRoomResultsMutation();
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     await calculateResults({
@@ -29,9 +37,29 @@ const CalculateRoomResultsModalInternal = (
       onCompleted: (data) => {
         if (data.calculateRoomResults) {
           setRank(data.calculateRoomResults);
+          props.snackbarShowMessage(
+            4000,
+            'Puntajes calculados exitosamente',
+            snackSeverity.success
+          );
         }
       },
+      onError: () => {
+        props.snackbarShowMessage(
+          4000,
+          'Los puntajes de la sala no pudieron calcularse correctamente',
+          snackSeverity.error
+        );
+      },
     });
+  };
+
+  const handleNavigateToRank = () => {
+    navigate(
+      generatePath(`admin/room/:roomId/rank`, {
+        roomId: props.roomId,
+      })
+    );
   };
 
   return (
@@ -75,16 +103,15 @@ const CalculateRoomResultsModalInternal = (
         </>
       ) : (
         <ModalBody>
-          <List>
-            {rank.map((participant) => {
-              return (
-                <ListItem key={participant.participantId}>
-                  {participant.name} {participant.lastName}
-                  {participant.score}
-                </ListItem>
-              );
-            })}
-          </List>
+          <Button
+            onClick={handleNavigateToRank}
+            variant="contained"
+            color="primary"
+            type="submit"
+            startIcon={<EmojiEvents />}
+          >
+            Ver ganadores
+          </Button>
         </ModalBody>
       )}
     </ModalContainer>
@@ -92,5 +119,5 @@ const CalculateRoomResultsModalInternal = (
 };
 
 export const CalculateRoomResultsModal = memo(
-  CalculateRoomResultsModalInternal
+  withSnack(CalculateRoomResultsModalInternal)
 );

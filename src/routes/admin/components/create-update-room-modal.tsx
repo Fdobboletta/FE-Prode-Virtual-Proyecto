@@ -14,6 +14,7 @@ import { ModalSecondaryButton } from '@/components/modal-container/components/mo
 import { Button } from '@mui/material';
 import { CreateRoomMutationVariables } from '@/graphql/createRoom.generated';
 import { RoomPageInternalRoom } from '../rooms/rooms';
+import styled from 'styled-components';
 
 type CreateOrUpdateRoomModalProps = {
   isOpen: boolean;
@@ -22,7 +23,13 @@ type CreateOrUpdateRoomModalProps = {
   onEditRoom: (editedRoom: RoomPageInternalRoom) => void;
   loading: boolean;
   roomToEdit: RoomPageInternalRoom | null;
+  serverErrorMessage: string | null;
 };
+
+const ErrorMessage = styled.div`
+  color: ${(props) => props.theme.palette.error.main};
+  text-align: center;
+`;
 
 const initialDate = new Date();
 
@@ -37,6 +44,11 @@ const buildDueDate = (date: Date, time: Date) => {
 const CreateOrUpdateRoomModalInternal = (
   props: CreateOrUpdateRoomModalProps
 ) => {
+  const [error, setError] = useState({
+    entryPrice: false,
+    name: false,
+    priceMoney: false,
+  });
   const [formData, setFormData] = useState<CreateOrUpdateRoomFormData>(
     props.roomToEdit
       ? {
@@ -61,10 +73,27 @@ const CreateOrUpdateRoomModalInternal = (
     ) => {
       event.preventDefault();
       try {
+        let isValid = true;
         const isoDueDate = buildDueDate(
           updatedFormData.dueDate,
           updatedFormData.dueTime
         );
+
+        if (!updatedFormData.name) {
+          setError((prevState) => ({ ...prevState, name: true }));
+          isValid = false;
+        }
+        if (!updatedFormData.entryPrice) {
+          setError((prevState) => ({ ...prevState, entryPrice: true }));
+          isValid = false;
+        }
+
+        if (!updatedFormData.prizeMoney) {
+          setError((prevState) => ({ ...prevState, priceMoney: true }));
+          isValid = false;
+        }
+
+        if (!isValid) return;
 
         if (props.roomToEdit) {
           await props.onEditRoom({
@@ -97,6 +126,8 @@ const CreateOrUpdateRoomModalInternal = (
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
       const { name, value } = event.target;
+
+      setError({ name: false, entryPrice: false, priceMoney: false });
 
       if (name === 'prizeMoney' || name === 'entryPrice') {
         setFormData((prevFormData) => ({
@@ -143,12 +174,21 @@ const CreateOrUpdateRoomModalInternal = (
     >
       <ModalBody>
         <CreateOrUpdateRoomForm
+          errors={error}
           formData={formData}
           onInputChange={handleInputChange}
           onDateChange={handleDateChange}
           onTimeChange={handleTimeChange}
         />
       </ModalBody>
+      {(error.entryPrice ||
+        error.name ||
+        error.priceMoney ||
+        props.serverErrorMessage) && (
+        <ErrorMessage>
+          {props.serverErrorMessage || 'Todos los campos son requeridos'}
+        </ErrorMessage>
+      )}
       <ModalFooter>
         <ModalSecondaryButton onClick={() => props.onCancel()} variant="text">
           Cancelar

@@ -48,7 +48,11 @@ export const AppRoutes = () => {
         />
         <Route
           path="user/room/:roomId/rank"
-          element={<ParticipantsRankingPage />}
+          element={
+            <RoomPage role={UserRole.Player}>
+              <ParticipantsRankingPage />
+            </RoomPage>
+          }
         />
         <Route
           path="user/config"
@@ -83,6 +87,14 @@ export const AppRoutes = () => {
               title="Actualizar datos del usuario"
             >
               <UserProfileUpdateForm />
+            </RoomPage>
+          }
+        />
+        <Route
+          path="admin/room/:roomId/rank"
+          element={
+            <RoomPage role={UserRole.Admin}>
+              <ParticipantsRankingPage />
             </RoomPage>
           }
         />

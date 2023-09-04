@@ -85,6 +85,9 @@ const InternalLogin = (): JSX.Element => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setAuthData] = useLocalStorageState<{
+    id: string;
+    firstName: string;
+    lastName: string;
     email: string;
     role: UserRole;
   }>('authData');
@@ -102,6 +105,9 @@ const InternalLogin = (): JSX.Element => {
     onCompleted: (data) => {
       const userRole = data.authenticateUser.role;
       setAuthData({
+        id: data.authenticateUser.id,
+        firstName: data.authenticateUser.firstName,
+        lastName: data.authenticateUser.lastName,
         email: data.authenticateUser.email,
         role: userRole,
       });

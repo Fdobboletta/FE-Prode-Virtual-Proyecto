@@ -129,6 +129,7 @@ const InternalRegister = (): JSX.Element => {
               handleInputChange={controller.handleInputChange}
               formValues={controller.formValues}
               emailError={controller.emailError}
+              passwordError={controller.passwordError}
               cellphoneError={controller.cellphoneError}
             />
           )}

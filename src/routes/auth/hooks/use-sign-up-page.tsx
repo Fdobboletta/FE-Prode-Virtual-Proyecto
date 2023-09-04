@@ -22,9 +22,11 @@ export const useSignUpPage = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [emailError, setEmailError] = useState('');
   const [cellphoneError, setCellphoneError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [formValues, setFormValues] = useState<RegisterFormValues>({
     email: '',
     password: '',
+    confirmPassword: '',
     firstName: '',
     lastName: '',
     address: '',
@@ -35,6 +37,9 @@ export const useSignUpPage = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setAuthData] = useLocalStorageState<{
+    id: string;
+    firstName: string;
+    lastName: string;
     email: string;
     role: UserRole;
   }>('authData');
@@ -42,6 +47,9 @@ export const useSignUpPage = () => {
   const [registerUser, { loading }] = useRegisterUserMutation({
     onCompleted: (data) => {
       setAuthData({
+        id: data.registerNewUser.id,
+        firstName: data.registerNewUser.firstName,
+        lastName: data.registerNewUser.lastName,
         email: data.registerNewUser.email,
         role: data.registerNewUser.role,
       });
@@ -105,6 +113,7 @@ export const useSignUpPage = () => {
       const {
         email,
         password,
+        confirmPassword,
         firstName,
         lastName,
         address,
@@ -130,6 +139,13 @@ export const useSignUpPage = () => {
           isValid = false;
         } else {
           setCellphoneError('');
+        }
+
+        if (password !== confirmPassword) {
+          setPasswordError('Las contraseñas no coinciden');
+          isValid = false;
+        } else {
+          setPasswordError('');
         }
 
         if (isValid) {
@@ -163,6 +179,7 @@ export const useSignUpPage = () => {
     handleBack,
     emailError,
     cellphoneError,
+    passwordError,
     activeStep,
     loading,
     formValues,

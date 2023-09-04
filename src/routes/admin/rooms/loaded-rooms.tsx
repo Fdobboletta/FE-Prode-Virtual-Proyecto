@@ -46,6 +46,7 @@ type LoadedRoomsProps = {
   onUpdateRoom: (room: RoomPageInternalRoom) => void;
   onConfirmActivateRoom: (roomId: string) => void;
   onConfirmDeleteRoom: (roomId: string) => void;
+  serverErrorMessage: string | null;
 };
 
 const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
@@ -160,6 +161,7 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
           onCreateRoom={props.onCreateRoom}
           onCancel={handleCreateRoomModalCancel}
           isOpen={createOrUpdateRoomModalController.modalOpen}
+          serverErrorMessage={props.serverErrorMessage}
         />
       )}
       <ConfirmationModal

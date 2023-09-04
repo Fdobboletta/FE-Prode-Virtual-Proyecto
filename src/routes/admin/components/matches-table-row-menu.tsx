@@ -10,6 +10,7 @@ type MatchesTableRowMenuProps = {
   onEdit: (matchId: string) => void;
   onDelete: (matchId: string) => void;
   matchId: string;
+  allowedActions: Set<'Edit' | 'Delete'>;
 };
 
 const MatchesTableRowMenuInternal = (props: MatchesTableRowMenuProps) => {
@@ -24,22 +25,26 @@ const MatchesTableRowMenuInternal = (props: MatchesTableRowMenuProps) => {
       onClose={props.onClose}
       open={props.open}
     >
-      <MenuItem
-        data-cy="workbook-edit-button"
-        data-testid="WorkbooksList-workbook-edit-button"
-        onClick={() => props.onEdit(props.matchId)}
-      >
-        <Edit />
-        <MenuItemText>Editar</MenuItemText>
-      </MenuItem>
-      <MenuItem
-        data-cy="workbook-delete-button"
-        data-testid="WorkbooksList-workbook-delete-button"
-        onClick={() => props.onDelete(props.matchId)}
-      >
-        <Delete />
-        <MenuItemText>Eliminar</MenuItemText>
-      </MenuItem>
+      {props.allowedActions.has('Edit') && (
+        <MenuItem
+          data-cy="workbook-edit-button"
+          data-testid="WorkbooksList-workbook-edit-button"
+          onClick={() => props.onEdit(props.matchId)}
+        >
+          <Edit />
+          <MenuItemText>Editar</MenuItemText>
+        </MenuItem>
+      )}
+      {props.allowedActions.has('Delete') && (
+        <MenuItem
+          data-cy="workbook-delete-button"
+          data-testid="WorkbooksList-workbook-delete-button"
+          onClick={() => props.onDelete(props.matchId)}
+        >
+          <Delete />
+          <MenuItemText>Eliminar</MenuItemText>
+        </MenuItem>
+      )}
     </Menu>
   );
 };

@@ -105,7 +105,7 @@ const UserDrawerContent = (): JSX.Element | null => {
 const InternalUserPage = (props: UserPageProps) => {
   return (
     <PrivateLayout
-      drawerTitle="User Panel"
+      drawerTitle="Menu de jugador"
       drawerContent={<UserDrawerContent />}
     >
       {props.children}

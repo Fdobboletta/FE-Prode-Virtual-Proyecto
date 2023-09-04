@@ -36,6 +36,9 @@ export type RoomPageInternalRoom = GetRoomsByUserIdQuery['getRoomsByUserId'][0];
 
 const RoomsPageInternal = (props: WithSnackbarProps) => {
   const [rooms, setRooms] = useState<RoomPageInternalRoom[]>([]);
+  const [serverErrorMessage, setServerErrorMessage] = useState<string | null>(
+    null
+  );
   const [isIntegrated, setIsIntegrated] = useState(false);
   const [createRoom, { loading: loadingCreateRoom }] = useCreateRoomMutation();
   const [activateRoom] = useActivateRoomMutation();
@@ -68,6 +71,23 @@ const RoomsPageInternal = (props: WithSnackbarProps) => {
             isClosed: false,
             ...newRoom,
           },
+        },
+        onCompleted: () => {
+          props.snackbarShowMessage(
+            3000,
+            'Sala creada exitosamente',
+            snackSeverity.success
+          );
+        },
+        onError: (error) => {
+          props.snackbarShowMessage(
+            4000,
+            'Ocurrio un error al intentar crear su sala',
+            snackSeverity.error
+          );
+          if (error.message) {
+            setServerErrorMessage(error.message);
+          }
         },
       });
       if (createdRoom.data && createdRoom.data.createRoom) {
@@ -191,6 +211,7 @@ const RoomsPageInternal = (props: WithSnackbarProps) => {
           <CircularProgress size={24} color="inherit" />
         ) : (
           <LoadedRooms
+            serverErrorMessage={serverErrorMessage}
             onConfirmActivateRoom={handleConfirmActivateRoom}
             onConfirmDeleteRoom={handleConfirmDeleteRoom}
             onCreateRoom={handleCreateRoom}

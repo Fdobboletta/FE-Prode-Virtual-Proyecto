@@ -57,7 +57,7 @@ const ParticipantsRanking: React.FC<ParticipantsRankingProps> = (props) => {
               </TableRow>
             </StyledTableHead>
             <TableBody>
-              {props.participants.map((participant, index) => (
+              {props.participants.slice(0, 5).map((participant, index) => (
                 <TableRow key={index}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{`${participant.firstName} ${participant.lastName}`}</TableCell>

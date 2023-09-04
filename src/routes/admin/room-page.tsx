@@ -110,7 +110,7 @@ const RoomPageDrawerContent = (props: {
               <StyledListItemIcon>
                 <EmojiEvents />
               </StyledListItemIcon>
-              <ListItemText primary="Ranking" />
+              <ListItemText primary="Top 5" />
             </ListItemButton>
           )}
           <ListItemButton

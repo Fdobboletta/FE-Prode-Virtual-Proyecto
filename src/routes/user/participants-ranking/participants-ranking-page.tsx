@@ -1,6 +1,5 @@
 import { memo, useState } from 'react';
 
-import { UserRole } from '@/generated/graphql-types.generated';
 import { toRem } from '@/utils';
 import styled from 'styled-components';
 import { CircularProgress } from '@mui/material';
@@ -10,7 +9,6 @@ import { useParams } from 'react-router';
 import _ from 'lodash';
 
 import { onError } from '@apollo/client/link/error';
-import { RoomPage } from '@/routes/admin/room-page';
 
 import {
   GetParticipantsByRoomIdQuery,
@@ -46,21 +44,19 @@ const ParticipantsRankingPageInternal = () => {
         setParticipants(sortedMatches);
       }
       onError((error) => {
-        console.log('error', error);
+        console.error('error', error);
       });
     },
   });
 
   return (
-    <RoomPage role={UserRole.Player}>
-      <Container>
-        {loadingParticipants ? (
-          <CircularProgress size={24} />
-        ) : (
-          <ParticipantsRanking participants={participants} />
-        )}
-      </Container>
-    </RoomPage>
+    <Container>
+      {loadingParticipants ? (
+        <CircularProgress size={24} />
+      ) : (
+        <ParticipantsRanking participants={participants} />
+      )}
+    </Container>
   );
 };
 

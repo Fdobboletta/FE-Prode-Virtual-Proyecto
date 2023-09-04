@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import { Match, Score } from '@/generated/graphql-types.generated';
+import { Match, Room, Score } from '@/generated/graphql-types.generated';
 import { toRem } from '@/utils';
 import styled from 'styled-components';
 import { Button } from '@mui/material';
@@ -52,30 +52,43 @@ type LoadedAdminRoomMatchesProps = {
   onCalculateResults: () => void;
 };
 
+const getAllowedActionsSet = (
+  room: Omit<Room, 'creatorId' | 'creator' | 'participantsCount'>
+): Set<'Edit' | 'Delete'> => {
+  if (room.isClosed) return new Set([]);
+  if (room.isActive) return new Set(['Edit']);
+  return new Set(['Edit', 'Delete']);
+};
+
 const LoadedAdminRoomMatchesInternal = (props: LoadedAdminRoomMatchesProps) => {
   const [urlState] = useUrlState<{ isEditing: '1' }>();
 
   const { room } = useRoomPageContext();
 
   const readyForCalculateResult =
+    props.matches.length !== 0 &&
     props.matches.every(
       (match) =>
         match.officialScore !== null && match.officialScore !== undefined
-    ) && !urlState.isEditing;
+    ) &&
+    !urlState.isEditing;
 
-  console.log('matches', props.matches);
+  const allowedActions = getAllowedActionsSet(room);
 
   return (
     <>
-      <StyledButton onClick={props.onCreateMatch}>
-        + Agregar Partido
-      </StyledButton>
+      {(!room.isClosed || !room.isActive) && (
+        <StyledButton onClick={props.onCreateMatch}>
+          + Agregar Partido
+        </StyledButton>
+      )}
       <AccordionWithTable
         title="Listado de partidos"
         dataLength={props.matches.length}
         keepExpanded
       >
         <AdminMatchesTable
+          allowedActions={allowedActions}
           matches={props.matches}
           onEditMatch={props.onEditMatch}
           onSaveScores={props.onSaveScores}
@@ -84,19 +97,23 @@ const LoadedAdminRoomMatchesInternal = (props: LoadedAdminRoomMatchesProps) => {
         />
       </AccordionWithTable>
       <SubmitButtonContainer>
-        <StyledRegisterButton
-          onClick={props.onCalculateResults}
-          variant="contained"
-          color="primary"
-          disabled={!readyForCalculateResult}
-          startIcon={<Calculate />}
-        >
-          Calcular puntaje
-        </StyledRegisterButton>
-        <Countdown
-          label={'Tiempo hasta el vencimiento de la sala:'}
-          targetDate={room.dueDate}
-        />
+        {!room.isClosed && (
+          <>
+            <StyledRegisterButton
+              onClick={props.onCalculateResults}
+              variant="contained"
+              color="primary"
+              disabled={!readyForCalculateResult}
+              startIcon={<Calculate />}
+            >
+              Calcular puntaje
+            </StyledRegisterButton>
+            <Countdown
+              label={'Tiempo hasta el vencimiento de la sala:'}
+              targetDate={room.dueDate}
+            />
+          </>
+        )}
       </SubmitButtonContainer>
     </>
   );

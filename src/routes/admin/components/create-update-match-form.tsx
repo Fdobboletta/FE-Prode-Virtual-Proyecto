@@ -24,6 +24,10 @@ type CreateOrUpdateMatchFormProps = {
   ) => void;
   onDateChange: (newDate: Date | null) => void;
   formData: CreateOrUpdateMatchFormData;
+  errors: {
+    homeTeam: boolean;
+    awayTeam: boolean;
+  };
 };
 
 const CreateOrUpdateMatchFormInternal = (
@@ -38,6 +42,8 @@ const CreateOrUpdateMatchFormInternal = (
         name="homeTeam"
         fullWidth
         value={props.formData.homeTeam}
+        error={props.errors.homeTeam}
+        helperText={props.errors.homeTeam ? 'Campo requerido' : ''}
         onChange={props.onInputChange}
       />
       <TextField
@@ -47,6 +53,8 @@ const CreateOrUpdateMatchFormInternal = (
         name="awayTeam"
         fullWidth
         value={props.formData.awayTeam}
+        error={props.errors.awayTeam}
+        helperText={props.errors.awayTeam ? 'Campo requerido' : ''}
         onChange={props.onInputChange}
       />
       <LocalizationProvider dateAdapter={AdapterDateFns}>

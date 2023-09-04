@@ -38,6 +38,7 @@ type MatchesTableProps = {
   onDeleteMatch: (matchId: string) => void;
   onScoreSelect: (matchId: string, score: Score | undefined) => void;
   onSaveScores: () => void;
+  allowedActions: Set<'Edit' | 'Delete'>;
 };
 
 const getScoreLabel = (score?: Score | null | undefined) => {
@@ -92,28 +93,32 @@ const AdminMatchesTableInternal = (props: MatchesTableProps) => {
               <StyledTableCell>Fecha del Encuentro</StyledTableCell>
               <StyledTableCell>
                 Resultado
-                <StyledIconButton
-                  sx={{
-                    ':hover': {
-                      backgroundColor: 'inherit',
-                    },
-                    ':focus': {
-                      backgroundColor: 'inherit',
-                    },
-                  }}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    handleLockIconClick();
-                  }}
-                >
-                  {urlState.isEditing ? (
-                    <LockOpen fontSize="small" />
-                  ) : (
-                    <LockOutlined fontSize="small" />
-                  )}
-                </StyledIconButton>
+                {props.allowedActions.size !== 0 && (
+                  <StyledIconButton
+                    sx={{
+                      ':hover': {
+                        backgroundColor: 'inherit',
+                      },
+                      ':focus': {
+                        backgroundColor: 'inherit',
+                      },
+                    }}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleLockIconClick();
+                    }}
+                  >
+                    {urlState.isEditing ? (
+                      <LockOpen fontSize="small" />
+                    ) : (
+                      <LockOutlined fontSize="small" />
+                    )}
+                  </StyledIconButton>
+                )}
               </StyledTableCell>
-              <StyledTableCell>Acciones</StyledTableCell>
+              {props.allowedActions.size !== 0 && (
+                <StyledTableCell>Acciones</StyledTableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -144,17 +149,19 @@ const AdminMatchesTableInternal = (props: MatchesTableProps) => {
                 ) : (
                   <TableCell>{getScoreLabel(row.officialScore)}</TableCell>
                 )}
-                <TableCell>
-                  <StyledIconButton
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      setMenuAnchorElement(event.currentTarget);
-                      setSelectedRowId(row.id);
-                    }}
-                  >
-                    <MoreHoriz />
-                  </StyledIconButton>
-                </TableCell>
+                {props.allowedActions.size !== 0 && (
+                  <TableCell>
+                    <StyledIconButton
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setMenuAnchorElement(event.currentTarget);
+                        setSelectedRowId(row.id);
+                      }}
+                    >
+                      <MoreHoriz />
+                    </StyledIconButton>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>
@@ -179,6 +186,7 @@ const AdminMatchesTableInternal = (props: MatchesTableProps) => {
             setMenuAnchorElement(null);
             setSelectedRowId(null);
           }}
+          allowedActions={props.allowedActions}
         />
       )}
     </Paper>

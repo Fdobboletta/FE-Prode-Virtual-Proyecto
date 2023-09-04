@@ -190,6 +190,7 @@ const IntegrationsPageInternal = (props: WithSnackbarProps) => {
                     handleRedirectToMercadoPago(controller.authData?.id || '')
                   }
                   variant="contained"
+                  disabled={controller.loading}
                 >
                   {controller.isIntegrated
                     ? 'Cambiar cuenta receptora'

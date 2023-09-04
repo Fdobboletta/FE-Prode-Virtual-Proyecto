@@ -20,6 +20,8 @@ export type RegisterUserMutation = {
     __typename?: 'User';
     id: string;
     email: string;
+    firstName: string;
+    lastName: string;
     role: Types.UserRole;
     token?: string | null;
   };
@@ -48,6 +50,8 @@ export const RegisterUserDocument = /*#__PURE__*/ gql`
     ) {
       id
       email
+      firstName
+      lastName
       role
       token
     }

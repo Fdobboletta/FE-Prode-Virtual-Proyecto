@@ -119,7 +119,10 @@ const MyRoomsTableInternal = (props: TableWithSortingAndSearchProps) => {
       label: 'Precio de Entrada',
       options: {
         customBodyRender: (value: any) => {
-          return `$${value}`;
+          return `$${value.toLocaleString('es-AR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}`;
         },
       },
     },
@@ -128,7 +131,10 @@ const MyRoomsTableInternal = (props: TableWithSortingAndSearchProps) => {
       label: 'Premio',
       options: {
         customBodyRender: (value: any) => {
-          return `$${value}`;
+          return `$${value.toLocaleString('es-AR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}`;
         },
       },
     },

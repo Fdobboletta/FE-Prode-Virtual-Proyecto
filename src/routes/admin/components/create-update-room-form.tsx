@@ -32,6 +32,11 @@ type CreateOrUpdateRoomFormProps = {
   onDateChange: (newDate: Date | null) => void;
   onTimeChange: (newTime: Date | null) => void;
   formData: CreateOrUpdateRoomFormData;
+  errors: {
+    name: boolean;
+    entryPrice: boolean;
+    priceMoney: boolean;
+  };
 };
 
 const CreateOrUpdateRoomFormInternal = (props: CreateOrUpdateRoomFormProps) => {
@@ -45,6 +50,7 @@ const CreateOrUpdateRoomFormInternal = (props: CreateOrUpdateRoomFormProps) => {
         fullWidth
         value={props.formData.name}
         onChange={props.onInputChange}
+        error={props.errors.name}
       />
       <TextField
         label="Precio de entrada"
@@ -55,6 +61,7 @@ const CreateOrUpdateRoomFormInternal = (props: CreateOrUpdateRoomFormProps) => {
         fullWidth
         value={props.formData.entryPrice}
         onChange={props.onInputChange}
+        error={props.errors.entryPrice}
         InputProps={{
           startAdornment: <InputAdornment position="start">$</InputAdornment>,
         }}
@@ -68,6 +75,7 @@ const CreateOrUpdateRoomFormInternal = (props: CreateOrUpdateRoomFormProps) => {
         fullWidth
         value={props.formData.prizeMoney}
         onChange={props.onInputChange}
+        error={props.errors.priceMoney}
         InputProps={{
           startAdornment: <InputAdornment position="start">$</InputAdornment>,
         }}

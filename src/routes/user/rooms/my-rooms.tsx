@@ -42,12 +42,12 @@ const MyRoomsInternal = () => {
   });
 
   const activeRooms = useMemo(
-    () => payedRooms.filter((room) => room.isActive),
+    () => payedRooms.filter((room) => room.isActive && !room.isClosed),
     [payedRooms]
   );
 
-  const inactiveRooms = useMemo(
-    () => payedRooms.filter((room) => !room.isActive),
+  const closedRooms = useMemo(
+    () => payedRooms.filter((room) => room.isClosed),
     [payedRooms]
   );
 
@@ -59,20 +59,17 @@ const MyRoomsInternal = () => {
         ) : (
           <AccordionGroupContainer>
             <AccordionWithTable
-              title={'Mis salas activas'}
+              title={'PRODES EN CURSO'}
               dataLength={activeRooms.length}
             >
               <MyRoomsTable data={activeRooms} allowedActionsSet={new Set()} />
             </AccordionWithTable>
             <Spacer />
             <AccordionWithTable
-              title={'Mis salas inactivas'}
-              dataLength={inactiveRooms.length}
+              title={'PRODES FINALIZADOS'}
+              dataLength={closedRooms.length}
             >
-              <MyRoomsTable
-                data={inactiveRooms}
-                allowedActionsSet={new Set()}
-              />
+              <MyRoomsTable data={closedRooms} allowedActionsSet={new Set()} />
             </AccordionWithTable>
           </AccordionGroupContainer>
         )}

@@ -8,6 +8,7 @@ import styled from 'styled-components';
 export interface RegisterFormValues {
   email: string;
   password: string;
+  confirmPassword: string;
   firstName: string;
   lastName: string;
   address: string;
@@ -19,6 +20,7 @@ export interface RegisterFormValues {
 type SignUpFormProps = {
   emailError: string;
   cellphoneError: string;
+  passwordError: string;
   formValues: RegisterFormValues;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
@@ -30,10 +32,14 @@ const StyledLock = styled(Lock)`
   margin-right: ${toRem(6)};
 `;
 
+const StyledTextField = styled(TextField)`
+  margin-bottom: 0px !important;
+`;
+
 const SignUpFormInternal = (props: SignUpFormProps): JSX.Element => {
   return (
     <>
-      <TextField
+      <StyledTextField
         label="Email"
         margin="normal"
         variant="outlined"
@@ -48,7 +54,7 @@ const SignUpFormInternal = (props: SignUpFormProps): JSX.Element => {
           startAdornment: <StyledAccountCircle />,
         }}
       />
-      <TextField
+      <StyledTextField
         label="Contraseña"
         margin="normal"
         variant="outlined"
@@ -56,12 +62,29 @@ const SignUpFormInternal = (props: SignUpFormProps): JSX.Element => {
         name="password"
         fullWidth
         value={props.formValues.password}
+        error={!!props.passwordError}
+        helperText={props.passwordError}
         onChange={props.handleInputChange}
         InputProps={{
           startAdornment: <StyledLock />,
         }}
       />
-      <TextField
+      <StyledTextField
+        label="Confirmar Contraseña"
+        margin="normal"
+        variant="outlined"
+        type="password"
+        name="confirmPassword"
+        fullWidth
+        value={props.formValues.confirmPassword}
+        error={!!props.passwordError}
+        helperText={props.passwordError}
+        onChange={props.handleInputChange}
+        InputProps={{
+          startAdornment: <StyledLock />,
+        }}
+      />
+      <StyledTextField
         label="Nombre"
         margin="normal"
         variant="outlined"
@@ -70,7 +93,7 @@ const SignUpFormInternal = (props: SignUpFormProps): JSX.Element => {
         value={props.formValues.firstName}
         onChange={props.handleInputChange}
       />
-      <TextField
+      <StyledTextField
         label="Apellido"
         margin="normal"
         variant="outlined"
@@ -79,7 +102,7 @@ const SignUpFormInternal = (props: SignUpFormProps): JSX.Element => {
         value={props.formValues.lastName}
         onChange={props.handleInputChange}
       />
-      <TextField
+      <StyledTextField
         label="Direccion"
         margin="normal"
         variant="outlined"
@@ -88,7 +111,7 @@ const SignUpFormInternal = (props: SignUpFormProps): JSX.Element => {
         value={props.formValues.address}
         onChange={props.handleInputChange}
       />
-      <TextField
+      <StyledTextField
         label="Numero Telefonico"
         margin="normal"
         variant="outlined"

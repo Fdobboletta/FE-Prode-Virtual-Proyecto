@@ -1,4 +1,5 @@
 import { toRem } from '@/utils';
+import { useLocalStorageState } from 'ahooks';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -66,13 +67,20 @@ const validateCellphone = (cellphone: string): boolean => {
 };
 
 const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = () => {
+  const [authData] = useLocalStorageState<{
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+  }>('authData');
+
   const [formData, setFormData] = useState({
     password: '',
     confirmPassword: '',
     address: '',
     phone: '',
-    firstName: '',
-    lastName: '',
+    firstName: authData?.firstName,
+    lastName: authData?.lastName,
   });
 
   const [passwordError, setPasswordError] = useState<string>('');

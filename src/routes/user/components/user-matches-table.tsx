@@ -10,12 +10,13 @@ import {
   IconButton,
   Select,
   MenuItem,
+  Chip,
 } from '@mui/material';
 import styled from 'styled-components';
 import { Match, Score } from '@/generated/graphql-types.generated';
 import { toRem } from '@/utils';
 import { format } from 'date-fns';
-import { LockOpen, LockOutlined } from '@mui/icons-material';
+import { Check, Close, LockOpen, LockOutlined } from '@mui/icons-material';
 
 import useUrlState from '@ahooksjs/use-url-state';
 import { useRoomPageContext } from '@/routes/admin/context/room-page-context';
@@ -88,7 +89,7 @@ const UserMatchesTableInternal = (props: MatchesTableProps) => {
               <StyledTableCell>Fecha del Encuentro</StyledTableCell>
               <StyledTableCell>
                 Pronostico
-                {room.isActive && (
+                {room.isActive && !room.isClosed && (
                   <StyledIconButton
                     sx={{
                       ':hover': {
@@ -111,7 +112,7 @@ const UserMatchesTableInternal = (props: MatchesTableProps) => {
                   </StyledIconButton>
                 )}
               </StyledTableCell>
-              {!room.isActive && (
+              {room.isClosed && (
                 <StyledTableCell>Resultado Oficial</StyledTableCell>
               )}
             </TableRow>
@@ -141,10 +142,30 @@ const UserMatchesTableInternal = (props: MatchesTableProps) => {
                       <MenuItem value={''}>No disputado</MenuItem>
                     </StyledSelect>
                   </TableCell>
-                ) : (
+                ) : !room.isClosed ? (
                   <TableCell>{getScoreLabel(row.userForecast)}</TableCell>
+                ) : (
+                  <TableCell>
+                    <Chip
+                      label={getScoreLabel(row.userForecast)}
+                      icon={
+                        row.userForecast === row.officialScore ? (
+                          <Check color="inherit" />
+                        ) : (
+                          <Close color="inherit" />
+                        )
+                      }
+                      sx={{
+                        backgroundColor:
+                          row.userForecast === row.officialScore
+                            ? '#4CAF50'
+                            : '#F44336',
+                        color: 'white',
+                      }}
+                    />
+                  </TableCell>
                 )}
-                {!room.isActive && (
+                {room.isClosed && (
                   <TableCell>{getScoreLabel(row.officialScore)}</TableCell>
                 )}
               </TableRow>

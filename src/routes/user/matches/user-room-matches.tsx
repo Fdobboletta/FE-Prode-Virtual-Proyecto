@@ -48,7 +48,7 @@ const UserRoomMatchesInternal = (props: WithSnackbarProps) => {
         setMatches(sortedMatches);
       }
       onError((error) => {
-        console.log('error', error);
+        console.error('error', error);
       });
     },
   });

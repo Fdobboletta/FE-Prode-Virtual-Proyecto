@@ -128,8 +128,11 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
       name: 'entryPrice',
       label: 'Precio de Entrada',
       options: {
-        customBodyRender: (value: any) => {
-          return `$${value}`;
+        customBodyRender: (value: number) => {
+          return `$${value.toLocaleString('es-AR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}`;
         },
       },
     },
@@ -137,8 +140,11 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
       name: 'prizeMoney',
       label: 'Premio',
       options: {
-        customBodyRender: (value: any) => {
-          return `$${value}`;
+        customBodyRender: (value: number) => {
+          return `$${value.toLocaleString('es-AR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}`;
         },
       },
     },

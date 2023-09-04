@@ -31,6 +31,10 @@ const initialDate = new Date();
 const CreateOrUpdateMatchModalInternal = (
   props: CreateOrUpdateMatchModalProps
 ) => {
+  const [error, setError] = useState({
+    homeTeam: false,
+    awayTeam: false,
+  });
   const [formData, setFormData] = useState<CreateOrUpdateMatchFormData>(
     props.matchToEdit
       ? {
@@ -51,7 +55,19 @@ const CreateOrUpdateMatchModalInternal = (
     ) => {
       event.preventDefault();
       try {
+        let isValid = true;
         const isoStartDate = formatISO(updatedFormData.startDate);
+
+        if (!updatedFormData.awayTeam) {
+          setError((prevState) => ({ ...prevState, awayTeam: true }));
+          isValid = false;
+        }
+        if (!updatedFormData.homeTeam) {
+          setError((prevState) => ({ ...prevState, homeTeam: true }));
+          isValid = false;
+        }
+
+        if (!isValid) return;
 
         if (props.matchToEdit) {
           await props.onEditMatch({
@@ -83,6 +99,8 @@ const CreateOrUpdateMatchModalInternal = (
     (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
       const { name, value } = event.target;
 
+      setError((prevErrors) => ({ ...prevErrors, [name]: false }));
+
       setFormData((prevFormData) => ({
         ...prevFormData,
         [name]: value,
@@ -110,6 +128,7 @@ const CreateOrUpdateMatchModalInternal = (
     >
       <ModalBody>
         <CreateOrUpdateMatchForm
+          errors={error}
           formData={formData}
           onInputChange={handleInputChange}
           onDateChange={handleDateChange}
