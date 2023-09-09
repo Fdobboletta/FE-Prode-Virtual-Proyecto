@@ -22,19 +22,11 @@ const CenterLoadingContainer = styled.div`
 `;
 
 const UserRoomsInternal = () => {
-  const [activeRooms, setActiveRooms] = useState<UnpaidRoom[]>([]);
-
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
 
   const paymentModalController = useModal();
 
-  const { loading, refetch } = useGetActiveUnpaidRoomsQuery({
-    onCompleted: (data) => {
-      if (data.getActiveUnpaidRooms) {
-        setActiveRooms(data.getActiveUnpaidRooms);
-      }
-    },
-  });
+  const { loading, data, refetch } = useGetActiveUnpaidRoomsQuery();
 
   const handlePayButtonClick = useCallback((roomId: string) => {
     setSelectedRoomId(roomId);
@@ -43,17 +35,17 @@ const UserRoomsInternal = () => {
 
   return (
     <UserPage>
-      {loading ? (
+      {loading || !data ? (
         <CenterLoadingContainer>
           <CircularProgress />
         </CenterLoadingContainer>
       ) : (
         <>
           <Stack alignItems={'center'}>
-            {activeRooms.length === 0 && (
+            {data.getActiveUnpaidRooms.length === 0 && (
               <UserRoomEmptyState onRefresh={() => refetch()} />
             )}
-            {activeRooms.map((room) => (
+            {data.getActiveUnpaidRooms.map((room) => (
               <UserRoomCard
                 key={room.id}
                 room={room}

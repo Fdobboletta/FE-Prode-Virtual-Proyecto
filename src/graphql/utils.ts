@@ -60,8 +60,8 @@ export const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
     link: from([errorLink, authLink, httpLink]),
     defaultOptions: {
       watchQuery: {
-        fetchPolicy: 'cache-and-network',
-        nextFetchPolicy: 'cache-first',
+        fetchPolicy: 'network-only',
+        nextFetchPolicy: 'network-only',
       },
     },
   });
