@@ -22,6 +22,7 @@ import { UserProfileUpdateForm } from './config/config-form';
 import { UserPage } from './user/user-page';
 import { RoomPage } from './admin/room-page';
 import { ParticipantsRankingPage } from './user/participants-ranking/participants-ranking-page';
+import { ReportsPage } from './admin/reports/reports-page';
 
 export const AppRoutes = () => {
   return (
@@ -66,10 +67,7 @@ export const AppRoutes = () => {
       <Route element={<PrivateRoutes requiredRole={UserRole.Admin} />}>
         <Route path="/admin" element={<Navigate to="/admin/rooms" />} />
         <Route path="/admin/integrations" element={<IntegrationsPage />} />
-        <Route
-          path="/admin/reports"
-          element={<AdminPage>Hello World</AdminPage>}
-        />
+        <Route path="/admin/reports" element={<ReportsPage />} />
         <Route path="/admin/rooms" element={<RoomsPage />} />
         <Route
           path="/admin/room/:roomId/matches"

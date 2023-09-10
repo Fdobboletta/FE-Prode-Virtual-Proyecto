@@ -1,0 +1,8 @@
+.styled-iframe {
+  width: 100%;
+  height: 80vh;
+}
+
+.styled-iframe iframe {
+  border: none;
+}

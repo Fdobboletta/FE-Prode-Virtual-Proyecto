@@ -182,6 +182,7 @@ export type Query = {
   getMatchesByRoomId: Array<Match>;
   getMatchesByRoomIdForPlayers: Array<Match>;
   getParticipantsByRoomId: Array<Participant>;
+  getPowerBiAccessToken: Scalars['String'];
   getRoomById: Room;
   getRoomsByUserId: Array<Room>;
   getUserMpAccessToken?: Maybe<Scalars['String']>;
