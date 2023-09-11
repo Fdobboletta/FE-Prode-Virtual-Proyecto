@@ -131,7 +131,7 @@ const LoadedRoomsInternal = (props: LoadedRoomsProps) => {
         <TableWithSortingAndSearch
           data={activeRooms}
           onDeleteRoom={handleDeleteRoom}
-          allowedActionsSet={new Set([RoomTableRowMenuActions.DELETE])}
+          allowedActionsSet={new Set()}
         />
       </AccordionWithTable>
       <Spacer />

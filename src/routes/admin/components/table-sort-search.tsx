@@ -166,6 +166,7 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
             </IconButton>
           );
         },
+        display: props.allowedActionsSet.size === 0 ? 'false' : 'true',
       },
     },
   ];
