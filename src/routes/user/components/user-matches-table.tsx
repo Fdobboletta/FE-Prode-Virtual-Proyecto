@@ -20,6 +20,7 @@ import { Check, Close, LockOpen, LockOutlined } from '@mui/icons-material';
 
 import useUrlState from '@ahooksjs/use-url-state';
 import { useRoomPageContext } from '@/routes/admin/context/room-page-context';
+import useDateComparison from '@/utils/use-date-comparison';
 
 const StyledTableCell = styled(TableCell)`
   font-weight: bold;
@@ -52,6 +53,8 @@ const UserMatchesTableInternal = (props: MatchesTableProps) => {
   const [clickCount, setClickCount] = useState(0);
   const [lastClickTime, setLastClickTime] = useState(0);
   const { room } = useRoomPageContext();
+
+  const { isDateReached } = useDateComparison({ targetDate: room.dueDate });
 
   const handleRowDoubleClick = () => {
     setClickCount(0);
@@ -89,7 +92,7 @@ const UserMatchesTableInternal = (props: MatchesTableProps) => {
               <StyledTableCell>Fecha del Encuentro</StyledTableCell>
               <StyledTableCell>
                 Pronostico
-                {room.isActive && !room.isClosed && (
+                {room.isActive && !room.isClosed && !isDateReached && (
                   <StyledIconButton
                     sx={{
                       ':hover': {

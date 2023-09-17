@@ -11,6 +11,7 @@ import {
 import { UserRoomEmptyState } from './user-room-empty-state';
 import { toRem } from '@/utils';
 import styled from 'styled-components';
+import { isAfter } from 'date-fns';
 
 export type UnpaidRoom = GetActiveUnpaidRoomsQuery['getActiveUnpaidRooms'][0];
 
@@ -45,13 +46,15 @@ const UserRoomsInternal = () => {
             {data.getActiveUnpaidRooms.length === 0 && (
               <UserRoomEmptyState onRefresh={() => refetch()} />
             )}
-            {data.getActiveUnpaidRooms.map((room) => (
-              <UserRoomCard
-                key={room.id}
-                room={room}
-                onPayButtonClick={handlePayButtonClick}
-              />
-            ))}
+            {data.getActiveUnpaidRooms
+              .filter((room) => !isAfter(new Date(), new Date(room.dueDate)))
+              .map((room) => (
+                <UserRoomCard
+                  key={room.id}
+                  room={room}
+                  onPayButtonClick={handlePayButtonClick}
+                />
+              ))}
           </Stack>
           {selectedRoomId && paymentModalController.modalOpen && (
             <RoomPaymentModal

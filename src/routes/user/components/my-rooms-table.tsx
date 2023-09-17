@@ -3,7 +3,7 @@
 import { RoomTableRowMenuActions } from '@/routes/admin/components/rooms-table-action-row-menu';
 import { toRem } from '@/utils';
 
-import { format } from 'date-fns';
+import { format, isAfter } from 'date-fns';
 import MUIDataTable, {
   MUIDataTableColumnDef,
   MUIDataTableOptions,
@@ -107,10 +107,12 @@ const MyRoomsTableInternal = (props: TableWithSortingAndSearchProps) => {
       label: 'Fecha de Cierre',
       options: {
         customBodyRender: (value: any) => {
-          const date = new Date(value);
+          const dueDate = new Date(value);
 
-          const formattedDate = format(date, 'dd/MM/yyyy HH:mm');
-          return formattedDate;
+          const dueRoom = isAfter(new Date(), dueDate);
+
+          const formattedDate = format(dueDate, 'dd/MM/yyyy HH:mm');
+          return `${formattedDate} ${dueRoom ? '(vencida)' : ''}`;
         },
       },
     },

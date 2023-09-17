@@ -8,7 +8,7 @@ import { RoomPage } from '../room-page';
 
 import { useGetMatchesByRoomIdQuery } from '@/graphql/matches/getMatchesByRoomId.generated';
 import { useCreateMatchMutation } from '@/graphql/matches/createMatch.generated';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { ConfirmationModal, useModal } from '@/components/modal-container';
 import { CreateOrUpdateMatchModal } from '../components/create-update-match-modal';
 import { CreateMatchMutationVariables } from '@/graphql/matches/createMatch.generated';
@@ -25,6 +25,7 @@ import _ from 'lodash';
 import { LoadedAdminRoomMatches } from './loaded-admin-room-matches';
 
 import { CalculateRoomResultsModal } from '../components/calculate-room-results-modal';
+import { useActivateRoomMutation } from '@/graphql/activateRoom.generated';
 
 const Container = styled.div`
   display: flex;
@@ -38,13 +39,15 @@ const AdminRoomMatchesInternal = (props: WithSnackbarProps) => {
 
   const [matches, setMatches] = useState<Match[]>([]);
 
+  const navigate = useNavigate();
+
   const [selectedMatchId, setSelectedMatchId] = useState<string | null>(null);
 
   const [createMatch, { loading: loadingCreateMatch }] =
     useCreateMatchMutation();
 
   const [updateMatch] = useUpdateMatchMutation();
-
+  const [activateRoom] = useActivateRoomMutation();
   const [deleteMatch] = useDeleteMatchMutation();
   const [updateManyMatchScores] = useUpdateManyMatchScoresMutation();
 
@@ -198,6 +201,32 @@ const AdminRoomMatchesInternal = (props: WithSnackbarProps) => {
     });
   };
 
+  const handlePublishRoom = async (roomId: string) => {
+    try {
+      await activateRoom({
+        variables: {
+          roomId,
+        },
+        onCompleted: () => {
+          props.snackbarShowMessage(
+            4000,
+            'Su sala fue publicada',
+            snackSeverity.success
+          );
+          navigate('/admin/rooms');
+        },
+        onError: () => {
+          props.snackbarShowMessage(
+            4000,
+            'Ocurrio un error al intentar publicada su sala',
+            snackSeverity.error
+          );
+        },
+      });
+    } catch (error) {
+      console.error('Error al activar sala', error);
+    }
+  };
   return (
     <RoomPage role={UserRole.Admin}>
       <Container>
@@ -216,6 +245,7 @@ const AdminRoomMatchesInternal = (props: WithSnackbarProps) => {
               setSelectedMatchId(matchId);
               createOrUpdateMatchModalController.onOpenModal();
             }}
+            onPublishRoom={handlePublishRoom}
             onSaveScores={handleScoreSubmit}
             onScoreSelect={handleScoreSelect}
             onDeleteMatch={(matchId) => {

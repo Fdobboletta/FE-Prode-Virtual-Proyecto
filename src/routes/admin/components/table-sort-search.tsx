@@ -2,7 +2,7 @@
 import { toRem } from '@/utils';
 import { MoreHoriz } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
-import { format } from 'date-fns';
+import { format, isAfter } from 'date-fns';
 import MUIDataTable, {
   MUIDataTableColumnDef,
   MUIDataTableOptions,
@@ -117,10 +117,12 @@ const TableWithSortingAndSearch = (props: TableWithSortingAndSearchProps) => {
       label: 'Fecha de Cierre',
       options: {
         customBodyRender: (value: any) => {
-          const date = new Date(value);
+          const dueDate = new Date(value);
 
-          const formattedDate = format(date, 'dd/MM/yyyy HH:mm');
-          return formattedDate;
+          const dueRoom = isAfter(new Date(), dueDate);
+
+          const formattedDate = format(dueDate, 'dd/MM/yyyy HH:mm');
+          return `${formattedDate} ${dueRoom ? '(vencida)' : ''}`;
         },
       },
     },

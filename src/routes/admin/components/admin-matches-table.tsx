@@ -18,6 +18,8 @@ import { format } from 'date-fns';
 import { LockOpen, LockOutlined, MoreHoriz } from '@mui/icons-material';
 import { MatchesTableRowMenu } from './matches-table-row-menu';
 import useUrlState from '@ahooksjs/use-url-state';
+import useDateComparison from '@/utils/use-date-comparison';
+import { useRoomPageContext } from '../context/room-page-context';
 
 const StyledTableCell = styled(TableCell)`
   font-weight: bold;
@@ -53,6 +55,10 @@ const AdminMatchesTableInternal = (props: MatchesTableProps) => {
   const [urlState, setUrlState] = useUrlState<{ isEditing: '1' }>();
   const [clickCount, setClickCount] = useState(0);
   const [lastClickTime, setLastClickTime] = useState(0);
+
+  const { room } = useRoomPageContext();
+
+  const { isDateReached } = useDateComparison({ targetDate: room.dueDate });
 
   const handleRowDoubleClick = () => {
     setClickCount(0);
@@ -93,7 +99,7 @@ const AdminMatchesTableInternal = (props: MatchesTableProps) => {
               <StyledTableCell>Fecha del Encuentro</StyledTableCell>
               <StyledTableCell>
                 Resultado
-                {props.allowedActions.size !== 0 && (
+                {props.allowedActions.size !== 0 && isDateReached && (
                   <StyledIconButton
                     sx={{
                       ':hover': {

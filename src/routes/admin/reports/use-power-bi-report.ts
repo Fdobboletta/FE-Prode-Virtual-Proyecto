@@ -69,7 +69,6 @@ export const usePowerBiReport = () => {
         })
         .catch((error) => {
           console.error('Error al generar el token:', error);
-          console.log('Respuesta completa:', error.response);
         });
     };
     if (data && data.getPowerBiAccessToken) {
